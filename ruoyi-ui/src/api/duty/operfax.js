@@ -3,16 +3,17 @@ import request from '@/utils/request'
 // 查询传真列表
 export function list(query) {
   return request({
-    url: '/msm/message/list',
+    url: '/fax/message/list',
     method: 'post',
     data: query
   })
+  
 }
 
 // 查询传真详细
-export function getMsmInfoById(sendInfoId) {
+export function getFaxInfoById(sendInfoId) {
   return request({
-    url: '/msm/message/getInfoById' + sendInfoId,
+    url: '/fax/message/getInfoById/' + sendInfoId,
     method: 'get'
   })
 }

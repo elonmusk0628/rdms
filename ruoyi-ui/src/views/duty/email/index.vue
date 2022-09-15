@@ -9,7 +9,7 @@
           style="width: 240px"
         >
           <el-option
-            v-for="item in mailTypeData"
+            v-for="item in mailType"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -43,15 +43,15 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="接收时间">
+      <el-form-item label="发送时间">
         <el-date-picker
-          v-model="dateRange"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
+          v-model="datetimerange"
+          style="width: 350px"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          type="datetimerange"
           range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -60,16 +60,19 @@
       </el-form-item>
     </el-form>
 
-    <el-table ref="tables" v-loading="loading" :data="list" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="邮件编号" align="center" prop="messageId" />
+    <el-table ref="tables" v-loading="loading" :data="list" :default-sort="defaultSort" @sort-change="handleSortChange">
+      <el-table-column label="序号" align="center" width="100">
+        <template slot-scope="scope">
+          {{ scope.$index + 1 }}
+        </template>
+      </el-table-column>
       <el-table-column label="邮箱类型" align="center" prop="mailType" />
-      <el-table-column label="标题" align="center" prop="mailName" />
+      <el-table-column label="标题" align="center" prop="mailName" :show-overflow-tooltip="true" />
       <el-table-column label="附件数量" align="center" prop="fileSize" />
       <el-table-column label="发送地址" align="center" prop="address" :show-overflow-tooltip="true" />
-      <el-table-column label="接收时间" align="center" prop="receivedDate" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
+      <el-table-column label="发送时间" align="center" prop="createTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.receivedDate) }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -78,7 +81,7 @@
             size="mini"
             type="text"
             icon="el-icon-view"
-            @click="handleView(scope.row)"
+            @click="handleView(scope.row.mailAttachmentId)"
           >详细</el-button>
         </template>
       </el-table-column>
@@ -116,7 +119,7 @@
 </template>
 
 <script>
-import { list, getMsmInfoById } from "@/api/duty/operemail";
+import { list, getEmailInfoById } from "@/api/duty/operemail";
 
 export default {
   name: "operemail",
@@ -124,10 +127,6 @@ export default {
     return {
       // 遮罩层
       loading: true,
-      // 选中数组
-      ids: [],
-      // 非多个禁用
-      multiple: true,
       // 显示搜索条件
       showSearch: true,
       // 总条数
@@ -136,10 +135,10 @@ export default {
       list: [],
       // 是否显示弹出层
       open: false,
-      // 日期范围
-      dateRange: [],
+      // 日期时间范围
+      datetimerange: [],
       // 默认排序
-      defaultSort: {prop: 'receivedDate', order: 'descending'},
+      defaultSort: {prop: 'createTime', order: 'descending'},
       // 表单参数
       form: {},
       // 查询参数
@@ -151,7 +150,7 @@ export default {
         mailType: undefined,
         fileSize: undefined
       },
-      mailTypeData: [{
+      mailType: [{
         value: '163',
         label: '163邮箱'
       },{
@@ -167,9 +166,7 @@ export default {
     /** 查询邮件列表 */
     getList() {
       this.loading = true;
-      list({ MsmParam: this.queryParams }).then( response => {
-      // list(this.addDateRange(this.queryParams, this.dateRange)).then( response => {
-          console.log(response)
+      list({ MailParam: this.addDateRange(this.queryParams, this.datetimerange)}).then( response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;
@@ -183,15 +180,10 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.dateRange = [];
+      this.datetimerange = [];
       this.resetForm("queryForm");
       this.$refs.tables.sort(this.defaultSort.prop, this.defaultSort.order)
       this.handleQuery();
-    },
-    /** 多选框选中数据 */
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.operId)
-      this.multiple = !selection.length
     },
     /** 排序触发事件 */
     handleSortChange(column, prop, order) {
@@ -200,14 +192,12 @@ export default {
       this.getList();
     },
     /** 详细按钮操作 */
-    handleView(sendInfoId) {
-      // getMsmInfoById(sendInfoId).then( res => {
-      //     this.form = res.data;
-      //     this.open = true;
-      //   }
-      // );
-      this.open = true;
-      this.form = sendInfoId;
+    handleView(mailAttachmentId) {
+      getEmailInfoById(mailAttachmentId).then( res => {
+          this.form = res.data;
+          this.open = true;
+        }
+      );
     }
   }
 };

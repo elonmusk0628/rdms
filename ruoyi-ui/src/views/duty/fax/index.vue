@@ -1,18 +1,18 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="标题" prop="mailName">
+      <el-form-item label="标题" prop="name">
         <el-input
-          v-model="queryParams.mailName"
+          v-model="queryParams.name"
           placeholder="请输入关键字"
           clearable
           style="width: 240px;"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="编号" prop="address">
+      <el-form-item label="编号" prop="category">
         <el-input
-          v-model="queryParams.address"
+          v-model="queryParams.category"
           placeholder="请输入"
           clearable
           style="width: 240px;"
@@ -21,13 +21,13 @@
       </el-form-item>
       <el-form-item label="发文时间">
         <el-date-picker
-          v-model="dateRange"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
+          v-model="datetimerange"
+          style="width: 350px"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          type="datetimerange"
           range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -36,15 +36,18 @@
       </el-form-item>
     </el-form>
 
-    <el-table ref="tables" v-loading="loading" :data="list" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="序号" align="center" prop="messageId" />
-      <el-table-column label="标题" align="center" prop="mailName" />
-      <el-table-column label="编号" align="center" prop="address" :show-overflow-tooltip="true" />
-      <el-table-column label="附件" align="center" prop="mailType" />
-      <el-table-column label="发文时间" align="center" prop="receivedDate" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
+    <el-table ref="tables" v-loading="loading" :data="list" :default-sort="defaultSort" @sort-change="handleSortChange">
+      <el-table-column label="序号" align="center" width="100">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.receivedDate) }}</span>
+          {{ scope.$index + 1 }}
+        </template>
+      </el-table-column>
+      <el-table-column label="标题" align="center" prop="name" />
+      <el-table-column label="编号" align="center" prop="category" :show-overflow-tooltip="true" />
+      <el-table-column label="附件" align="center" prop="fileNum" />
+      <el-table-column label="发文时间" align="center" prop="createTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -84,7 +87,7 @@
 </template>
 
 <script>
-import { list, getMsmInfoById } from "@/api/duty/operfax";
+import { list, getFaxInfoById } from "@/api/duty/operfax";
 
 export default {
   name: "operfax",
@@ -92,10 +95,6 @@ export default {
     return {
       // 遮罩层
       loading: true,
-      // 选中数组
-      ids: [],
-      // 非多个禁用
-      multiple: true,
       // 显示搜索条件
       showSearch: true,
       // 总条数
@@ -104,20 +103,18 @@ export default {
       list: [],
       // 是否显示弹出层
       open: false,
-      // 日期范围
-      dateRange: [],
+      // 日期时间范围
+      datetimerange: [],
       // 默认排序
-      defaultSort: {prop: 'receivedDate', order: 'descending'},
+      defaultSort: {prop: 'createTime', order: 'descending'},
       // 表单参数
       form: {},
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        mailName: undefined,
-        address: undefined,
-        mailType: undefined,
-        fileSize: undefined
+        name: undefined,
+        category: undefined
       }
     };
   },
@@ -128,9 +125,7 @@ export default {
     /** 查询传真列表 */
     getList() {
       this.loading = true;
-      list({ MsmParam: this.queryParams }).then( response => {
-      // list(this.addDateRange(this.queryParams, this.dateRange)).then( response => {
-          console.log(response)
+      list({ FaxParam: this.addDateRange(this.queryParams, this.datetimerange)}).then( response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;
@@ -144,15 +139,10 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.dateRange = [];
+      this.datetimerange = [];
       this.resetForm("queryForm");
       this.$refs.tables.sort(this.defaultSort.prop, this.defaultSort.order)
       this.handleQuery();
-    },
-    /** 多选框选中数据 */
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.operId)
-      this.multiple = !selection.length
     },
     /** 排序触发事件 */
     handleSortChange(column, prop, order) {
@@ -162,13 +152,11 @@ export default {
     },
     /** 详细按钮操作 */
     handleView(sendInfoId) {
-      // getMsmInfoById(sendInfoId).then( res => {
-      //     this.form = res.data;
-      //     this.open = true;
-      //   }
-      // );
-      this.open = true;
-      this.form = sendInfoId;
+      getFaxInfoById(sendInfoId).then( res => {
+          this.form = res.data;
+          this.open = true;
+        }
+      );
     }
   }
 };

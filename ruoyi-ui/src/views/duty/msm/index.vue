@@ -27,7 +27,7 @@
           style="width: 240px"
         >
           <el-option
-            v-for="item in msmSuccessData"
+            v-for="item in msmSuccess"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -36,13 +36,13 @@
       </el-form-item>
       <el-form-item label="发送时间">
         <el-date-picker
-          v-model="dateRange"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
+          v-model="datetimerange"
+          style="width: 350px"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          type="datetimerange"
           range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -51,9 +51,8 @@
       </el-form-item>
     </el-form>
 
-    <el-table ref="tables" v-loading="loading" :data="list" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="序号" align="center">
+    <el-table ref="tables" v-loading="loading" :data="list" :default-sort="defaultSort" @sort-change="handleSortChange">
+      <el-table-column label="序号" align="center" width="100">
         <template slot-scope="scope">
           {{ scope.$index + 1 }}
         </template>
@@ -64,7 +63,7 @@
       <el-table-column label="失败人数" align="center" prop="failCount" />
       <el-table-column label="发送是否成功" align="center" prop="success">
         <template slot-scope="scope">
-          <el-tag size="small">{{ scope.row.success == "0" ? "失败" : "成功" }}</el-tag>
+          <el-tag size="small" :type="scope.row.success=='0'?'danger':''">{{ scope.row.success == "0" ? "失败" : "成功" }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="发送时间" align="center" prop="sendTime" sortable :sort-orders="['descending', 'ascending']" width="180">
@@ -79,6 +78,7 @@
             type="text"
             icon="el-icon-view"
             @click="handleView(scope.row.sendInfoId)"
+            v-hasPermi="['msm:message:getInfoById']"
           >详细</el-button>
         </template>
       </el-table-column>
@@ -141,10 +141,6 @@ export default {
     return {
       // 遮罩层
       loading: true,
-      // 选中数组
-      ids: [],
-      // 非多个禁用
-      multiple: true,
       // 显示搜索条件
       showSearch: true,
       // 总条数
@@ -153,8 +149,8 @@ export default {
       list: [],
       // 是否显示弹出层
       open: false,
-      // 日期范围
-      dateRange: [],
+      // 日期时间范围
+      datetimerange: [],
       // 默认排序
       defaultSort: {prop: 'sendTime', order: 'descending'},
       // 表单参数
@@ -167,7 +163,7 @@ export default {
         content: undefined,
         success: undefined
       },
-      msmSuccessData: [{
+      msmSuccess: [{
         value: 0,
         label: '失败'
       },{
@@ -183,9 +179,7 @@ export default {
     /** 查询短信列表 */
     getList() {
       this.loading = true;
-      list({ MsmParam: this.queryParams }).then( response => {
-      // list(this.addDateRange(this.queryParams, this.dateRange)).then( response => {
-          console.log(response)
+      list({ MsmParam: this.addDateRange(this.queryParams, this.datetimerange)}).then( response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;
@@ -199,15 +193,10 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.dateRange = [];
+      this.datetimerange = [];
       this.resetForm("queryForm");
       this.$refs.tables.sort(this.defaultSort.prop, this.defaultSort.order)
       this.handleQuery();
-    },
-    /** 多选框选中数据 */
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.operId)
-      this.multiple = !selection.length
     },
     /** 排序触发事件 */
     handleSortChange(column, prop, order) {

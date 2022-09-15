@@ -12,7 +12,7 @@ export function list(query) {
 // 查询短信详细
 export function getMsmInfoById(sendInfoId) {
   return request({
-    url: '/msm/message/getInfoById' + sendInfoId,
+    url: '/msm/message/getInfoById/' + sendInfoId,
     method: 'get'
   })
 }
