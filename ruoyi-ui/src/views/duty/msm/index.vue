@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="署名" prop="signature">
+      <el-form-item label="署名" prop="signaTure">
         <el-input
-          v-model="queryParams.signature"
+          v-model="queryParams.signaTure"
           placeholder="请输入短信署名"
           clearable
           style="width: 240px;"
@@ -34,16 +34,21 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="发送时间">
+      <el-form-item label="开始时间">
         <el-date-picker
-          v-model="datetimerange"
-          style="width: 350px"
+          v-model="queryParams.startDate"
           value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetimerange"
-          range-separator="-"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
-        ></el-date-picker>
+          type="datetime"
+          placeholder="开始时间">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="结束时间">
+        <el-date-picker
+          v-model="queryParams.endDate"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          type="datetime"
+          placeholder="结束时间">
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -57,13 +62,11 @@
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column label="署名" align="center" prop="signature" />
+      <el-table-column label="署名" align="center" prop="signaTure" />
       <el-table-column label="发送内容" align="center" prop="content" :show-overflow-tooltip="true" />
-      <el-table-column label="发送人数" align="center" prop="sendCount" />
-      <el-table-column label="失败人数" align="center" prop="failCount" />
       <el-table-column label="发送是否成功" align="center" prop="success">
         <template slot-scope="scope">
-          <el-tag size="small" :type="scope.row.success=='0'?'danger':''">{{ scope.row.success == "0" ? "失败" : "成功" }}</el-tag>
+          <el-tag size="small" :type="scope.row.success=='0'?'':'danger'">{{ scope.row.success == "0" ? "成功" : "失败" }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="发送时间" align="center" prop="sendTime" sortable :sort-orders="['descending', 'ascending']" width="180">
@@ -100,7 +103,7 @@
             <el-form-item label="发送内容：" v-if="form.content">{{ form.content }}</el-form-item>
           </el-col>
           <el-col :span="24" class="card-box">
-            <el-form-item label="接收人列表：" v-if="form.receiverList">
+            <el-form-item label="接收人列表：" v-if="form.msmInfoList&&form.msmInfoList.length>0">
               <el-card>
                 <div class="el-table el-table--enable-row-hover el-table--medium">
                   <table cellspacing="0" style="width: 100%;">
@@ -112,9 +115,9 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(item, index) in form.receiverList" :key="index">
+                      <tr v-for="(item, index) in form.msmInfoList" :key="index">
                         <td class="el-table__cell is-leaf"><div class="cell">{{ item.userName }}</div></td>
-                        <td class="el-table__cell is-leaf"><div class="cell"><el-tag size="small">{{ item.success == "0" ? "失败" : "成功" }}</el-tag></div></td>
+                        <td class="el-table__cell is-leaf"><div class="cell"><el-tag size="small">{{ item.success == "0" ? "成功" : "失败" }}</el-tag></div></td>
                         <td class="el-table__cell is-leaf"><div class="cell">{{ item.phone }}</div></td>
                       </tr>
                     </tbody>
@@ -149,8 +152,6 @@ export default {
       list: [],
       // 是否显示弹出层
       open: false,
-      // 日期时间范围
-      datetimerange: [],
       // 默认排序
       defaultSort: {prop: 'sendTime', order: 'descending'},
       // 表单参数
@@ -159,16 +160,18 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        signature: undefined,
+        startDate: undefined,
+        endDate: undefined,
+        signaTure: undefined,
         content: undefined,
         success: undefined
       },
       msmSuccess: [{
         value: 0,
-        label: '失败'
+        label: '成功'
       },{
         value: 1,
-        label: '成功'
+        label: '失败'
       }]
     };
   },
@@ -179,7 +182,7 @@ export default {
     /** 查询短信列表 */
     getList() {
       this.loading = true;
-      list({ MsmParam: this.addDateRange(this.queryParams, this.datetimerange)}).then( response => {
+      list({ MsmParam: this.queryParams }).then( response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;
@@ -193,7 +196,8 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.datetimerange = [];
+      this.queryParams.startDate = undefined;
+      this.queryParams.endDate = undefined;
       this.resetForm("queryForm");
       this.$refs.tables.sort(this.defaultSort.prop, this.defaultSort.order)
       this.handleQuery();

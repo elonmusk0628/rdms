@@ -11,9 +11,9 @@ export function list(query) {
 }
 
 // 查询传真详细
-export function getFaxInfoById(sendInfoId) {
+export function getFaxInfoById(id) {
   return request({
-    url: '/fax/message/getInfoById/' + sendInfoId,
+    url: '/fax/message/getFaxInfoById/' + id,
     method: 'get'
   })
 }

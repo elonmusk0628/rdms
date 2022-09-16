@@ -43,16 +43,21 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="发送时间">
+      <el-form-item label="开始时间">
         <el-date-picker
-          v-model="datetimerange"
-          style="width: 350px"
+          v-model="queryParams.startDate"
           value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetimerange"
-          range-separator="-"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
-        ></el-date-picker>
+          type="datetime"
+          placeholder="开始时间">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="结束时间">
+        <el-date-picker
+          v-model="queryParams.endDate"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          type="datetime"
+          placeholder="结束时间">
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -70,9 +75,9 @@
       <el-table-column label="标题" align="center" prop="mailName" :show-overflow-tooltip="true" />
       <el-table-column label="附件数量" align="center" prop="fileSize" />
       <el-table-column label="发送地址" align="center" prop="address" :show-overflow-tooltip="true" />
-      <el-table-column label="发送时间" align="center" prop="createTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
+      <el-table-column label="接收时间" align="center" prop="receivedDate" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTime(scope.row.receivedDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -81,7 +86,7 @@
             size="mini"
             type="text"
             icon="el-icon-view"
-            @click="handleView(scope.row.mailAttachmentId)"
+            @click="handleView(scope.row.id)"
           >详细</el-button>
         </template>
       </el-table-column>
@@ -97,19 +102,16 @@
 
     <!-- 邮件详细 -->
     <el-dialog title="邮件详细" :visible.sync="open" width="700px" append-to-body>
-      <el-descriptions class="margin-top" :column="2">
-        <el-descriptions-item label="发送时间" v-if="form.createTime">{{ form.createTime }}</el-descriptions-item>
-        <el-descriptions-item label="发送单位" v-if="form.theElectricityUnit">{{ form.theElectricityUnit }}</el-descriptions-item>
-        <el-descriptions-item label="发送电话" v-if="form.tel">{{ form.tel }}</el-descriptions-item>
-        <el-descriptions-item label="发件人" v-if="form.userName">
-          {{ form.userName }}
+      <el-descriptions class="margin-top" :column="1">
+        <el-descriptions-item label="创建时间" v-if="form.createTime">{{ form.createTime }}</el-descriptions-item>
+        <el-descriptions-item label="标题" v-if="form.mailName">{{ form.mailName }}</el-descriptions-item>
+        <el-descriptions-item label="附件" v-if="form.mailInfoList&&form.mailInfoList.length>0">
+          <div>
+            <div v-for="(item, index) in form.mailInfoList" :key="index" style="padding-bottom: 10px">
+              {{ item.fileName }}
+            </div>
+          </div>
         </el-descriptions-item>
-        <el-descriptions-item label="接收时间" v-if="form.telTime">{{ form.telTime }}</el-descriptions-item>
-        <el-descriptions-item label="接收电话" v-if="form.phone">{{ form.phone }}</el-descriptions-item>
-        <el-descriptions-item label="接收人" v-if="form.answerPeople">{{ form.answerPeople }}</el-descriptions-item>
-        <el-descriptions-item label="邮件标题" v-if="form.title">{{ form.title }}</el-descriptions-item>
-        <el-descriptions-item label="邮件内容" v-if="form.content">{{ form.content }}</el-descriptions-item>
-        <el-descriptions-item label="处理意见" v-if="form.suggestion">{{ form.suggestion }}</el-descriptions-item>
       </el-descriptions>
       <div slot="footer" class="dialog-footer">
         <el-button @click="open = false">关 闭</el-button>
@@ -135,16 +137,16 @@ export default {
       list: [],
       // 是否显示弹出层
       open: false,
-      // 日期时间范围
-      datetimerange: [],
       // 默认排序
-      defaultSort: {prop: 'createTime', order: 'descending'},
+      defaultSort: {prop: 'receivedDate', order: 'descending'},
       // 表单参数
       form: {},
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        startDate: undefined,
+        endDate: undefined,
         mailName: undefined,
         address: undefined,
         mailType: undefined,
@@ -166,7 +168,7 @@ export default {
     /** 查询邮件列表 */
     getList() {
       this.loading = true;
-      list({ MailParam: this.addDateRange(this.queryParams, this.datetimerange)}).then( response => {
+      list({ MailParam: this.queryParams }).then( response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;
@@ -180,7 +182,8 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.datetimerange = [];
+      this.queryParams.startDate = undefined;
+      this.queryParams.endDate = undefined;
       this.resetForm("queryForm");
       this.$refs.tables.sort(this.defaultSort.prop, this.defaultSort.order)
       this.handleQuery();
@@ -192,8 +195,8 @@ export default {
       this.getList();
     },
     /** 详细按钮操作 */
-    handleView(mailAttachmentId) {
-      getEmailInfoById(mailAttachmentId).then( res => {
+    handleView(id) {
+      getEmailInfoById(id).then( res => {
           this.form = res.data;
           this.open = true;
         }

@@ -10,9 +10,9 @@ export function list(query) {
 }
 
 // 查询邮件详细
-export function getEmailInfoById(mailAttachmentId) {
+export function getEmailInfoById(id) {
   return request({
-    url: '/baseFile/mailMsg/' + mailAttachmentId,
+    url: '/mail/message/getMailInfoById/' + id,
     method: 'get'
   })
 }

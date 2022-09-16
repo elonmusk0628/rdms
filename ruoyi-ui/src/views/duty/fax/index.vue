@@ -10,25 +10,30 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="编号" prop="category">
+      <el-form-item label="编号" prop="fileNum">
         <el-input
-          v-model="queryParams.category"
+          v-model="queryParams.fileNum"
           placeholder="请输入"
           clearable
           style="width: 240px;"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="发文时间">
+      <el-form-item label="开始时间">
         <el-date-picker
-          v-model="datetimerange"
-          style="width: 350px"
+          v-model="queryParams.startDate"
           value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetimerange"
-          range-separator="-"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
-        ></el-date-picker>
+          type="datetime"
+          placeholder="开始时间">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="结束时间">
+        <el-date-picker
+          v-model="queryParams.endDate"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          type="datetime"
+          placeholder="结束时间">
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -42,12 +47,12 @@
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column label="标题" align="center" prop="name" />
-      <el-table-column label="编号" align="center" prop="category" :show-overflow-tooltip="true" />
-      <el-table-column label="附件" align="center" prop="fileNum" />
-      <el-table-column label="发文时间" align="center" prop="createTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
+      <el-table-column label="标题" align="center" prop="name" :show-overflow-tooltip="true" />
+      <el-table-column label="编号" align="center" prop="fileNum" />
+      <el-table-column label="附件" align="center" prop="fileName" :show-overflow-tooltip="true" />
+      <el-table-column label="发文时间" align="center" prop="draftDate" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTime(scope.row.draftDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -56,7 +61,7 @@
             size="mini"
             type="text"
             icon="el-icon-view"
-            @click="handleView(scope.row)"
+            @click="handleView(scope.row.id)"
           >详细</el-button>
         </template>
       </el-table-column>
@@ -72,12 +77,16 @@
 
     <!-- 传真详细 -->
     <el-dialog title="传真详细" :visible.sync="open" width="700px" append-to-body>
-      <el-descriptions class="margin-top" :column="2">
-        <el-descriptions-item label="传真标题" v-if="form.createTime">{{ form.createTime }}</el-descriptions-item>
-        <el-descriptions-item label="传真编号" v-if="form.theElectricityUnit">{{ form.theElectricityUnit }}</el-descriptions-item>
-        <el-descriptions-item label="发文时间" v-if="form.tel">{{ form.tel }}</el-descriptions-item>
-        <el-descriptions-item label="来文单位" v-if="form.userName">{{ form.userName }}</el-descriptions-item>
-        <el-descriptions-item label="关键字" v-if="form.telTime">{{ form.telTime }}</el-descriptions-item>
+      <el-descriptions class="margin-top" :column="1">
+        <el-descriptions-item label="创建时间" v-if="form.createTime">{{ form.createTime }}</el-descriptions-item>
+        <el-descriptions-item label="标题" v-if="form.name">{{ form.name }}</el-descriptions-item>
+        <el-descriptions-item label="文件名" v-if="form.faxInfoEntityList&&form.faxInfoEntityList.length>0">
+          <div>
+            <div v-for="(item, index) in form.faxInfoEntityList" :key="index" style="padding-bottom: 10px">
+              {{ item.fileName }}
+            </div>
+          </div>
+        </el-descriptions-item>
       </el-descriptions>
       <div slot="footer" class="dialog-footer">
         <el-button @click="open = false">关 闭</el-button>
@@ -103,18 +112,18 @@ export default {
       list: [],
       // 是否显示弹出层
       open: false,
-      // 日期时间范围
-      datetimerange: [],
       // 默认排序
-      defaultSort: {prop: 'createTime', order: 'descending'},
+      defaultSort: {prop: 'draftDate', order: 'descending'},
       // 表单参数
       form: {},
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        startDate: undefined,
+        endDate: undefined,
         name: undefined,
-        category: undefined
+        fileNum: undefined
       }
     };
   },
@@ -125,7 +134,7 @@ export default {
     /** 查询传真列表 */
     getList() {
       this.loading = true;
-      list({ FaxParam: this.addDateRange(this.queryParams, this.datetimerange)}).then( response => {
+      list({ FaxParam: this.queryParams }).then( response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;
@@ -139,7 +148,8 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.datetimerange = [];
+      this.queryParams.startDate = undefined;
+      this.queryParams.endDate = undefined;
       this.resetForm("queryForm");
       this.$refs.tables.sort(this.defaultSort.prop, this.defaultSort.order)
       this.handleQuery();
@@ -151,8 +161,8 @@ export default {
       this.getList();
     },
     /** 详细按钮操作 */
-    handleView(sendInfoId) {
-      getFaxInfoById(sendInfoId).then( res => {
+    handleView(id) {
+      getFaxInfoById(id).then( res => {
           this.form = res.data;
           this.open = true;
         }

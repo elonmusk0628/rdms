@@ -25,16 +25,21 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="时间">
+      <el-form-item label="开始时间">
         <el-date-picker
-          v-model="datetimerange"
-          style="width: 240px"
+          v-model="queryParams.startDate"
           value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetimerange"
-          range-separator="-"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
-        ></el-date-picker>
+          type="datetime"
+          placeholder="开始时间">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="结束时间">
+        <el-date-picker
+          v-model="queryParams.endDate"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          type="datetime"
+          placeholder="结束时间">
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -235,12 +240,12 @@ export default {
       dialog: 'add',
       // 是否显示弹出层
       open: false,
-      // 日期时间范围
-      datetimerange: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        startDate: undefined,
+        endDate: undefined,
         type: undefined,
         dictName: undefined
       },
@@ -289,7 +294,7 @@ export default {
     /** 查询水情信息列表 */
     getList() {
       this.loading = true;
-      listWord(this.addDateRange(this.queryParams, this.datetimerange)).then(response => {
+      listWord(this.queryParams).then(response => {
           this.typeList = response.rows;
           this.total = response.total;
           this.loading = false;
@@ -318,7 +323,8 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.datetimerange = [];
+      this.queryParams.startDate = undefined;
+      this.queryParams.endDate = undefined;
       this.resetForm("queryForm");
       this.handleQuery();
     },
