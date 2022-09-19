@@ -92,20 +92,24 @@
     <el-table v-loading="loading" :data="typeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="编号" width="100" align="center" prop="id" />
-      <el-table-column label="类型" align="center" prop="type" />
-      <el-table-column label="关键字" align="center" prop="dictName" :show-overflow-tooltip="true" />
+      <el-table-column label="类型" align="center">
+        <template slot-scope="scope">
+          <div>{{ scope.row.type=='1'?'水库':(scope.row.type=='2'?'河道':'机构') }}</div>
+        </template>
+      </el-table-column>
+      <el-table-column label="关键字" align="center" prop="key_word" :show-overflow-tooltip="true" />
       <el-table-column label="水位" align="center" prop="dictName" :show-overflow-tooltip="true" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <el-tag size="small" :type="scope.row.status=='告警'?'danger':''">{{ scope.row.status}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="时间" align="center" prop="createTime" width="180">
+      <el-table-column label="时间" align="center" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTime(scope.row.update_time) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -161,7 +165,7 @@
       </el-form>
       <el-form :model="form" label-width="100px" size="mini" v-if="this.dialog==='detail'">
         <el-descriptions class="margin-top" :column="2">
-          <el-descriptions-item label="关键字">{{ form.createTime }}</el-descriptions-item>
+          <el-descriptions-item label="关键字">{{ form.key_word }}</el-descriptions-item>
           <el-descriptions-item label="时间">{{ form.theElectricityUnit }}</el-descriptions-item>
           <el-descriptions-item label="水位">{{ form.tel }}</el-descriptions-item>
           <el-descriptions-item label="汛限水位" v-if="form.type=='1'">{{ form.telTime }}</el-descriptions-item>
@@ -295,7 +299,7 @@ export default {
     getList() {
       this.loading = true;
       listWord(this.queryParams).then(response => {
-          this.typeList = response.rows;
+          this.typeList = response.data;
           this.total = response.total;
           this.loading = false;
         }
@@ -380,7 +384,6 @@ export default {
           return;
         }
       })
-      this.title = "详细";
       this.dialog = 'detail';
       this.open = true;
       this.form = row;

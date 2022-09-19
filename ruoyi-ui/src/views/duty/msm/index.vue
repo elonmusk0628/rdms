@@ -1,10 +1,19 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="收件人" prop="remark">
+        <el-input
+          v-model="queryParams.remark"
+          placeholder="请输入"
+          clearable
+          style="width: 240px;"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="署名" prop="signaTure">
         <el-input
           v-model="queryParams.signaTure"
-          placeholder="请输入短信署名"
+          placeholder="请输入"
           clearable
           style="width: 240px;"
           @keyup.enter.native="handleQuery"
@@ -13,33 +22,18 @@
       <el-form-item label="发送内容" prop="content">
         <el-input
           v-model="queryParams.content"
-          placeholder="请输入发送内容"
+          placeholder="请输入"
           clearable
           style="width: 240px;"
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
-      <el-form-item label="是否成功" prop="success">
-        <el-select
-          v-model="queryParams.success"
-          placeholder="发送是否成功"
-          clearable
-          style="width: 240px"
-        >
-          <el-option
-            v-for="item in msmSuccess"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
       </el-form-item>
       <el-form-item label="开始时间">
         <el-date-picker
           v-model="queryParams.startDate"
           value-format="yyyy-MM-dd HH:mm:ss"
           type="datetime"
-          placeholder="开始时间">
+          placeholder="选择">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="结束时间">
@@ -47,7 +41,7 @@
           v-model="queryParams.endDate"
           value-format="yyyy-MM-dd HH:mm:ss"
           type="datetime"
-          placeholder="结束时间">
+          placeholder="选择">
         </el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -62,6 +56,7 @@
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
+      <el-table-column label="收件人" align="center" prop="remark" />
       <el-table-column label="署名" align="center" prop="signaTure" />
       <el-table-column label="发送内容" align="center" prop="content" :show-overflow-tooltip="true" />
       <el-table-column label="发送是否成功" align="center" prop="success">
@@ -162,17 +157,11 @@ export default {
         pageSize: 10,
         startDate: undefined,
         endDate: undefined,
+        remark: undefined,
         signaTure: undefined,
         content: undefined,
         success: undefined
-      },
-      msmSuccess: [{
-        value: 0,
-        label: '成功'
-      },{
-        value: 1,
-        label: '失败'
-      }]
+      }
     };
   },
   created() {
