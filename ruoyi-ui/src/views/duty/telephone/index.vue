@@ -98,15 +98,15 @@
     <!-- 电话详细 -->
     <el-dialog title="电话详细" :visible.sync="open" width="700px" append-to-body>
       <el-descriptions class="margin-top" :column="2" border>
-        <el-descriptions-item label="来电单位">{{ form.theElectricityUnit }}</el-descriptions-item>
-        <el-descriptions-item label="来电电话">{{ form.tel }}</el-descriptions-item>
-        <el-descriptions-item label="来电姓名">{{ form.userName }}</el-descriptions-item>
-        <el-descriptions-item label="来电时间">{{ form.telTime }}</el-descriptions-item>
-        <el-descriptions-item label="接话人">{{ form.answerPeople }}</el-descriptions-item>
-        <el-descriptions-item label="联系电话">{{ form.phone }}</el-descriptions-item>
-        <el-descriptions-item label="通话标题" :span="2">{{ form.title }}</el-descriptions-item>
-        <el-descriptions-item label="通话内容" :span="2">{{ form.content }}</el-descriptions-item>
-        <el-descriptions-item label="处理意见">{{ form.suggestion }}</el-descriptions-item>
+        <el-descriptions-item label="来电单位" :labelStyle="labelStyle">{{ form.theElectricityUnit }}</el-descriptions-item>
+        <el-descriptions-item label="来电电话" :labelStyle="labelStyle">{{ form.tel }}</el-descriptions-item>
+        <el-descriptions-item label="来电姓名" :labelStyle="labelStyle">{{ form.userName }}</el-descriptions-item>
+        <el-descriptions-item label="来电时间" :labelStyle="labelStyle">{{ parseTime(form.telTime) }}</el-descriptions-item>
+        <el-descriptions-item label="接话人" :labelStyle="labelStyle">{{ form.answerPeople }}</el-descriptions-item>
+        <el-descriptions-item label="联系电话" :labelStyle="labelStyle">{{ form.phone }}</el-descriptions-item>
+        <el-descriptions-item label="通话标题" :labelStyle="labelStyle" :span="2">{{ form.title }}</el-descriptions-item>
+        <el-descriptions-item label="通话内容" :labelStyle="labelStyle" :span="2">{{ form.content }}</el-descriptions-item>
+        <el-descriptions-item label="处理意见" :labelStyle="labelStyle">{{ form.suggestion }}</el-descriptions-item>
       </el-descriptions>
       <div slot="footer" class="dialog-footer">
         <el-button @click="open = false">关 闭</el-button>
@@ -144,6 +144,9 @@ export default {
         tel: undefined,
         userName: undefined,
         answerPeople: undefined
+      },
+      labelStyle: {
+        'width': '80px'
       }
     };
   },

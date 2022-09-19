@@ -24,7 +24,7 @@
           v-model="queryParams.startDate"
           value-format="yyyy-MM-dd HH:mm:ss"
           type="datetime"
-          placeholder="开始时间">
+          placeholder="选择">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="结束时间">
@@ -32,7 +32,7 @@
           v-model="queryParams.endDate"
           value-format="yyyy-MM-dd HH:mm:ss"
           type="datetime"
-          placeholder="结束时间">
+          placeholder="选择">
         </el-date-picker>
       </el-form-item>
       <el-form-item>

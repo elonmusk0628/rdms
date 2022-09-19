@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
       <el-form-item label="邮箱类型" prop="mailType">
         <el-select
           v-model="queryParams.mailType"
@@ -19,31 +19,13 @@
       <el-form-item label="标题" prop="mailName">
         <el-input
           v-model="queryParams.mailName"
-          placeholder="请输入邮件标题"
+          placeholder="请输入"
           clearable
           style="width: 240px;"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="发送地址" prop="address">
-        <el-input
-          v-model="queryParams.address"
-          placeholder="请输入发送地址"
-          clearable
-          style="width: 240px;"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="数量" prop="fileSize">
-        <el-input
-          v-model="queryParams.fileSize"
-          placeholder="请输入附件数量"
-          clearable
-          style="width: 240px;"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="开始时间">
+      <el-form-item label="接收开始时间">
         <el-date-picker
           v-model="queryParams.startDate"
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -51,7 +33,7 @@
           placeholder="开始时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="结束时间">
+      <el-form-item label="接收结束时间">
         <el-date-picker
           v-model="queryParams.endDate"
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -71,7 +53,11 @@
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column label="邮箱类型" align="center" prop="mailType" />
+      <el-table-column label="邮箱类型" align="center">
+        <template slot-scope="scope">
+          <div>{{ scope.row.mailType=='163'?'163邮箱':(scope.row.mailType=='pearlwater'?'珠江委邮箱':'') }}</div>
+        </template>
+      </el-table-column>
       <el-table-column label="标题" align="center" prop="mailName" :show-overflow-tooltip="true" />
       <el-table-column label="附件数量" align="center" prop="fileSize" />
       <el-table-column label="发送地址" align="center" prop="address" :show-overflow-tooltip="true" />
@@ -148,9 +134,7 @@ export default {
         startDate: undefined,
         endDate: undefined,
         mailName: undefined,
-        address: undefined,
-        mailType: undefined,
-        fileSize: undefined
+        mailType: undefined
       },
       mailType: [{
         value: '163',
