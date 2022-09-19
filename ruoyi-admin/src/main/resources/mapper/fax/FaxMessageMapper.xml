@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.dutymanagement.fax.mapper.FaxMessageMapper">
+        <resultMap id="FaxEntityResult" type="FaxEntity">
+            <id property="id"     column="id"/>
+            <result property="file_manage_id"    column="fileManageId"/>
+            <result property="name"    column="name"/>
+            <result property="file_num"    column="fileNum"/>
+            <result property="draft_date"    column="draftDate"/>
+            <result property="file_name"    column="fileName"/>
+            <result property="file_path"    column="filePath"/>
+            <result property="app_code"    column="appCode"/>
+            <result property="category"    column="category"/>
+            <result property="dept_name"    column="deptName"/>
+            <result property="create_by"    column="createBy"/>
+            <result property="create_time"    column="createTime"/>
+            <result property="update_by"    column="updateBy"/>
+            <result property="update_time"    column="updateTime"/>
+            <result property="remark"    column="remark"/>
+        </resultMap>
+
+    <select id="list" parameterType="FaxParam" resultType="FaxVO">
+        select
+        id as id,
+        file_manage_id as fileManageId,
+        name as name,
+        file_num as fileNum,
+        draft_date as draftDate,
+        category as category,
+        create_time as createTime
+        from fax
+        where 1=1
+        <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+            and date_format(draft_date,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+        </if>
+        <if test="endDate != null and endDate != ''"><!--  结束时间检索 -->
+            and date_format(draft_date,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+        </if>
+        <if test="name!=null and name!=''">
+            AND name like concat ('%',#{name},'%')
+        </if>
+        order by id desc
+    </select>
+    <select id="getFaxById" parameterType="Integer" resultType="FaxVO">
+        select
+            id as id,
+            file_manage_id as fileManageId,
+            name as name,
+            file_num as fileNum,
+            draft_date as draftDate,
+            category as category,
+            create_time as createTime
+        from fax
+        where 1=1
+           and id=#{mainId}
+    </select>
+    <select id="getFaxInfoById" parameterType="Integer" resultType="FaxInfoEntity">
+        select
+            file_id as fileId,
+            file_name as fileName,
+            file_path as filePath
+            from fax_info
+            where 1=1
+            and main_id=#{mainId}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="FaxEntity">
+        insert into fax (
+            file_manage_id,
+            name,
+            file_num,
+            draft_date,
+            category,
+            create_time
+        )values (
+            #{fileManageId},
+            #{name},
+            #{fileNum},
+            #{draftDate},
+            #{category},
+            #{createTime}
+                        )
+    </insert>
+    <insert id="addItem" useGeneratedKeys="true" keyProperty="id" parameterType="FaxInfoEntity">
+        insert into fax_info (
+            main_id,
+            file_id,
+            file_type,
+            file_name,
+            file_path
+        ) values (
+            #{mainId},
+            #{fileId},
+            #{fileType},
+            #{fileName},
+            #{filePath}
+                         )
+    </insert>
+    <select id="getFaxByStatus" parameterType="String" resultType="FaxVO">
+        select
+            id as id,
+            name as name,
+            draft_date as draftDate
+        from fax
+        where 1=1
+        and status = #{status}
+    </select>
+    <update id="updateStatus" >
+        update fax set status ="1" where id=#{id}
+    </update>
+    <select id="getFaxByManageId" parameterType="String" resultType="FaxVO">
+        select
+            file_manage_id as fileManageId,
+            name as name,
+            file_num as fileNum,
+            draft_date as draftDate,
+            category as category,
+            create_time as createTime
+        from fax
+        where 1=1
+          and file_manage_id=#{fileManageId}
+    </select>
+</mapper>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.dutymanagement.msm.mapper.ShortMessageMapper">
+
+    <resultMap type="MsmEntity" id="MsmEntityResult">
+        <id property="sendInfoId"     column="send_info_id"      />
+        <result property="searchValue"    column="search_value"    />
+        <result property="createBy"       column="create_by"     />
+        <result property="createTime"     column="create_time"   />
+        <result property="updateBy"       column="update_by"    />
+        <result property="updateTime"     column="update_time"      />
+        <result property="remark"         column="remark"    />
+        <result property="ageing"         column="ageing"    />
+        <result property="sendTime"       column="send_time"    />
+        <result property="businessType"   column="business_type"    />
+        <result property="status"         column="status"    />
+        <result property="content"        column="content"    />
+        <result property="sendCount"      column="send_count"    />
+        <result property="failCount"      column="fail_count"    />
+        <result property="dhsmsId"        column="dhsms_id"    />
+        <result property="signaTure"      column="signa_ture"    />
+        <result property="success"        column="success"    />
+        <result property="userName"       column="user_name"    />
+        <result property="phone"          column="phone"    />
+        <result property="taskTime"       column="task_time"    />
+        <result property="taskTimeStr"    column="task_time_str"    />
+    </resultMap>
+    <select id="list" parameterType="MsmParam" resultType="MsmEntity">
+        select
+        id as id,
+        send_info_id as sendInfoId,
+        ageing as ageing,
+        send_time as sendTime,
+        business_type as businessType,
+        status as status,
+        content as content,
+        signa_ture as signaTure,
+        success as success
+        from msm
+        where 1=1
+        <if test="signaTure!=null and signaTure!=''">
+            AND signa_ture like concat ('%',#{signaTure},'%')
+        </if>
+        <if test="content!=null and content!=''">
+            AND content like concat ('%',#{content},'%')
+        </if>
+        <if test="success!=null and success!=''">
+            AND success = #{success}
+        </if>
+        <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+            and date_format(send_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+        </if>
+        <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
+            and date_format(send_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+        </if>
+        order by id desc
+    </select>
+    <select id="getShortMessageById" parameterType="Integer" resultType="MsmVO">
+        select
+            send_info_id as sendInfoId,
+            ageing as ageing,
+            send_time as sendTime,
+            business_type as businessType,
+            status as status,
+            content as content,
+            signa_ture as signaTure,
+            success as success
+         from msm
+        where 1=1
+        and send_info_id = #{sendInfoId}
+    </select>
+    <select id="getInfoById" parameterType="Integer" resultType="MsmInfoEntity">
+        select
+            send_info_id as sendInfoId,
+            user_name as userName,
+            phone as phone,
+            success as success
+        from msm_info
+        where 1=1
+           and send_info_id = #{sendInfoId}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="MsmEntity">
+        insert into msm (
+        send_info_id,
+        ageing,
+        send_time,
+        create_time,
+        create_by,
+        remark,
+        status,
+        content,
+        send_count,
+        signa_ture,
+        success
+        )VALUES(
+        #{sendInfoId},
+        #{ageing},
+        #{sendTime},
+        #{createTime},
+        #{createBy},
+        #{remark},
+        #{status},
+        #{content},
+        #{sendCount},
+        #{signaTure},
+        #{success}
+        )
+    </insert>
+    <insert id="addItem">
+        insert into msm_info (
+        send_info_id,
+        user_name,
+        success,
+        phone
+        )VALUES(
+        #{sendInfoId},
+        #{userName},
+        #{success},
+        #{phone}
+        )
+    </insert>
+    <select id="getRobotData" parameterType="String" resultType="MsmVO">
+        select
+        id as id,
+        send_info_id as sendInfoId,
+        user_name as userName,
+        phone as phone,
+        ageing as ageing,
+        send_time as sendTime,
+        business_type as businessType,
+        status as status,
+        content as content,
+        send_count as sendCount,
+        fail_count as failCount,
+        signa_ture as signaTure,
+        success as success
+        from msm
+        where 1=1
+            AND success = '0'
+            AND status = #{status}
+        order by id desc
+    </select>
+    <update id="updatMsmStatus" parameterType="Integer">
+        update msm set status="1" where id=#{id}
+    </update>
+</mapper>

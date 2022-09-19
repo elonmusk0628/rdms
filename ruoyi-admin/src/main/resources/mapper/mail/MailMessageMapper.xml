@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.dutymanagement.mail.mapper.MailMessageMapper">
+    <resultMap type="MailEntity" id="MailEntityResult">
+        <id property="id"                column="id"/>
+        <result property="messageId"     column="message_Id" />
+        <result property="mailAttachmentId"     column="mail_attachment_id" />
+        <result property="mailName"     column="mail_name" />
+        <result property="personal"     column="personal" />
+        <result property="address;"     column="address" />
+        <result property="receivedDate"     column="received_date" />
+        <result property="mailType"     column="mail_type" />
+        <result property="fileSize"     column="file_size" />
+        <result property="searchValue"     column="search_value" />
+        <result property="createby"     column="createby" />
+        <result property="createTime"     column="create_time" />
+        <result property="updateBy"     column="update_by" />
+        <result property="updateTime"     column="update_time" />
+        <result property="appCode"     column="app_code" />
+        <result property="remark"     column="remark" />
+        <result property="status"     column="status" />
+    </resultMap>
+
+    <select id="list" parameterType="MailParam" resultType="MailEntity">
+      select
+      id as id,
+      message_Id as messageId,
+      mail_name as mailName,
+      mail_attachment_id as mailAttachmentId,
+      personal as personal,
+      address as address,
+      received_date as receivedDate,
+      mail_type as mailType,
+      file_size as fileSize,
+      create_time as createTime,
+      app_code as appCode,
+      remark as remark
+      from mail
+      where 1=1
+        <if test="mailType!=null and mailType!=''">
+            AND mail_type like concat ('%',#{mailType},'%')
+        </if>
+        <if test="mailName!=null and mailName!=''">
+            AND mail_name like concat ('%',#{mailName},'%')
+        </if>
+        <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
+        and date_format(received_date,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+        </if>
+        <if test="endDate != null and endDate != ''"><!--  结束时间检索 -->
+        and date_format(received_date,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+        </if>
+        order by id desc
+    </select>
+    <select id="getMailById" parameterType="Integer" resultType="MailVO">
+        SELECT
+            message_Id AS messageId,
+            mail_name AS mailName,
+            mail_attachment_id AS mailAttachmentId,
+            personal AS personal,
+            address AS address,
+            received_date AS receivedDate,
+            mail_type AS mailType,
+            file_size AS fileSize,
+            create_time AS createTime,
+            app_code AS appCode,
+            remark AS remark,
+            status as status
+        FROM
+            mail
+        WHERE
+            1 = 1
+            AND id = #{mainId}
+    </select>
+    <select id="getMailInfoById" parameterType="String" resultType="MailInfoEntity">
+        SELECT
+            mail_attachment_id AS mailAttachmentId,
+            file_id AS fileId,
+            file_name AS fileName
+        FROM
+            mail_info
+        WHERE
+            1 = 1
+            AND main_id = #{mainId}
+    </select>
+    <select id="getMailByStatus" parameterType="String" resultType="MailVO">
+        SELECT
+        id as id,
+        message_Id AS messageId,
+        mail_name AS mailName,
+        mail_attachment_id AS mailAttachmentId,
+        personal AS personal,
+        address AS address,
+        received_date AS receivedDate,
+        mail_type AS mailType,
+        file_size AS fileSize,
+        create_time AS createTime,
+        app_code AS appCode,
+        remark AS remark,
+        status as status
+        FROM
+        mail
+        WHERE
+        1 = 1
+            AND status = #{status}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="MailEntity">
+        insert into mail (
+        message_Id,
+        mail_attachment_id,
+        mail_name,
+        create_time,
+        address,
+        received_date,
+        app_code,
+        mail_type,
+        file_size
+        ) VALUES (
+        #{messageId},
+        #{mailAttachmentId},
+        #{mailName},
+        #{createTime},
+        #{address},
+        #{receivedDate},
+        #{appCode},
+        #{mailType},
+        #{fileSize}
+        )
+    </insert>
+    <update id="updateMailStatus">
+        update mail set status ="1" where id=#{id}
+    </update>
+    <insert id="addMailInfo" useGeneratedKeys="true" keyProperty="item_id" parameterType="MailInfoEntity">
+        insert into mail_info (
+            main_id,
+            file_id,
+            mail_attachment_id,
+            file_name
+        ) VALUES (
+            #{mainId},
+            #{fileId},
+            #{mailAttachmentId},
+            #{fileName}
+                         )
+    </insert>
+    <select id="getMailByMessageId" parameterType="String" resultType="MailVO">
+        SELECT
+            message_Id AS messageId,
+            mail_name AS mailName,
+            mail_attachment_id AS mailAttachmentId,
+            personal AS personal,
+            address AS address,
+            received_date AS receivedDate,
+            mail_type AS mailType,
+            file_size AS fileSize,
+            create_time AS createTime,
+            app_code AS appCode,
+            remark AS remark,
+            status as status
+        FROM
+            mail
+        WHERE
+            1 = 1
+          AND message_Id = #{messageId}
+    </select>
+</mapper>
