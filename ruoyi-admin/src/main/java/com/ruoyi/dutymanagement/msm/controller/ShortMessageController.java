@@ -32,8 +32,8 @@ public class ShortMessageController extends BaseController {
      * @param msmParam
      * @return
      */
-    @PostMapping("/list")
-    public TableDataInfo list(@RequestBody MsmParam msmParam) {
+    @GetMapping("/list")
+    public TableDataInfo list(MsmParam msmParam) {
         startPage();
         List<MsmVO> msmVOList = shortMessageService.list(msmParam);
         return getDataTable(msmVOList);

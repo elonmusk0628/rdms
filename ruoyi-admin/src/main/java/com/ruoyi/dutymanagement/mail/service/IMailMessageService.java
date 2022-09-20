@@ -18,7 +18,7 @@ public interface IMailMessageService {
      * @param mailParam
      * @return
      */
-    public List<MailVO> list(MailParam mailParam);
+    List<MailVO> list(MailParam mailParam);
 
     /**
      * 查询邮件详情
@@ -26,7 +26,7 @@ public interface IMailMessageService {
      * @param mainId
      * @return
      */
-    public MailVO getMailInfoById(String mainId);
+    MailVO getMailInfoById(String mainId);
 
     /**
      * 调其它系统接口
@@ -41,12 +41,12 @@ public interface IMailMessageService {
      * @param status
      * @return
      */
-    public String getRobotData(String status);
+    String getRobotData(String status);
 
     /**
      * 获取鉴权码F-Access
      *
      * @return
      */
-    public String getMailFAccess(LoginInfo loginInfo) throws Exception;
+    String getMailFAccess(LoginInfo loginInfo) throws Exception;
 }

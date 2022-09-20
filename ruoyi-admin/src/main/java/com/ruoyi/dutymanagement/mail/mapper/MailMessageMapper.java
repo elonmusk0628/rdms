@@ -21,7 +21,7 @@ public interface MailMessageMapper {
      * @param mailParam
      * @return
      */
-    public List<MailVO> list(MailParam mailParam);
+    List<MailVO> list(MailParam mailParam);
 
     /**
      * 根据邮件附件id查询邮件
@@ -29,7 +29,7 @@ public interface MailMessageMapper {
      * @param mainId
      * @return
      */
-    public MailVO getMailById(int mainId);
+    MailVO getMailById(int mainId);
 
     /**
      * 根据邮件附件messageId查询邮件
@@ -37,7 +37,7 @@ public interface MailMessageMapper {
      * @param messageId
      * @return
      */
-    public MailVO getMailByMessageId(String messageId);
+    MailVO getMailByMessageId(String messageId);
 
     /**
      * 查询邮件详情
@@ -45,7 +45,7 @@ public interface MailMessageMapper {
      * @param mainId
      * @return
      */
-    public List<MailInfoEntity> getMailInfoById(String mainId);
+    List<MailInfoEntity> getMailInfoById(String mainId);
 
     /**
      * 查询播报邮件
@@ -53,14 +53,14 @@ public interface MailMessageMapper {
      * @param status
      * @return
      */
-    public List<MailVO> getMailByStatus(String status);
+    List<MailVO> getMailByStatus(String status);
 
     /**
      * 新增邮件信息
      *
      * @param mailEntity
      */
-    public int add(MailEntity mailEntity);
+    int add(MailEntity mailEntity);
 
     /**
      * 修改邮件状态

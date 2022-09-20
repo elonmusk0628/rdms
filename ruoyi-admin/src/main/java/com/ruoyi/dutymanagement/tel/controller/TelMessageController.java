@@ -33,8 +33,8 @@ public class TelMessageController extends BaseController {
      * @param telInfoParam
      * @return
      */
-    @PostMapping("/list")
-    public TableDataInfo list(@RequestBody TelInfoParam telInfoParam) {
+    @GetMapping("/list")
+    public TableDataInfo list(TelInfoParam telInfoParam) {
         startPage();
         List<TelInfoVO> telVOList = telMessageService.list(telInfoParam);
         return getDataTable(telVOList);

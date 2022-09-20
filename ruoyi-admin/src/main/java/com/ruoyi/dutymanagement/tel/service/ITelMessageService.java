@@ -17,7 +17,7 @@ public interface ITelMessageService {
      * @param telInfoParam
      * @return
      */
-    public List<TelInfoVO> list(TelInfoParam telInfoParam);
+    List<TelInfoVO> list(TelInfoParam telInfoParam);
 
     /**
      * 根据id查询通话记录详情
@@ -25,7 +25,7 @@ public interface ITelMessageService {
      * @param id
      * @return
      */
-    public TelInfoVO getTelInfoById(String id);
+    TelInfoVO getTelInfoById(String id);
 
     /**
      * 与机器人接口
@@ -33,5 +33,5 @@ public interface ITelMessageService {
      * @param status
      * @return
      */
-    public String getRobotData(String status);
+    String getRobotData(String status);
 }

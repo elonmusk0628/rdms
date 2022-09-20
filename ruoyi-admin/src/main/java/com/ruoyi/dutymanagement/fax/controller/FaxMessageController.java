@@ -29,8 +29,8 @@ public class FaxMessageController extends BaseController {
      * @param faxParam
      * @return
      */
-    @PostMapping("/list")
-    public TableDataInfo list(@RequestBody FaxParam faxParam) {
+        @GetMapping("/list")
+    public TableDataInfo list(FaxParam faxParam) {
         startPage();
         List<FaxVO> faxVOList = faxMessageService.list(faxParam);
         return getDataTable(faxVOList);

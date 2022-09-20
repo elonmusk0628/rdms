@@ -22,7 +22,7 @@ public interface IShortMessageService {
      * @param msmParam
      * @return
      */
-    public List<MsmVO> list(MsmParam msmParam);
+    List<MsmVO> list(MsmParam msmParam);
 
     /**
      * 查询短信详情
@@ -30,14 +30,14 @@ public interface IShortMessageService {
      * @param sendInfoId
      * @return
      */
-    public MsmVO getInfoById(String sendInfoId);
+    MsmVO getInfoById(String sendInfoId);
 
     /**
      * 调其它系统接口
      *
      * @return
      */
-    public String getJsonObject(String status) throws Exception;
+    String getJsonObject(String status) throws Exception;
 
     /**
      * 测试方法
@@ -45,7 +45,7 @@ public interface IShortMessageService {
      * @param status
      * @return
      */
-    public String getRobotData(String status);
+    String getRobotData(String status);
 
     /**
      * 测试新增接口
@@ -53,12 +53,12 @@ public interface IShortMessageService {
      * @param msmParam
      * @throws ParseException
      */
-    public void add(MsmParam msmParam) throws ParseException;
+    void add(MsmParam msmParam) throws ParseException;
 
     /**
      * 获取token
      *
      * @return
      */
-    public String getToken(LoginInfo loginInfo) throws Exception;
+    String getToken(LoginInfo loginInfo) throws Exception;
 }
