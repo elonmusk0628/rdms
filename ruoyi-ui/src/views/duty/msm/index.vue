@@ -171,7 +171,7 @@ export default {
     /** 查询短信列表 */
     getList() {
       this.loading = true;
-      list({ MsmParam: this.queryParams }).then( response => {
+      list(this.queryParams).then( response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;
