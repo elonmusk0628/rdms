@@ -1,6 +1,5 @@
 package com.ruoyi.dutymanagement.fax.controller;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
