@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.KeyWordMapper">
+    
+    <resultMap type="com.ruoyi.web.domian.KeyWordInfo" id="KeyWordInfoResult">
+    	<id     property="id"      column="id"      />
+        <result property="type"    column="type"    />
+        <result property="keyWord"     column="key_word"     />
+        <result property="createTime"   column="create_time"   />
+        <result property="updateTime"   column="update_time"   />
+    </resultMap>
+
+    <sql id="selectKeyWord">
+        select id, type, key_word, create_time from key_word_info
+    </sql>
+
+
+    <select id="selectKeyWordInfoList" parameterType="String" resultMap="KeyWordInfoResult">
+        <include refid="selectKeyWord"/>
+        <where>
+            <if test="keyWord !=null and keyWord != ''">
+                and key_word LIKE CONCAT( '%' , #{keyWord}, '%')
+            </if>
+            <if test="type !=null">
+                and type = #{type}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and date_format(create_time,'%y%m%d') &gt;= date_format(#{startTime},'%y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and date_format(create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+            </if>
+
+        </where>
+    </select>
+
+    <insert id="addKeyWordInfo" parameterType="com.ruoyi.web.domian.KeyWordInfo">
+        insert into key_word_info (type, key_word, create_time)
+        values(#{type}, #{keyWord}, #{createTime})
+    </insert>
+
+    <update id="updateKeyWordInfo" parameterType="com.ruoyi.web.domian.KeyWordInfo">
+        update key_word_info
+        <set>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="keyWord != null and keyWord != ''">key_word = #{keyWord},</if>
+            update_time = #{updateTime}
+        </set>
+        where id = #{id}
+    </update>
+    
+    <delete id="deleteWordInfo" parameterType="int">
+        delete from key_word_info
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </delete>
+
+
+</mapper>

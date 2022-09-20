@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.SearchInfoMapper">
+    
+    <resultMap type="com.ruoyi.web.domian.SearchInfo" id="RiverInfoResult">
+    	<id     property="id"      column="id"      />
+        <result property="type"    column="type"    />
+        <result property="status"     column="status"     />
+        <result property="name"   column="name"   />
+        <result property="waterLevel"    column="water_level"    />
+        <result property="warnLevel"      column="warn_level"      />
+        <result property="waterPotential"      column="water_potential"      />
+        <result property="riverFlow"    column="river_flow"    />
+        <result property="waterType"      column="water_type"      />
+        <result property="reservoirIn"      column="reservoir_in"      />
+        <result property="reservoirOut"      column="reservoir_out"      />
+        <result property="markContent"    column="mark_content"    />
+		<result property="iDate"    column="i_date"    />
+		<result property="iHour"    column="i_hour"    />
+    </resultMap>
+
+    <sql id="selectRiver">
+        select id, type, status, name, water_level, warn_level, water_potential, river_flow, water_type, reservoir_in,
+        reservoir_out, mark_content, i_date, i_hour
+        from river_info
+    </sql>
+
+
+    <select id="selectRiverInfoList" parameterType="com.ruoyi.web.domian.SearchRequest" resultMap="RiverInfoResult">
+        <include refid="selectRiver"/>
+        <where>
+            <if test="name !=null and name != ''">
+                and name LIKE CONCAT( '%' , #{name}, '%')
+            </if>
+            <if test="status !=null">
+                and status = #{status}
+            </if>
+            <if test="iDate != null and iDate != ''">
+                and i_date = #{iDate}
+            </if>
+            <if test="iHour != null and iHour != ''">
+                and i_hour = #{iHour}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
