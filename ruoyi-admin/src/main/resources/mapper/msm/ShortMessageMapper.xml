@@ -55,7 +55,7 @@
         <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
             and date_format(send_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
         </if>
-        order by id desc
+        order by id,send_time desc
     </select>
     <select id="getShortMessageById" parameterType="Integer" resultType="MsmVO">
         select
