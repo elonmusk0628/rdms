@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="keyWord !=null and keyWord != ''">
                 and key_word LIKE CONCAT( '%' , #{keyWord}, '%')
             </if>
-            <if test="type !=null">
+            <if test="type !=null and type !=''">
                 and type = #{type}
             </if>
             <if test="startTime != null and startTime != ''">
@@ -60,5 +60,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </delete>
 
+    <select id="selectAll" resultMap="KeyWordInfoResult">
+        <include refid="selectKeyWord"/>
+    </select>
 
 </mapper>

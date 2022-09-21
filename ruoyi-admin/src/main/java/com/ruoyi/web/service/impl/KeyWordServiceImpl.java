@@ -2,9 +2,13 @@ package com.ruoyi.web.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.web.domian.KeyWordInfo;
 import com.ruoyi.web.mapper.KeyWordMapper;
 import com.ruoyi.web.service.IKeyWordService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +32,9 @@ public class KeyWordServiceImpl implements IKeyWordService {
     @Autowired
     KeyWordMapper keyWordMapper;
 
-    private static final String FAIL_PATH = "D:/CodeResource/rdms/rdms/ruoyi-admin/src/main/resources/ik_analyzer/ext.dic";
+    private static final String FAIL_PATH = "D:/CodeSource/rdms/ruoyi-admin/src/main/resources/ik_analyzer/ext.dic";
+
+    private static final Logger log = LoggerFactory.getLogger(KeyWordServiceImpl.class);
 
 
     /**
@@ -40,7 +46,7 @@ public class KeyWordServiceImpl implements IKeyWordService {
      * @param endTime 结束时间
      */
     @Override
-    public PageInfo<KeyWordInfo> selectKeyWordInfoList(String keyWord, Integer type, String startTime, String endTime, Integer pageNum, Integer pageSize) {
+    public PageInfo<KeyWordInfo> selectKeyWordInfoList(String keyWord, String type, String startTime, String endTime, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<KeyWordInfo> keyWordInfos = keyWordMapper.selectKeyWordInfoList(keyWord, type, startTime, endTime);
         return new PageInfo<KeyWordInfo>(keyWordInfos);
@@ -79,12 +85,95 @@ public class KeyWordServiceImpl implements IKeyWordService {
     /**
      * 删除关键字请求
      *
-     * @param id 关键字请求体
+     * @param ids 关键字id集合
      */
     @Override
-    public int deleteKeyWordInfo(Integer id) {
-        return keyWordMapper.deleteWordInfo(id);
+    public int deleteKeyWordInfo(List<Integer> ids) {
+        int i = 0;
+        for (Integer id : ids) {
+            i = keyWordMapper.deleteWordInfo(id);
+        }
+        return i;
     }
+
+    /**
+     * 批量新增关键字
+     *
+     * @param keyWordInfoList keyWordInfoList
+     * @return String
+     */
+    @Override
+    @Transactional(rollbackFor = IOException.class)
+    public String addKeyWordTemplate(List<KeyWordInfo> keyWordInfoList) throws IOException {
+        if (StringUtils.isNull(keyWordInfoList) || keyWordInfoList.size() == 0)
+        {
+            throw new ServiceException("导入关键字数据不能为空！");
+        }
+        int successNum = 0;
+        int failureNum = 0;
+        StringBuilder successMsg = new StringBuilder();
+        StringBuilder failureMsg = new StringBuilder();
+
+        for (KeyWordInfo info : keyWordInfoList)
+        {
+            try
+            {
+                // 验证该关键字是否存在
+                KeyWordInfo keyInfo = keyWordMapper.selectByKeyWord(info.getKeyWord());
+                if (keyInfo == null)
+                {
+                    successNum++;
+                    // 1.不存在写入数据库
+                    info.setCreateTime(new Date());
+                    keyWordMapper.addKeyWordInfo(info);
+                    // 2.写入字典
+                    writeToDocument(FAIL_PATH, info.getKeyWord());
+                    successMsg.append("<br/>" + successNum + ",关键字 " + info.getKeyWord() + " 导入成功");
+                }
+                else
+                {
+                    failureNum++;
+                    failureMsg.append("<br/>" + failureNum + ",关键字 " + info.getKeyWord() + " 已存在");
+                }
+            }
+            catch (Exception e)
+            {
+                failureNum++;
+                String msg = "<br/>" + failureNum + ",关键字 " + info.getKeyWord() + " 导入失败：";
+                failureMsg.append(msg + e.getMessage());
+                log.error(msg, e);
+            }
+        }
+        if (failureNum > 0)
+        {
+            failureMsg.insert(0, "很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
+            throw new ServiceException(failureMsg.toString());
+        }
+        else
+        {
+            successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
+        }
+        return successMsg.toString();
+    }
+
+    @Override
+    public String refreshKeyWords()  {
+        try {
+            // 1.先清空文档
+            clearDocument();
+            List<KeyWordInfo> keyWordInfoList = keyWordMapper.selectAll();
+
+            // 2.循环写入文档
+            for (KeyWordInfo info : keyWordInfoList) {
+                String keyWord = info.getKeyWord();
+                writeToDocument(FAIL_PATH, keyWord);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
 
     public void writeToDocument(String path, String content) throws IOException {
         File file = new File(path);
@@ -94,6 +183,14 @@ public class KeyWordServiceImpl implements IKeyWordService {
         bufferedWriter.write(content);
         bufferedWriter.flush();
         bufferedWriter.close();
+    }
+
+    public void clearDocument() throws IOException {
+        File fi = new File(FAIL_PATH);
+        FileWriter fileWriter = new FileWriter(fi);
+        fileWriter.write("");
+        fileWriter.flush();
+        fileWriter.close();
     }
 
 }

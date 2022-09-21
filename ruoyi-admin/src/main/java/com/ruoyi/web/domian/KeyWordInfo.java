@@ -27,8 +27,8 @@ public class KeyWordInfo {
 
     /** 类型(1:水库；2:河道；3:机构) */
     @JsonProperty(value = "type")
-    @Excel(name = "关键字类型", cellType = ColumnType.NUMERIC)
-    private Integer type;
+    @Excel(name = "关键字类型", cellType = ColumnType.STRING)
+    private String type;
 
     /** 关键字 */
     @NotBlank(message = "key word param cant be empty")

@@ -28,7 +28,7 @@ public class SearchInfoController {
     /**
      * 查询信息请求
      *
-     * @param str http请求对象
+     * @param str str
      */
     @GetMapping("/info")
     public AjaxResult SearchInfo(@RequestParam(name = "str") String str) {
@@ -44,5 +44,6 @@ public class SearchInfoController {
     }
 
 }
+
 
 

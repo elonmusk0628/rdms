@@ -28,4 +28,12 @@ public interface BaseConstants {
 
     String COMMA_SYMBOL = "，";
 
+    int RESERVOIR_TYPE  = 1;
+
+    int RIVER_TYPE  = 2;
+
+    String SHUI_KU = "水库";
+
+    String HE_DAO = "河道";
+
 }

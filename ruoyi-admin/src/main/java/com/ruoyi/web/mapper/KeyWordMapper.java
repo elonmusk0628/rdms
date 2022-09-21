@@ -3,7 +3,6 @@ package com.ruoyi.web.mapper;
 import com.ruoyi.web.domian.KeyWordInfo;
 import org.apache.ibatis.annotations.Param;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,7 +23,7 @@ public interface KeyWordMapper {
      * @param startTime 开始时间
      * @param endTime 结束时间
      */
-    public List<KeyWordInfo> selectKeyWordInfoList(@Param("keyWord")String keyWord, @Param("type")Integer type,
+    public List<KeyWordInfo> selectKeyWordInfoList(@Param("keyWord")String keyWord, @Param("type")String type,
                                                    @Param("startTime")String startTime, @Param("endTime")String endTime);
 
     /**
@@ -50,4 +49,19 @@ public interface KeyWordMapper {
      * @return 结果行数
      */
     public int deleteWordInfo(Integer id);
+
+    /**
+     * 查询关键字
+     *
+     * @param keyWord keyWord
+     * @return 结果行数
+     */
+    public KeyWordInfo selectByKeyWord(String keyWord);
+
+    /**
+     * 查询全表
+     *
+     * @return 关键字结果集
+     */
+    public List<KeyWordInfo> selectAll();
 }
