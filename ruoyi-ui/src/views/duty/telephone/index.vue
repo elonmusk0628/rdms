@@ -65,7 +65,7 @@
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column label="来电单位" align="center" prop="theElectricityUnit" />
+      <el-table-column label="来电单位" align="center" prop="theElectricityUnit" :show-overflow-tooltip="true" />
       <el-table-column label="来电号码" align="center" prop="tel" width="120" />
       <el-table-column label="来电姓名" align="center" prop="userName" />
       <el-table-column label="来电时间" align="center" prop="telTime" width="180">
