@@ -36,4 +36,6 @@ public interface BaseConstants {
 
     String HE_DAO = "河道";
 
+    String JI_GOU = "机构";
+
 }

@@ -73,7 +73,7 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
             String monthKeyWord = keyWordMap.get(MONTH_KEY);
             String dayKeyWord = keyWordMap.get(DAY_KEY);
             String hourKeyWord = keyWordMap.get(HOUR_KEY);
-            // 3.拼接日期，封装查询数据库请求体req
+            // 3.截取日期，封装查询数据库请求体req
             String date = yearKeyWord.substring(0, yearKeyWord.length()-1) + CONNECT_SYMBOL + monthKeyWord.substring(0, monthKeyWord.length()-1)
                     + CONNECT_SYMBOL + dayKeyWord.substring(0, dayKeyWord.length()-1);
             req.setIDate(date);

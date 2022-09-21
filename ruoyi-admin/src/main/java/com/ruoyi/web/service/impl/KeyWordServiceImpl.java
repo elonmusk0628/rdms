@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.web.common.constant.BaseConstants;
 import com.ruoyi.web.domian.KeyWordInfo;
 import com.ruoyi.web.mapper.KeyWordMapper;
 import com.ruoyi.web.service.IKeyWordService;
@@ -62,6 +63,7 @@ public class KeyWordServiceImpl implements IKeyWordService {
     public int addKeyWordInfo(KeyWordInfo req) throws IOException {
         // 1.写入数据库
         req.setCreateTime(new Date());
+        req.setUpdateTime(new Date());
         int i = keyWordMapper.addKeyWordInfo(req);
 
         // 2.写入关键字词典ext.dic
@@ -116,28 +118,35 @@ public class KeyWordServiceImpl implements IKeyWordService {
 
         for (KeyWordInfo info : keyWordInfoList)
         {
-            try
-            {
-                // 验证该关键字是否存在
-                KeyWordInfo keyInfo = keyWordMapper.selectByKeyWord(info.getKeyWord());
-                if (keyInfo == null)
-                {
-                    successNum++;
-                    // 1.不存在写入数据库
-                    info.setCreateTime(new Date());
-                    keyWordMapper.addKeyWordInfo(info);
-                    // 2.写入字典
-                    writeToDocument(FAIL_PATH, info.getKeyWord());
-                    successMsg.append("<br/>" + successNum + ",关键字 " + info.getKeyWord() + " 导入成功");
-                }
-                else
-                {
+            try {
+                if (StringUtils.isNotEmpty(info.getType()) && StringUtils.isNotEmpty(info.getKeyWord())) {
+                    if (BaseConstants.SHUI_KU.equals(info.getType()) || BaseConstants.HE_DAO.equals(info.getType())
+                            || BaseConstants.JI_GOU.equals(info.getType())) {
+
+                        // 验证该关键字是否存在
+                        KeyWordInfo keyInfo = keyWordMapper.selectByKeyWord(info.getKeyWord(), info.getType());
+                        if (keyInfo == null) {
+                            successNum++;
+                            // 1.不存在写入数据库
+                            info.setCreateTime(new Date());
+                            info.setUpdateTime(new Date());
+                            keyWordMapper.addKeyWordInfo(info);
+                            // 2.写入字典
+                            writeToDocument(FAIL_PATH, info.getKeyWord());
+                            successMsg.append("<br/>" + successNum + ",关键字 " + info.getKeyWord() + " 导入成功");
+                        } else {
+                            failureNum++;
+                            failureMsg.append("<br/>" + failureNum + ",关键字 " + info.getKeyWord() + " 已存在,请重新导入");
+                        }
+                    } else {
+                        failureNum++;
+                        failureMsg.append("<br/>" + failureNum + ",关键字 " + info.getKeyWord() + ",关键字类型错误");
+                    }
+                } else {
                     failureNum++;
-                    failureMsg.append("<br/>" + failureNum + ",关键字 " + info.getKeyWord() + " 已存在");
+                    failureMsg.append("<br/>" + failureNum + ",关键字 " + info.getKeyWord() + ",关键字类型或关键字不能为空");
                 }
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 failureNum++;
                 String msg = "<br/>" + failureNum + ",关键字 " + info.getKeyWord() + " 导入失败：";
                 failureMsg.append(msg + e.getMessage());

@@ -9,7 +9,6 @@ import com.ruoyi.web.service.IKeyWordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,11 +43,7 @@ public class KeyWordController {
                                     @RequestParam(value = "page_size", required = false) Integer pageSize) {
         PageInfo<KeyWordInfo> keyWordInfoPageInfo = keyWordService.selectKeyWordInfoList(keyWord, type, startTime, endTime, pageNum, pageSize);
         List<KeyWordInfo> keyWordInfos = keyWordInfoPageInfo.getList();
-        if (CollectionUtils.isEmpty(keyWordInfos)) {
-            return AjaxResult.error(ExceptionEnum.NULL_RESULT.getErrorMsg());
-        } else {
-            return AjaxResult.success(keyWordInfoPageInfo);
-        }
+        return AjaxResult.success(keyWordInfoPageInfo);
     }
 
     /**

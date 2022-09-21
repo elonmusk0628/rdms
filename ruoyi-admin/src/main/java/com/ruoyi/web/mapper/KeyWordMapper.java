@@ -56,7 +56,7 @@ public interface KeyWordMapper {
      * @param keyWord keyWord
      * @return 结果行数
      */
-    public KeyWordInfo selectByKeyWord(String keyWord);
+    public KeyWordInfo selectByKeyWord(@Param("keyWord")String keyWord, @Param("type")String type);
 
     /**
      * 查询全表
