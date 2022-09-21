@@ -50,7 +50,8 @@ import java.util.Date;
  */
 @Service
 @Transactional
-public class HttpClientServiceImpl implements IHttpClientService {
+public class
+ HttpClientServiceImpl implements IHttpClientService {
     @Autowired
     private ShortMessageMapper shortMessageMapper;
 

@@ -51,7 +51,7 @@
         <if test="endDate != null and endDate != ''"><!--  结束时间检索 -->
         and date_format(received_date,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
         </if>
-        order by id desc
+        order by id,received_date desc
     </select>
     <select id="getMailById" parameterType="Integer" resultType="MailVO">
         SELECT

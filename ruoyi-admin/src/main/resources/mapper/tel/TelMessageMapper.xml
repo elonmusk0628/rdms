@@ -57,7 +57,7 @@
     <if test="endDate != null and endDate != ''"><!--  结束时间检索 -->
         and date_format(tel_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
     </if>
-    order by id desc
+    order by id,tel_time desc
 </select>
     <select id="getTelInfoById" parameterType="Integer" resultType="TelInfoVO">
         SELECT
