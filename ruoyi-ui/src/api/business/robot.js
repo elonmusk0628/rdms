@@ -35,3 +35,11 @@ export function delWord(query) {
     params: query
   })
 }
+
+// 刷新关键字
+export function refreshWord() {
+  return request({
+    url: '/key/word/refresh',
+    method: 'get'
+  })
+}
