@@ -16,9 +16,9 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="关键字" prop="dictName">
+      <el-form-item label="关键字" prop="key_word">
         <el-input
-          v-model="queryParams.dictName"
+          v-model="queryParams.key_word"
           placeholder="请输入关键字"
           clearable
           style="width: 240px"
@@ -27,7 +27,7 @@
       </el-form-item>
       <el-form-item label="开始时间">
         <el-date-picker
-          v-model="queryParams.startDate"
+          v-model="queryParams.start_time"
           value-format="yyyy-MM-dd HH:mm:ss"
           type="datetime"
           placeholder="开始时间">
@@ -35,7 +35,7 @@
       </el-form-item>
       <el-form-item label="结束时间">
         <el-date-picker
-          v-model="queryParams.endDate"
+          v-model="queryParams.end_time"
           value-format="yyyy-MM-dd HH:mm:ss"
           type="datetime"
           placeholder="结束时间">
@@ -94,7 +94,7 @@
       <el-table-column label="编号" width="100" align="center" prop="id" />
       <el-table-column label="类型" align="center">
         <template slot-scope="scope">
-          <div>{{ scope.row.type=='1'?'水库':(scope.row.type=='2'?'河道':'机构') }}</div>
+          <div>{{ scope.row.type=='1'?'水库':(scope.row.type=='2'?'河道':(scope.row.type=='3'?'机构':'')) }}</div>
         </template>
       </el-table-column>
       <el-table-column label="关键字" align="center" prop="key_word" :show-overflow-tooltip="true" />
@@ -104,19 +104,13 @@
           <el-tag size="small" :type="scope.row.status=='告警'?'danger':''">{{ scope.row.status}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="时间" align="center" width="180">
+      <el-table-column label="创建时间" align="center" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.update_time) }}</span>
+          <span>{{ parseTime(scope.row.create_time) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-view"
-            @click="handleView(scope.row)"
-          >详细</el-button>
           <el-button
             size="mini"
             type="text"
@@ -136,14 +130,14 @@
     <pagination
       v-show="total>0"
       :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
+      :page.sync="queryParams.page_num"
+      :limit.sync="queryParams.page_size"
       @pagination="getList"
     />
 
-    <!-- 新增水情信息或者详细弹框 -->
+    <!-- 新增或者修改弹框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px" v-if="this.dialog==='add' || this.dialog==='modify'">
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="类型" prop="type">
           <el-select
             v-model="form.type"
@@ -159,28 +153,13 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="关键字" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入关键字"></el-input>
+        <el-form-item label="关键字" prop="key_word">
+          <el-input v-model="form.key_word" type="textarea" placeholder="请输入关键字"></el-input>
         </el-form-item>
       </el-form>
-      <el-form :model="form" label-width="100px" size="mini" v-if="this.dialog==='detail'">
-        <el-descriptions class="margin-top" :column="2">
-          <el-descriptions-item label="关键字">{{ form.key_word }}</el-descriptions-item>
-          <el-descriptions-item label="时间">{{ form.theElectricityUnit }}</el-descriptions-item>
-          <el-descriptions-item label="水位">{{ form.tel }}</el-descriptions-item>
-          <el-descriptions-item label="汛限水位" v-if="form.type=='1'">{{ form.telTime }}</el-descriptions-item>
-          <el-descriptions-item label="警戒水位" v-if="form.type=='2'">{{ form.telTime }}</el-descriptions-item>
-          <el-descriptions-item label="入库" v-if="form.type=='1'">{{ form.phone }}</el-descriptions-item>
-          <el-descriptions-item label="出库" v-if="form.type=='1'">{{ form.answerPeople }}</el-descriptions-item>
-          <el-descriptions-item label="河道流量" v-if="form.type=='2'">{{ form.phone }}</el-descriptions-item>
-          <el-descriptions-item label="水势" v-if="form.type=='2'">{{ form.answerPeople }}</el-descriptions-item>
-          <el-descriptions-item label="状态">{{ form.title }}</el-descriptions-item>
-        </el-descriptions>
-      </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm" v-if="this.dialog==='add'">确 定</el-button>
-        <el-button @click="cancel" v-if="this.dialog==='add'">取 消</el-button>
-        <el-button @click="open = false" v-if="this.dialog==='detail'">关 闭</el-button>
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
 
@@ -217,7 +196,7 @@
 </template>
 
 <script>
-import { listWord, delWord, addWord, updateWord, getWord } from "@/api/business/robot";
+import { listWord, delWord, addWord, updateWord } from "@/api/business/robot";
 import { getToken } from "@/utils/auth";
 
 export default {
@@ -227,7 +206,7 @@ export default {
       // 遮罩层
       loading: true,
       // 选中数组
-      ids: [],
+      selection: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -240,18 +219,16 @@ export default {
       typeList: [],
       // 弹出层标题
       title: "",
-      // 弹出框类型
-      dialog: 'add',
       // 是否显示弹出层
       open: false,
       // 查询参数
       queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        startDate: undefined,
-        endDate: undefined,
+        page_num: 1,
+        page_size: 10,
+        start_time: undefined,
+        end_time: undefined,
         type: undefined,
-        dictName: undefined
+        key_word: undefined
       },
       // 表单参数
       form: {},
@@ -260,7 +237,7 @@ export default {
         type: [
           { required: true, message: "类型不能为空", trigger: "blur" }
         ],
-        remark: [
+        key_word: [
           { required: true, message: "关键字不能为空", trigger: "blur" }
         ]
       },
@@ -287,7 +264,7 @@ export default {
         // 设置上传的请求头部
         headers: { Authorization: "Bearer " + getToken() },
         // 上传的地址
-        url: process.env.VUE_APP_BASE_API + "/system/user/importData"
+        url: process.env.VUE_APP_BASE_API + "/key/word/importKeyWords"
       }
     };
   },
@@ -299,8 +276,8 @@ export default {
     getList() {
       this.loading = true;
       listWord(this.queryParams).then(response => {
-          this.typeList = response.data;
-          this.total = response.total;
+          this.typeList = response.data.list;
+          this.total = response.data.total;
           this.loading = false;
         }
       );
@@ -315,20 +292,19 @@ export default {
       this.form = {
         id: undefined,
         type: undefined,
-        dictName: undefined,
-        remark: undefined
+        key_word: undefined
       };
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
+      this.queryParams.page_num = 1;
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.queryParams.startDate = undefined;
-      this.queryParams.endDate = undefined;
+      this.queryParams.start_time = undefined;
+      this.queryParams.end_time = undefined;
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -337,62 +313,57 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加水文水情信息";
-      this.dialog = "add";
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
+      this.selection = selection
       this.single = selection.length!=1
       this.multiple = !selection.length
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const waterId = row.id || this.ids
-      getWord(waterId).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.dialog = 'modify';
-        this.title = "修改水文水情信息";
-      });
+      if (row.id) {
+        this.form = JSON.parse(JSON.stringify(row));
+      } else {
+        this.form = JSON.parse(JSON.stringify(this.selection[0]));
+      }
+      this.waterType.forEach(item => {
+        if (item.value == this.form.type) {
+          this.form.type = item.label
+          return;
+        }
+      })
+      this.open = true;
+      this.title = "修改水文水情信息";
     },
     /** 提交按钮 */
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-         if (this.form.id != undefined) {
-            updateWord(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addWord(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
+          if (this.form.id != undefined) {
+              updateWord(this.form).then(response => {
+                this.$modal.msgSuccess("修改成功");
+                this.open = false;
+                this.getList();
+              });
+            } else {
+              addWord(this.form).then(response => {
+                this.$modal.msgSuccess("新增成功");
+                this.open = false;
+                this.getList();
+              });
+            }
         }
       });
     },
-    /** 详细按钮操作 */
-    handleView(row) {
-      this.waterType.forEach(item => {
-        if (item.value == row.type) {
-          this.title = item.label + "详细";
-          return;
-        }
-      })
-      this.dialog = 'detail';
-      this.open = true;
-      this.form = row;
-    },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const waterIds = row.id || this.ids;
+      const waterIds = row.id || this.selection.map(item => item.id);
       this.$modal.confirm('是否确认删除编号为"' + waterIds + '"的数据项？').then(function() {
-        return delWord(waterIds);
+        return delWord({
+          id: waterIds.toString()
+        });
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -405,7 +376,7 @@ export default {
     },
     /** 下载模板操作 */
     importTemplate() {
-      this.download('system/user/importTemplate', {
+      this.download('key/word/downloadTemplate', {
       }, `water_template_${new Date().getTime()}.xlsx`)
     },
     // 文件上传中处理

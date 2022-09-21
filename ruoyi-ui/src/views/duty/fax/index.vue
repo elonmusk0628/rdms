@@ -134,7 +134,7 @@ export default {
     /** 查询传真列表 */
     getList() {
       this.loading = true;
-      list({ FaxParam: this.queryParams }).then( response => {
+      list(this.queryParams).then( response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;

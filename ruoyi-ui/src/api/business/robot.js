@@ -9,19 +9,11 @@ export function listWord(query) {
   })
 }
 
-// 查询水情信息详细
-export function getWord(dictId) {
-  return request({
-    url: '/key/word/select/' + dictId,
-    method: 'get'
-  })
-}
-
 // 修改水情信息
 export function updateWord(data) {
   return request({
-    url: '/key/word/select',
-    method: 'put',
+    url: '/key/word/update',
+    method: 'post',
     data: data
   })
 }
@@ -29,16 +21,17 @@ export function updateWord(data) {
 // 新增水情信息
 export function addWord(data) {
   return request({
-    url: '/key/word/select',
+    url: '/key/word/add',
     method: 'post',
     data: data
   })
 }
 
 // 删除水情信息
-export function delWord(waterId) {
+export function delWord(query) {
   return request({
-    url: '/key/word/select/' + waterId,
-    method: 'delete'
+    url: '/key/word/delete',
+    method: 'get',
+    params: query
   })
 }

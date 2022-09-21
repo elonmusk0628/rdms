@@ -21,7 +21,7 @@ public interface ShortMessageMapper {
      * @param msmParam
      * @return
      */
-    public List<MsmVO> list(MsmParam msmParam);
+    List<MsmVO> list(MsmParam msmParam);
 
     /**
      * 根据id查询短信信息
@@ -29,7 +29,7 @@ public interface ShortMessageMapper {
      * @param sendInfoId
      * @return
      */
-    public MsmVO getShortMessageById(int sendInfoId);
+    MsmVO getShortMessageById(int sendInfoId);
 
     /**
      * 查询短信详情
@@ -37,21 +37,21 @@ public interface ShortMessageMapper {
      * @param sendInfoId
      * @return
      */
-    public List<MsmInfoEntity> getInfoById(int sendInfoId);
+    List<MsmInfoEntity> getInfoById(int sendInfoId);
 
     /**
      * 新增短信主信息
      *
      * @param msmEntity
      */
-    public int add(MsmEntity msmEntity);
+    int add(MsmEntity msmEntity);
 
     /**
      * 新增短信子信息
      *
      * @param msmInfoEntity
      */
-    public void addItem(MsmInfoEntity msmInfoEntity);
+    void addItem(MsmInfoEntity msmInfoEntity);
 
     /**
      * 测试机器人接口
@@ -59,12 +59,12 @@ public interface ShortMessageMapper {
      * @param status
      * @return
      */
-    public List<MsmVO> getRobotData(String status);
+    List<MsmVO> getRobotData(String status);
 
     /**
      * 根据id修改短信状态
      *
      * @param id
      */
-    public void updatMsmStatus(Integer id);
+    void updatMsmStatus(Integer id);
 }

@@ -1,6 +1,5 @@
 package com.ruoyi.dutymanagement.fax.controller;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -30,8 +29,8 @@ public class FaxMessageController extends BaseController {
      * @param faxParam
      * @return
      */
-    @PostMapping("/list")
-    public TableDataInfo list(@RequestBody FaxParam faxParam) {
+        @GetMapping("/list")
+    public TableDataInfo list(FaxParam faxParam) {
         startPage();
         List<FaxVO> faxVOList = faxMessageService.list(faxParam);
         return getDataTable(faxVOList);

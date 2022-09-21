@@ -21,7 +21,7 @@ public interface FaxMessageMapper {
      * @param faxParam
      * @return
      */
-    public List<FaxVO> list(FaxParam faxParam);
+    List<FaxVO> list(FaxParam faxParam);
 
     /**
      * 查询传真信息
@@ -29,7 +29,7 @@ public interface FaxMessageMapper {
      * @param mainId
      * @return
      */
-    public FaxVO getFaxById(Integer mainId);
+    FaxVO getFaxById(Integer mainId);
 
     /**
      * 查询传真信息
@@ -37,7 +37,7 @@ public interface FaxMessageMapper {
      * @param fileManageId
      * @return
      */
-    public FaxVO getFaxByManageId(String fileManageId);
+    FaxVO getFaxByManageId(String fileManageId);
 
     /**
      * 查询传真信息详情
@@ -45,21 +45,21 @@ public interface FaxMessageMapper {
      * @param mainId
      * @return
      */
-    public List<FaxInfoEntity> getFaxInfoById(Integer mainId);
+    List<FaxInfoEntity> getFaxInfoById(Integer mainId);
 
     /**
      * 新增传真信息
      *
      * @param faxEntity
      */
-    public int add(FaxEntity faxEntity);
+    int add(FaxEntity faxEntity);
 
     /**
      * 新增传真子信息
      *
      * @param faxInfoEntity
      */
-    public void addItem(FaxInfoEntity faxInfoEntity);
+    void addItem(FaxInfoEntity faxInfoEntity);
 
     /**
      * 查询播报传真信息
@@ -67,12 +67,12 @@ public interface FaxMessageMapper {
      * @param status
      * @return
      */
-    public List<FaxVO> getFaxByStatus(String status);
+    List<FaxVO> getFaxByStatus(String status);
 
     /**
      * 修改传真状态为已读 0未读1已读
      *
      * @param id
      */
-    public void updateStatus(Integer id);
+    void updateStatus(Integer id);
 }

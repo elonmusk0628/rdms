@@ -152,7 +152,7 @@ export default {
     /** 查询邮件列表 */
     getList() {
       this.loading = true;
-      list({ MailParam: this.queryParams }).then( response => {
+      list(this.queryParams).then( response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;

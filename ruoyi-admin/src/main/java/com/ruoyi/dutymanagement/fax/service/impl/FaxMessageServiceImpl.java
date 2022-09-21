@@ -61,11 +61,15 @@ public class FaxMessageServiceImpl implements IFaxMessageService {
      */
     @Override
     public String getJsonObject(String status) throws Exception {
-        //调取值班管理系统短信接口
+        //调取值班管理系统传真接口
         String jsonObject = httpPostClientService.doFax(status);
         return jsonObject;
     }
-
+    /**
+     * 与机器人接口
+     *
+     * @return
+     */
     @Override
     public String getRobotData(String status) {
         List<FaxVO> faxVOList = faxMessageMapper.getFaxByStatus(status);

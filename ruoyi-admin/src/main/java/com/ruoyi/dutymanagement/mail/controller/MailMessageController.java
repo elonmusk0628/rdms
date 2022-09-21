@@ -34,8 +34,8 @@ public class MailMessageController extends BaseController {
      * @param mailParam
      * @return
      */
-    @PostMapping("/list")
-    public TableDataInfo list(@RequestBody MailParam mailParam) {
+    @GetMapping("/list")
+    public TableDataInfo list(MailParam mailParam) {
         startPage();
         List<MailVO> mailVOList = mailMessageService.list(mailParam);
         return getDataTable(mailVOList);

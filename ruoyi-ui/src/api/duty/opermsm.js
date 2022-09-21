@@ -4,8 +4,8 @@ import request from '@/utils/request'
 export function list(query) {
   return request({
     url: '/msm/message/list',
-    method: 'post',
-    data: query
+    method: 'get',
+    params: query
   })
 }
 

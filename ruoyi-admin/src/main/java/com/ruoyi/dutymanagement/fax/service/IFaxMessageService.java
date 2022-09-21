@@ -17,7 +17,7 @@ public interface IFaxMessageService {
      * @param faxParam
      * @return
      */
-    public List<FaxVO> list(FaxParam faxParam);
+    List<FaxVO> list(FaxParam faxParam);
 
     /**
      * 查询传真信息详情
@@ -25,7 +25,7 @@ public interface IFaxMessageService {
      * @param mainId
      * @return
      */
-    public FaxVO getFaxInfoById(String mainId);
+    FaxVO getFaxInfoById(String mainId);
 
     /**
      * 调其它系统接口
@@ -40,6 +40,6 @@ public interface IFaxMessageService {
      * @param status
      * @return
      */
-    public String getRobotData(String status);
+    String getRobotData(String status);
 
 }
