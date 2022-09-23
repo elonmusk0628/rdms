@@ -39,7 +39,7 @@ public class SearchInfoController {
         if (StringUtils.isNotEmpty(resp.getContent())) {
             return AjaxResult.success(resp);
         } else {
-            return AjaxResult.error(ExceptionEnum.NULL_RESULT.getErrorMsg());
+            return AjaxResult.success(ExceptionEnum.NULL_RESULT.getErrorMsg());
         }
     }
 

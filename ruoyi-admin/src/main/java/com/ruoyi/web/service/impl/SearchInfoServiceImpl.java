@@ -1,5 +1,6 @@
 package com.ruoyi.web.service.impl;
 
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.web.common.constant.BaseConstants;
 import com.ruoyi.web.domian.SearchInfo;
 import com.ruoyi.web.domian.SearchRequest;
@@ -41,6 +42,8 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
 
     private static final Integer RIVER_TYPE  = 2;
 
+    private static final Integer ATTRIBUTE  = 6;
+
     @Autowired
     SearchInfoMapper searchInfoMapper;
 
@@ -64,7 +67,7 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
             Lexeme lex;
             while((lex = ik.next())!=null){
                 i++;
-                keyWordMap.put(i,lex.getLexemeText());
+                keyWordMap.put(i, lex.getLexemeText());
             }
 
             SearchRequest req = new SearchRequest();
@@ -84,7 +87,7 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
             // 4.封装返回体参数，添加单位
             packageParam(riverList);
             // 5.封装到返回体中
-            resp = packageResp(riverList);
+            resp = packageResp(riverList, keyWordMap);
             return resp;
         } catch (Exception e) {
             return resp;
@@ -104,22 +107,71 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
         searchInfo.setWarnLevel(searchInfo.getWarnLevel() + BaseConstants.METER_SUFFIX);
     }
 
-    private SearchResponse packageResp(List<SearchInfo> list) {
+    private SearchResponse packageResp(List<SearchInfo> list, Map<Integer,String> keyWordMap) {
         SearchInfo info = list.get(0);
         SearchResponse resp = new SearchResponse();
         if (info.getType() == RESERVOIR_TYPE) {
-            resp.setContent(info.getName()+BaseConstants.WATER_LEVEL+info.getWaterLevel()+BaseConstants.COMMA_SYMBOL
-                    +BaseConstants.WARN_LEVEL+info.getWarnLevel()+BaseConstants.COMMA_SYMBOL+BaseConstants.RESERVOIR_IN
-                    +info.getReservoirIn()+BaseConstants.COMMA_SYMBOL+BaseConstants.RESERVOIR_OUT+info.getReservoirOut()
-                    +BaseConstants.COMMA_SYMBOL+BaseConstants.STATUS+info.getStatus()
-            );
+            if (StringUtils.isEmpty(keyWordMap.get(ATTRIBUTE))) {
+                resp.setContent(info.getName() + BaseConstants.WATER_LEVEL + info.getWaterLevel() + BaseConstants.COMMA_SYMBOL
+                        + BaseConstants.LIMIT_LEVEL + info.getWarnLevel() + BaseConstants.COMMA_SYMBOL + BaseConstants.RESERVOIR_IN
+                        + info.getReservoirIn() + BaseConstants.COMMA_SYMBOL + BaseConstants.RESERVOIR_OUT + info.getReservoirOut()
+                        + BaseConstants.COMMA_SYMBOL + BaseConstants.STATUS + info.getStatus());
+            } else {
+
+                switch (keyWordMap.get(ATTRIBUTE)) {
+                    case BaseConstants.A_WATER_LEVEL:
+                        resp.setContent(info.getName() + BaseConstants.WATER_LEVEL + info.getWaterLevel());
+                        break;
+                    case BaseConstants.A_LIMIT_LEVEL:
+                        resp.setContent(info.getName() + BaseConstants.LIMIT_LEVEL + info.getWarnLevel());
+                        break;
+                    case BaseConstants.A_RESERVOIR_IN:
+                        resp.setContent(info.getName() + BaseConstants.RESERVOIR_IN + info.getReservoirIn());
+                        break;
+                    case BaseConstants.A_RESERVOIR_OUT:
+                        resp.setContent(info.getName() + BaseConstants.RESERVOIR_OUT + info.getReservoirOut());
+                        break;
+                    case BaseConstants.A_STATUS:
+                        resp.setContent(info.getName() + BaseConstants.STATUS + info.getStatus());
+                        break;
+                    default:
+                        resp.setContent(info.getName() + BaseConstants.WATER_LEVEL + info.getWaterLevel() + BaseConstants.COMMA_SYMBOL
+                                + BaseConstants.LIMIT_LEVEL + info.getWarnLevel() + BaseConstants.COMMA_SYMBOL + BaseConstants.RESERVOIR_IN
+                                + info.getReservoirIn() + BaseConstants.COMMA_SYMBOL + BaseConstants.RESERVOIR_OUT + info.getReservoirOut()
+                                + BaseConstants.COMMA_SYMBOL + BaseConstants.STATUS + info.getStatus());
+                }
+            }
         }
         if (info.getType() == RIVER_TYPE) {
-            resp.setContent(info.getName()+BaseConstants.WATER_LEVEL+info.getWaterLevel()+BaseConstants.COMMA_SYMBOL
-                    +BaseConstants.WARN_LEVEL+info.getWarnLevel()+BaseConstants.COMMA_SYMBOL+BaseConstants.RIVER_FLOW
-                    +info.getRiverFlow()+BaseConstants.COMMA_SYMBOL+BaseConstants.WATER_POTENTIAL+info.getWaterPotential()
-                    +BaseConstants.COMMA_SYMBOL+BaseConstants.STATUS+info.getStatus()
-            );
+            if (StringUtils.isEmpty(keyWordMap.get(ATTRIBUTE))) {
+                resp.setContent(info.getName() + BaseConstants.WATER_LEVEL + info.getWaterLevel() + BaseConstants.COMMA_SYMBOL
+                        + BaseConstants.WARN_LEVEL + info.getWarnLevel() + BaseConstants.COMMA_SYMBOL + BaseConstants.RIVER_FLOW
+                        + info.getRiverFlow() + BaseConstants.COMMA_SYMBOL + BaseConstants.WATER_POTENTIAL + info.getWaterPotential()
+                        + BaseConstants.COMMA_SYMBOL + BaseConstants.STATUS + info.getStatus());
+            } else {
+                switch (keyWordMap.get(ATTRIBUTE)) {
+                    case BaseConstants.A_WATER_LEVEL:
+                        resp.setContent(info.getName() + BaseConstants.WATER_LEVEL + info.getWaterLevel());
+                        break;
+                    case BaseConstants.A_WARN_LEVEL:
+                        resp.setContent(info.getName() + BaseConstants.WARN_LEVEL + info.getWarnLevel());
+                        break;
+                    case BaseConstants.A_RIVER_FLOW:
+                        resp.setContent(info.getName() + BaseConstants.RIVER_FLOW + info.getRiverFlow());
+                        break;
+                    case BaseConstants.A_WATER_POTENTIAL:
+                        resp.setContent(info.getName() + BaseConstants.WATER_POTENTIAL + info.getWaterPotential());
+                        break;
+                    case BaseConstants.A_STATUS:
+                        resp.setContent(info.getName() + BaseConstants.STATUS + info.getStatus());
+                        break;
+                    default:
+                        resp.setContent(info.getName() + BaseConstants.WATER_LEVEL + info.getWaterLevel() + BaseConstants.COMMA_SYMBOL
+                                + BaseConstants.WARN_LEVEL + info.getWarnLevel() + BaseConstants.COMMA_SYMBOL + BaseConstants.RIVER_FLOW
+                                + info.getRiverFlow() + BaseConstants.COMMA_SYMBOL + BaseConstants.WATER_POTENTIAL + info.getWaterPotential()
+                                + BaseConstants.COMMA_SYMBOL + BaseConstants.STATUS + info.getStatus());
+                }
+            }
         }
         return resp;
     }

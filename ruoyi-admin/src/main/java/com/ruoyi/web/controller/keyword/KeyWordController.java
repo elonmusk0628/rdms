@@ -59,7 +59,7 @@ public class KeyWordController {
             if (i > 0) {
                 return AjaxResult.success();
             } else {
-                return AjaxResult.error(ExceptionEnum.ADD_FAILED.getErrorMsg());
+                return AjaxResult.success(ExceptionEnum.ADD_FAILED.getErrorMsg());
             }
         } catch (IOException e) {
             log.error(ExceptionEnum.WRITE_TO_DOCUMENT_FAILED.getErrorMsg(), e);

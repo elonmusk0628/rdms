@@ -61,15 +61,22 @@ public class KeyWordServiceImpl implements IKeyWordService {
     @Override
     @Transactional(rollbackFor = IOException.class)
     public int addKeyWordInfo(KeyWordInfo req) throws IOException {
-        // 1.写入数据库
-        req.setCreateTime(new Date());
-        req.setUpdateTime(new Date());
-        int i = keyWordMapper.addKeyWordInfo(req);
+        // 1.校验关键字是否存在
+        KeyWordInfo info = keyWordMapper.selectByKeyWord(req.getKeyWord(), req.getType());
+        if (info == null) {
+            // 2.写入数据库
+            req.setCreateTime(new Date());
+            req.setUpdateTime(new Date());
+            int i = keyWordMapper.addKeyWordInfo(req);
 
-        // 2.写入关键字词典ext.dic
-        String keyWord = req.getKeyWord();
-        writeToDocument(FAIL_PATH, keyWord);
-        return i;
+            // 3.写入关键字词典ext.dic
+            String keyWord = req.getKeyWord();
+            writeToDocument(FAIL_PATH, keyWord);
+            return i;
+        } else {
+            return 0;
+        }
+
     }
 
     /**
