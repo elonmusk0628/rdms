@@ -82,6 +82,7 @@
             type="text"
             icon="el-icon-view"
             @click="handleView(scope.row.id)"
+            v-hasPermi="['tel:message:getTelInfoById']"
           >详细</el-button>
         </template>
       </el-table-column>
