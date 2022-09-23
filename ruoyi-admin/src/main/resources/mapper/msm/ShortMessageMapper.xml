@@ -49,12 +49,10 @@
         <if test="success!=null and success!=''">
             AND success = #{success}
         </if>
-        <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
-            and date_format(send_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+        <if test="startDate != null and endDate != null"><!-- 开始时间检索 -->
+            and send_time BETWEEN #{startDate} AND #{endDate}
         </if>
-        <if test="endDate != null and endDate != ''"><!-- 结束时间检索 -->
-            and date_format(send_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
-        </if>
+
         order by id,send_time desc
     </select>
     <select id="getShortMessageById" parameterType="Integer" resultType="MsmVO">

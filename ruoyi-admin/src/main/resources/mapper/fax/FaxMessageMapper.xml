@@ -32,11 +32,8 @@
         create_time as createTime
         from fax
         where 1=1
-        <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
-            and date_format(draft_date,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
-        </if>
-        <if test="endDate != null and endDate != ''"><!--  结束时间检索 -->
-            and date_format(draft_date,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
+        <if test="startDate != null and endDate != null"><!-- 开始时间检索 -->
+            and draft_date BETWEEN #{startDate} AND #{endDate}
         </if>
         <if test="name!=null and name!=''">
             AND name like concat ('%',#{name},'%')
