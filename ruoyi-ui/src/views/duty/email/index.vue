@@ -28,16 +28,16 @@
       <el-form-item label="接收开始时间">
         <el-date-picker
           v-model="queryParams.startDate"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetime"
+          value-format="yyyy-MM-dd"
+          type="date"
           placeholder="开始时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="接收结束时间">
         <el-date-picker
           v-model="queryParams.endDate"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetime"
+          value-format="yyyy-MM-dd"
+          type="date"
           placeholder="结束时间">
         </el-date-picker>
       </el-form-item>
@@ -63,7 +63,7 @@
       <el-table-column label="发送地址" align="center" prop="address" :show-overflow-tooltip="true" />
       <el-table-column label="接收时间" align="center" prop="receivedDate" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.receivedDate) }}</span>
+          <span>{{ scope.row.receivedDate }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">

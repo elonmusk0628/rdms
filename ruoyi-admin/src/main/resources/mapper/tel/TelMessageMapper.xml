@@ -51,13 +51,10 @@
     <if test="answerPeople!=null and answerPeople!=''">
         AND answer_people like concat ('%',#{answerPeople},'%')
     </if>
-    <if test="startDate != null and startDate != ''"><!-- 开始时间检索 -->
-        and date_format(tel_time,'%y%m%d') &gt;= date_format(#{startDate},'%y%m%d')
+    <if test="startDate != null and endDate != null"><!-- 开始时间检索 -->
+        and tel_time BETWEEN #{startDate} AND #{endDate}
     </if>
-    <if test="endDate != null and endDate != ''"><!--  结束时间检索 -->
-        and date_format(tel_time,'%y%m%d') &lt;= date_format(#{endDate},'%y%m%d')
-    </if>
-    order by id desc
+    order by id,tel_time desc
 </select>
     <select id="getTelInfoById" parameterType="Integer" resultType="TelInfoVO">
         SELECT

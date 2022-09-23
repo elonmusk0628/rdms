@@ -10,9 +10,9 @@
         >
           <el-option
             v-for="item in waterType"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item"
+            :label="item"
+            :value="item"
           />
         </el-select>
       </el-form-item>
@@ -25,21 +25,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="开始时间">
+      <el-form-item label="创建时间">
         <el-date-picker
-          v-model="queryParams.start_time"
+          v-model="datetimerange"
+          style="width: 350px"
           value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetime"
-          placeholder="开始时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="结束时间">
-        <el-date-picker
-          v-model="queryParams.end_time"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetime"
-          placeholder="结束时间">
-        </el-date-picker>
+          type="datetimerange"
+          range-separator="-"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
+        ></el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -91,25 +86,24 @@
 
     <el-table v-loading="loading" :data="typeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="编号" width="100" align="center" prop="id" />
+      <el-table-column label="编号" align="center" prop="id" />
       <el-table-column label="类型" align="center">
         <template slot-scope="scope">
-          <div>{{ scope.row.type=='1'?'水库':(scope.row.type=='2'?'河道':(scope.row.type=='3'?'机构':'')) }}</div>
+          <div>{{ scope.row.type }}</div>
         </template>
       </el-table-column>
       <el-table-column label="关键字" align="center" prop="key_word" :show-overflow-tooltip="true" />
-      <el-table-column label="水位" align="center" prop="dictName" :show-overflow-tooltip="true" />
-      <el-table-column label="状态" align="center" prop="status">
-        <template slot-scope="scope">
-          <el-tag size="small" :type="scope.row.status=='告警'?'danger':''">{{ scope.row.status}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" align="center" width="180">
+      <el-table-column label="创建时间" align="center">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.create_time) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
+      <el-table-column label="修改时间" align="center">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.update_time) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -147,9 +141,9 @@
           >
             <el-option
               v-for="item in waterType"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item"
+              :label="item"
+              :value="item"
             />
           </el-select>
         </el-form-item>
@@ -170,7 +164,7 @@
         :limit="1"
         accept=".xlsx, .xls"
         :headers="upload.headers"
-        :action="upload.url + '?updateSupport=' + upload.updateSupport"
+        :action="upload.url"
         :disabled="upload.isUploading"
         :on-progress="handleFileUploadProgress"
         :on-success="handleFileSuccess"
@@ -180,9 +174,6 @@
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <div class="el-upload__tip text-center" slot="tip">
-          <div class="el-upload__tip" slot="tip">
-            <el-checkbox v-model="upload.updateSupport" /> 是否更新已经存在的水情数据
-          </div>
           <span>仅允许导入xls、xlsx格式文件。</span>
           <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;" @click="importTemplate">下载模板</el-link>
         </div>
@@ -196,7 +187,7 @@
 </template>
 
 <script>
-import { listWord, delWord, addWord, updateWord } from "@/api/business/robot";
+import { listWord, delWord, addWord, updateWord, refreshWord } from "@/api/business/robot";
 import { getToken } from "@/utils/auth";
 
 export default {
@@ -217,6 +208,8 @@ export default {
       total: 0,
       // 水情信息数据
       typeList: [],
+      // 日期范围
+      datetimerange: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -225,8 +218,6 @@ export default {
       queryParams: {
         page_num: 1,
         page_size: 10,
-        start_time: undefined,
-        end_time: undefined,
         type: undefined,
         key_word: undefined
       },
@@ -241,16 +232,7 @@ export default {
           { required: true, message: "关键字不能为空", trigger: "blur" }
         ]
       },
-      waterType: [{
-        value: '1',
-        label: '水库'
-      },{
-        value: '2',
-        label: '河道'
-      },{
-        value: '3',
-        label: '机构'
-      }],
+      waterType: ['水库', '河道', '机构'],
       // 水情导入参数
       upload: {
         // 是否显示弹出层（水情导入）
@@ -259,8 +241,6 @@ export default {
         title: "",
         // 是否禁用上传
         isUploading: false,
-        // 是否更新已经存在的水情数据
-        updateSupport: 0,
         // 设置上传的请求头部
         headers: { Authorization: "Bearer " + getToken() },
         // 上传的地址
@@ -275,6 +255,8 @@ export default {
     /** 查询水情信息列表 */
     getList() {
       this.loading = true;
+      this.queryParams.start_time = this.datetimerange[0];
+      this.queryParams.end_time = this.datetimerange[1];
       listWord(this.queryParams).then(response => {
           this.typeList = response.data.list;
           this.total = response.data.total;
@@ -303,8 +285,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.queryParams.start_time = undefined;
-      this.queryParams.end_time = undefined;
+      this.datetimerange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -324,16 +305,10 @@ export default {
     handleUpdate(row) {
       this.reset();
       if (row.id) {
-        this.form = JSON.parse(JSON.stringify(row));
+        this.form = row;
       } else {
-        this.form = JSON.parse(JSON.stringify(this.selection[0]));
+        this.form = this.selection[0];
       }
-      this.waterType.forEach(item => {
-        if (item.value == this.form.type) {
-          this.form.type = item.label
-          return;
-        }
-      })
       this.open = true;
       this.title = "修改水文水情信息";
     },
@@ -345,13 +320,17 @@ export default {
               updateWord(this.form).then(response => {
                 this.$modal.msgSuccess("修改成功");
                 this.open = false;
-                this.getList();
+                refreshWord().then(() => {
+                  this.getList();
+                });
               });
             } else {
               addWord(this.form).then(response => {
                 this.$modal.msgSuccess("新增成功");
                 this.open = false;
-                this.getList();
+                refreshWord().then(() => {
+                  this.getList();
+                });
               });
             }
         }
@@ -365,7 +344,9 @@ export default {
           id: waterIds.toString()
         });
       }).then(() => {
-        this.getList();
+        refreshWord().then(() => {
+          this.getList();
+        });
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
@@ -377,7 +358,7 @@ export default {
     /** 下载模板操作 */
     importTemplate() {
       this.download('key/word/downloadTemplate', {
-      }, `water_template_${new Date().getTime()}.xlsx`)
+      }, `keyWord_template_${new Date().getTime()}.xlsx`)
     },
     // 文件上传中处理
     handleFileUploadProgress(event, file, fileList) {

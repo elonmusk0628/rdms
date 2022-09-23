@@ -22,16 +22,16 @@
       <el-form-item label="开始时间">
         <el-date-picker
           v-model="queryParams.startDate"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetime"
+          value-format="yyyy-MM-dd"
+          type="date"
           placeholder="选择">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="结束时间">
         <el-date-picker
           v-model="queryParams.endDate"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetime"
+          value-format="yyyy-MM-dd"
+          type="date"
           placeholder="选择">
         </el-date-picker>
       </el-form-item>
@@ -52,7 +52,7 @@
       <el-table-column label="附件" align="center" prop="fileName" :show-overflow-tooltip="true" />
       <el-table-column label="发文时间" align="center" prop="draftDate" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.draftDate) }}</span>
+          <span>{{ scope.row.draftDate }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">

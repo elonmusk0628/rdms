@@ -50,7 +50,8 @@ import java.util.Date;
  */
 @Service
 @Transactional
-public class HttpClientServiceImpl implements IHttpClientService {
+public class
+ HttpClientServiceImpl implements IHttpClientService {
     @Autowired
     private ShortMessageMapper shortMessageMapper;
 
@@ -296,7 +297,7 @@ public class HttpClientServiceImpl implements IHttpClientService {
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
-        HttpGet httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/baseFile/filemanage/list");
+        HttpGet httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/baseFile/filemanage/list?category=3");
         //Get请求中添加token
         httpGet.addHeader("Authorization", token);
         //Gtt请求中添加鉴权码F-Access
@@ -594,5 +595,71 @@ public class HttpClientServiceImpl implements IHttpClientService {
             return "无响应";
         }
         return fAccess;
+    }
+    /**
+     *获取http请求数据
+     * @param sign
+     * @return
+     * @throws Exception
+     */
+    public JSONObject getHttpClientService(String sign) throws Exception {
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setUsername("admin");
+        loginInfo.setPassword("Fyc@87117781");
+        HttpGet httpGet = null;
+        //获取token
+        String token = getToken(loginInfo);
+        //获取鉴权码FAccess
+        String fAccess = getFAccess(token);
+        // 1. 创建HttpClient对象
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        // 2. 创建HttpGet对象
+        if("FAX".equals(sign)){
+            httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/baseFile/filemanage/list?category=3");
+        }else if("MAIL".equals(sign)){
+            httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/baseFile/mailMsg/list");
+        }else if("MSM".equals(sign)){
+            httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/fxb/sendinfo/getMore");
+        }else if ("TEL".equals(sign)){
+            httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/fxb/telrecord/list");
+        }
+        //Get请求中添加token
+        httpGet.addHeader("Authorization", token);
+        //Gtt请求中添加鉴权码F-Access
+        httpGet.addHeader("F-Access", fAccess);
+
+        JSONObject object = null;
+        // 4. 执行请求并处理响应
+        try {
+            CloseableHttpResponse response = httpClient.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                entity = new BufferedHttpEntity(entity);
+                System.out.println("响应内容：");
+                System.out.println(EntityUtils.toString(entity));
+                // 从响应模型中获取响应实体
+                byte[] bytes = EntityUtils.toByteArray(entity);
+                if (bytes != null) {
+                    String resultStr = new String(bytes, "UTF-8");
+                    JSONObject jsonObject = JSONObject.parseObject(resultStr);
+                    JSONArray jsonArray = JSONArray.parseArray(jsonObject.get("rows").toString());
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        object = (JSONObject) jsonArray.get(i);
+                    }
+                    return object;
+                }
+            }
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 5. 释放资源
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }
