@@ -69,14 +69,16 @@
             file_num,
             draft_date,
             category,
-            create_time
+            create_time,
+            status
         )values (
             #{fileManageId},
             #{name},
             #{fileNum},
             #{draftDate},
             #{category},
-            #{createTime}
+            #{createTime},
+            #{status}
                         )
     </insert>
     <insert id="addItem" useGeneratedKeys="true" keyProperty="id" parameterType="FaxInfoEntity">
