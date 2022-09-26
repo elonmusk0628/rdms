@@ -76,17 +76,19 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
             String monthKeyWord = keyWordMap.get(MONTH_KEY);
             String dayKeyWord = keyWordMap.get(DAY_KEY);
             String hourKeyWord = keyWordMap.get(HOUR_KEY);
-            // 3.截取日期，封装查询数据库请求体req
+            // 3.大写小时转为int
+            int hour = packageHour(keyWordMap);
+            // 4.截取日期，封装查询数据库请求体req
             String date = yearKeyWord.substring(0, yearKeyWord.length()-1) + CONNECT_SYMBOL + monthKeyWord.substring(0, monthKeyWord.length()-1)
                     + CONNECT_SYMBOL + dayKeyWord.substring(0, dayKeyWord.length()-1);
             req.setIDate(date);
-            req.setIHour(Integer.parseInt(hourKeyWord.substring(0, hourKeyWord.length() - 1)));
+            req.setIHour(hour);
             req.setName(keyWordMap.get(NAME_KEY));
             riverList = searchInfoMapper.selectRiverInfoList(req);
 
-            // 4.封装返回体参数，添加单位
+            // 5.封装返回体参数，添加单位
             packageParam(riverList);
-            // 5.封装到返回体中
+            // 6.封装到返回体中
             resp = packageResp(riverList, keyWordMap);
             return resp;
         } catch (Exception e) {
@@ -174,6 +176,47 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
             }
         }
         return resp;
+    }
+
+    public int packageHour(Map<Integer,String> keyWordMap) {
+        String hourStr = keyWordMap.get(HOUR_KEY);
+        String hour = hourStr.substring(0, hourStr.length() - 1);
+        switch (hour) {
+            case BaseConstants.ZERO_OCLOCK:
+                return 0;
+            case BaseConstants.ONE_OCLOCK:
+                return 1;
+
+            case BaseConstants.TWO_OCLOCK:
+                return 2;
+
+            case BaseConstants.THREE_OCLOCK:
+                return 3;
+
+            case BaseConstants.FOUR_OCLOCK:
+                return 4;
+
+            case BaseConstants.FIVE_OCLOCK:
+                return 5;
+
+            case BaseConstants.SIX_OCLOCK:
+                return 6;
+
+            case BaseConstants.SEVEN_OCLOCK:
+                return 7;
+
+            case BaseConstants.EIGHT_OCLOCK:
+                return 8;
+
+            case BaseConstants.NINE_OCLOCK:
+                return 9;
+
+            case BaseConstants.TEN_OCLOCK:
+                return 10;
+
+            default:
+                return Integer.parseInt(hour);
+        }
     }
 
 }

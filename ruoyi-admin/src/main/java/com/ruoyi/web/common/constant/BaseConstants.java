@@ -56,4 +56,26 @@ public interface BaseConstants {
 
     String JI_GOU = "机构";
 
+    String ZERO_OCLOCK = "零";
+
+    String ONE_OCLOCK = "一";
+
+    String TWO_OCLOCK = "两";
+
+    String THREE_OCLOCK = "三";
+
+    String FOUR_OCLOCK = "四";
+
+    String FIVE_OCLOCK = "五";
+
+    String SIX_OCLOCK = "六";
+
+    String SEVEN_OCLOCK = "七";
+
+    String EIGHT_OCLOCK = "八";
+
+    String NINE_OCLOCK = "九";
+
+    String TEN_OCLOCK = "十";
+
 }
