@@ -178,7 +178,7 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
         return resp;
     }
 
-    public int packageHour(Map<Integer,String> keyWordMap) {
+    private int packageHour(Map<Integer,String> keyWordMap) {
         String hourStr = keyWordMap.get(HOUR_KEY);
         String hour = hourStr.substring(0, hourStr.length() - 1);
         switch (hour) {

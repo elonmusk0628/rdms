@@ -9,6 +9,7 @@ import com.ruoyi.web.service.IKeyWordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +36,7 @@ public class KeyWordController {
      * @param endTime 结束时间
      */
     @GetMapping("/select")
+    @PreAuthorize("@ss.hasPermi('key:word:select')")
     public AjaxResult selectKeyword(@RequestParam(value = "key_word", required = false) String keyWord,
                                     @RequestParam(value = "type", required = false) String type,
                                     @RequestParam(value = "start_time", required = false) String startTime,
@@ -52,7 +54,7 @@ public class KeyWordController {
      * @param req 请求体
      */
     @PostMapping("/add")
-
+    @PreAuthorize("@ss.hasPermi('key:word:add')")
     public AjaxResult addKeyword(@Validated @RequestBody KeyWordInfo req) {
         try {
             int i = keyWordService.addKeyWordInfo(req);
@@ -73,6 +75,7 @@ public class KeyWordController {
      * @param req 请求体
      */
     @PostMapping("/update")
+    @PreAuthorize("@ss.hasPermi('key:word:update')")
     public AjaxResult updateKeyword(@Validated @RequestBody KeyWordInfo req) {
             int i = keyWordService.updateKeyWordInfo(req);
             if (i > 0) {
@@ -88,6 +91,7 @@ public class KeyWordController {
      * @param ids id
      */
     @GetMapping("/delete")
+    @PreAuthorize("@ss.hasPermi('key:word:delete')")
     public AjaxResult deleteKeyWord(@RequestParam(value = "id", required = true) List<Integer> ids) {
         int i = keyWordService.deleteKeyWordInfo(ids);
         if (i > 0) {
@@ -115,6 +119,7 @@ public class KeyWordController {
      * @param file file
      */
     @PostMapping("/importKeyWords")
+    @PreAuthorize("@ss.hasPermi('key:word:importKeyWords')")
     public AjaxResult addKeyWordTemplate(MultipartFile file) throws Exception
     {
         ExcelUtil<KeyWordInfo> util = new ExcelUtil<KeyWordInfo>(KeyWordInfo.class);
