@@ -89,7 +89,7 @@ public class ShortMessageServiceImpl implements IShortMessageService {
                 String sendTime = DateUtils.dateRurnString(msmVO.getSendTime());
                 //署名
                 String signaTure = msmVO.getSignaTure();
-                messageContent = sendTime + signaTure + "来了一条新短消息,请注意查收！";
+                messageContent = sendTime + signaTure + "收到一条新短消息,请注意查收！";
                 //修改已播报信息状态为已读1
                 shortMessageMapper.updatMsmStatus(msmVO.getId());
             }
