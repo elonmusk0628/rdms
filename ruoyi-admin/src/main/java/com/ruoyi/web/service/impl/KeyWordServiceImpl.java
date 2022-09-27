@@ -11,6 +11,7 @@ import com.ruoyi.web.service.IKeyWordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,8 @@ public class KeyWordServiceImpl implements IKeyWordService {
     @Autowired
     KeyWordMapper keyWordMapper;
 
-    private static final String FAIL_PATH = "D:/CodeSource/rdms/ruoyi-admin/src/main/resources/ik_analyzer/ext.dic";
+    @Value("${keyword.filePath}")
+    private String FILE_PATH;
 
     private static final Logger log = LoggerFactory.getLogger(KeyWordServiceImpl.class);
 
@@ -71,7 +73,7 @@ public class KeyWordServiceImpl implements IKeyWordService {
 
             // 3.写入关键字词典ext.dic
             String keyWord = req.getKeyWord();
-            writeToDocument(FAIL_PATH, keyWord);
+            writeToDocument(FILE_PATH, keyWord);
             return i;
         } else {
             return 0;
@@ -139,7 +141,7 @@ public class KeyWordServiceImpl implements IKeyWordService {
                             info.setUpdateTime(new Date());
                             keyWordMapper.addKeyWordInfo(info);
                             // 2.写入字典
-                            writeToDocument(FAIL_PATH, info.getKeyWord());
+                            writeToDocument(FILE_PATH, info.getKeyWord());
                             successMsg.append("<br/>" + successNum + ",关键字 " + info.getKeyWord() + " 导入成功");
                         } else {
                             failureNum++;
@@ -182,7 +184,7 @@ public class KeyWordServiceImpl implements IKeyWordService {
             // 2.循环写入文档
             for (KeyWordInfo info : keyWordInfoList) {
                 String keyWord = info.getKeyWord();
-                writeToDocument(FAIL_PATH, keyWord);
+                writeToDocument(FILE_PATH, keyWord);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -202,7 +204,7 @@ public class KeyWordServiceImpl implements IKeyWordService {
     }
 
     public void clearDocument() throws IOException {
-        File fi = new File(FAIL_PATH);
+        File fi = new File(FILE_PATH);
         FileWriter fileWriter = new FileWriter(fi);
         fileWriter.write("");
         fileWriter.flush();
