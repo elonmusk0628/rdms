@@ -88,9 +88,14 @@ public class KeyWordServiceImpl implements IKeyWordService {
      */
     @Override
     public int updateKeyWordInfo(KeyWordInfo req) {
-        req.setUpdateTime(new Date());
-        int i = keyWordMapper.updateKeyWordInfo(req);
-        return i;
+        KeyWordInfo info = keyWordMapper.selectByKeyWord(req.getKeyWord(), req.getType());
+        if (info == null) {
+            req.setUpdateTime(new Date());
+            int i = keyWordMapper.updateKeyWordInfo(req);
+            return i;
+        } else {
+            return 0;
+        }
     }
 
     /**
