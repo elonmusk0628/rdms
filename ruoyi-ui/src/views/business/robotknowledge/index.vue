@@ -172,6 +172,7 @@
         :headers="upload.headers"
         :action="upload.url"
         :disabled="upload.isUploading"
+        :before-upload="beforeUpload"
         :on-progress="handleFileUploadProgress"
         :on-success="handleFileSuccess"
         :auto-upload="false"
@@ -365,6 +366,15 @@ export default {
     importTemplate() {
       this.download('key/word/downloadTemplate', {
       }, `keyWord_template_${new Date().getTime()}.xlsx`)
+    },
+    // 文件上传之前，限制文件格式
+    beforeUpload(file) {
+      const fileSuffix = file.name.substring(file.name.lastIndexOf(".") + 1);
+      const whiteList = ["xlsx", "xls"];
+      if (whiteList.indexOf(fileSuffix) === -1) {
+        this.$message.error('上传文件只能是 xls、xlsx 格式');
+        return false;
+      }
     },
     // 文件上传中处理
     handleFileUploadProgress(event, file, fileList) {
