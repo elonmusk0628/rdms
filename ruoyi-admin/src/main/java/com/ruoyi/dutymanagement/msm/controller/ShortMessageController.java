@@ -8,6 +8,7 @@ import com.ruoyi.dutymanagement.msm.domain.param.MsmParam;
 import com.ruoyi.dutymanagement.msm.domain.vo.MsmVO;
 import com.ruoyi.dutymanagement.msm.service.IShortMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -32,6 +33,7 @@ public class ShortMessageController extends BaseController {
      * @param msmParam
      * @return
      */
+    @PreAuthorize("@ss.hasPermi('msm:message:list')")
     @GetMapping("/list")
     public TableDataInfo list(MsmParam msmParam) {
         startPage();
@@ -45,6 +47,7 @@ public class ShortMessageController extends BaseController {
      * @param sendInfoId
      * @return
      */
+    @PreAuthorize("@ss.hasPermi('msm:message:getInfoById')")
     @GetMapping("/getInfoById/{sendInfoId}")
     public AjaxResult getInfoById(@PathVariable String sendInfoId) {
         if (sendInfoId == null || "".equals(sendInfoId)) {

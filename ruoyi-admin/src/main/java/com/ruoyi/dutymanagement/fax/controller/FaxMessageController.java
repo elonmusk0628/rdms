@@ -7,6 +7,7 @@ import com.ruoyi.dutymanagement.fax.domain.param.FaxParam;
 import com.ruoyi.dutymanagement.fax.domain.vo.FaxVO;
 import com.ruoyi.dutymanagement.fax.service.IFaxMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class FaxMessageController extends BaseController {
      * @param faxParam
      * @return
      */
+    @PreAuthorize("@ss.hasPermi('fax:message:list')")
         @GetMapping("/list")
     public TableDataInfo list(FaxParam faxParam) {
         startPage();
@@ -42,6 +44,7 @@ public class FaxMessageController extends BaseController {
      * @param mainId
      * @return
      */
+    @PreAuthorize("@ss.hasPermi('fax:message:getFaxInfoById')")
     @GetMapping("/getFaxInfoById/{mainId}")
     public AjaxResult getFaxInfoById(@PathVariable String mainId) {
         if (mainId == null || "".equals(mainId)) {

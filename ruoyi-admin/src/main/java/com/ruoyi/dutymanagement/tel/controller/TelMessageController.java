@@ -8,6 +8,7 @@ import com.ruoyi.dutymanagement.tel.domain.param.TelInfoParam;
 import com.ruoyi.dutymanagement.tel.domain.vo.TelInfoVO;
 import com.ruoyi.dutymanagement.tel.service.ITelMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class TelMessageController extends BaseController {
      * @param telInfoParam
      * @return
      */
+    @PreAuthorize("@ss.hasPermi('tel:message:list')")
     @GetMapping("/list")
     public TableDataInfo list(TelInfoParam telInfoParam) {
         startPage();
@@ -46,6 +48,7 @@ public class TelMessageController extends BaseController {
      * @param id
      * @return
      */
+    @PreAuthorize("@ss.hasPermi('tel:message:getTelInfoById')")
     @GetMapping("/getTelInfoById/{id}")
     public AjaxResult getTelInfoById(@PathVariable String id) {
         TelInfoVO telInfoVO = telMessageService.getTelInfoById(id);

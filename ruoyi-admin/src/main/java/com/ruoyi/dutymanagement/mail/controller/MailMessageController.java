@@ -9,6 +9,7 @@ import com.ruoyi.dutymanagement.mail.service.IMailMessageService;
 import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
 import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class MailMessageController extends BaseController {
      * @param mailParam
      * @return
      */
+    @PreAuthorize("@ss.hasPermi('mail:message:list')")
     @GetMapping("/list")
     public TableDataInfo list(MailParam mailParam) {
         startPage();
@@ -47,6 +49,7 @@ public class MailMessageController extends BaseController {
      * @param mainId
      * @return
      */
+    @PreAuthorize("@ss.hasPermi('mail:message:getMailInfoById')")
     @GetMapping("/getMailInfoById/{mainId}")
     public AjaxResult getMailInfoById(@PathVariable String mainId) {
         MailVO mailInfo = mailMessageService.getMailInfoById(mainId);
