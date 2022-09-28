@@ -33,7 +33,7 @@ public interface IMailMessageService {
      *
      * @return
      */
-    String getJsonObject(String status) throws Exception;
+    String getJsonObject(String token,String fAccess) throws Exception;
 
     /**
      * 机器人接口

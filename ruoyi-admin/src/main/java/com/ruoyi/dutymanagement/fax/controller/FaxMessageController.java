@@ -6,6 +6,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.dutymanagement.fax.domain.param.FaxParam;
 import com.ruoyi.dutymanagement.fax.domain.vo.FaxVO;
 import com.ruoyi.dutymanagement.fax.service.IFaxMessageService;
+import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
+import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,10 @@ public class FaxMessageController extends BaseController {
 
     @Autowired
     private IFaxMessageService faxMessageService;
+
+    @Autowired
+    private IHttpClientService httpClientService;
+
 
     /**
      * 查询传真信息列表
@@ -60,11 +66,12 @@ public class FaxMessageController extends BaseController {
      * @return
      */
     @GetMapping("/getJsonObject")
-    public AjaxResult getJsonObject(@RequestParam String status) throws Exception {
-        if (status == null || "".equals(status)) {
-            return AjaxResult.error("status参数不能为空！");
-        }
-        String jsonObject = faxMessageService.getJsonObject(status);
+    public AjaxResult getJsonObject(LoginInfo loginInfo) throws Exception {
+        //获取token
+        String token = httpClientService.getToken(loginInfo);
+        //获取fAccess
+        String fAccess = httpClientService.getFAccess(token);
+        String jsonObject = faxMessageService.getJsonObject(token,fAccess);
         return AjaxResult.success(jsonObject);
     }
 

@@ -67,16 +67,11 @@ public class
     /**
      * 调值班管理系统短信接口
      *
-     * @param status
+     * @param token
      * @return
      */
     @Override
-    public String doMsm(String status) throws Exception {
-        LoginInfo loginInfo = new LoginInfo();
-        loginInfo.setUsername("admin");
-        loginInfo.setPassword("Fyc@87117781");
-        //获取token
-        String token = getToken(loginInfo);
+    public String doMsm(String token) throws Exception {
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
@@ -93,8 +88,6 @@ public class
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 entity = new BufferedHttpEntity(entity);
-                System.out.println("响应内容：");
-                System.out.println(EntityUtils.toString(entity));
                 // 从响应模型中获取响应实体
                 byte[] bytes = EntityUtils.toByteArray(entity);
                 if (bytes != null) {
@@ -173,18 +166,11 @@ public class
 
     /**
      * 调其它系统接口
-     *
+     * @param token fAccess
      * @return
      */
     @Override
-    public String doMail(String status) throws Exception {
-        LoginInfo loginInfo = new LoginInfo();
-        loginInfo.setUsername("admin");
-        loginInfo.setPassword("Fyc@87117781");
-        //获取token
-        String token = getToken(loginInfo);
-        //获取鉴权码FAccess
-        String fAccess = getFAccess(token);
+    public String doMail(String token,String fAccess) throws Exception {
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
@@ -202,8 +188,6 @@ public class
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 entity = new BufferedHttpEntity(entity);
-                System.out.println("响应内容：");
-                System.out.println(EntityUtils.toString(entity));
                 // 从响应模型中获取响应实体
                 byte[] bytes = EntityUtils.toByteArray(entity);
                 if (bytes != null) {
@@ -278,22 +262,14 @@ public class
         return null;
     }
 
-
     /**
      * 调值班管理系统传真接口
      *
-     * @param status
+     * @param token,fAccess
      * @return
      */
     @Override
-    public String doFax(String status) throws Exception {
-        LoginInfo loginInfo = new LoginInfo();
-        loginInfo.setUsername("admin");
-        loginInfo.setPassword("Fyc@87117781");
-        //获取token
-        String token = getToken(loginInfo);
-        //获取鉴权码FAccess
-        String fAccess = getFAccess(token);
+    public String doFax(String token,String fAccess) throws Exception {
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
@@ -312,8 +288,6 @@ public class
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 entity = new BufferedHttpEntity(entity);
-                System.out.println("响应内容：");
-                System.out.println(EntityUtils.toString(entity));
                 // 从响应模型中获取响应实体
                 byte[] bytes = EntityUtils.toByteArray(entity);
                 if (bytes != null) {
@@ -362,7 +336,6 @@ public class
                                     //附件入库
                                     faxMessageMapper.addItem(faxInfoEntity);
                                 }
-
                             }
                         } else {
                             continue;
@@ -388,18 +361,11 @@ public class
     /**
      * 调值班管理系统电话接口
      *
-     * @param status
+     * @param token,fAccess
      * @return
      */
     @Override
-    public String doTel(String status) throws Exception {
-        LoginInfo loginInfo = new LoginInfo();
-        loginInfo.setUsername("admin");
-        loginInfo.setPassword("Fyc@87117781");
-        //获取token
-        String token = getToken(loginInfo);
-        //获取鉴权码FAccess
-        String fAccess = getFAccess(token);
+    public String doTel(String token,String fAccess) throws Exception {
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
@@ -416,8 +382,6 @@ public class
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 entity = new BufferedHttpEntity(entity);
-                System.out.println("响应内容：");
-                System.out.println(EntityUtils.toString(entity));
                 // 从响应模型中获取响应实体
                 byte[] bytes = EntityUtils.toByteArray(entity);
                 if (bytes != null) {
@@ -485,31 +449,6 @@ public class
      */
     @Override
     public String getToken(LoginInfo loginInfo) throws Exception {
-        String token = doPostData(loginInfo);
-        return token;
-    }
-
-    /**
-     * 获取鉴权码F-Access
-     *
-     * @param loginInfo
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public String getMailFAccess(LoginInfo loginInfo) throws Exception {
-        String token = doPostData(loginInfo);
-        return token;
-    }
-
-    /**
-     * 获取token
-     *
-     * @param loginInfo
-     * @return
-     * @throws Exception
-     */
-    public String doPostData(LoginInfo loginInfo) throws Exception {
         String jsonString = JSON.toJSONString(loginInfo);
         // 1. 创建HttpClient对象
         CloseableHttpClient client = HttpClientBuilder.create().build();
@@ -528,8 +467,6 @@ public class
                 HttpEntity entity = res.getEntity();
                 if (entity != null) {
                     entity = new BufferedHttpEntity(entity);
-                    System.out.println("响应内容：");
-                    System.out.println(EntityUtils.toString(entity));
                     // 从响应模型中获取响应实体
                     byte[] bytes = EntityUtils.toByteArray(entity);
                     if (bytes != null) {
@@ -551,12 +488,12 @@ public class
         }
         return token;
     }
-
     /**
      * 获取鉴权码F-Access
      *
      * @return
      */
+    @Override
     public String getFAccess(String token) throws Exception {
         //鉴权码F-Access
         String fAccess = null;
@@ -572,8 +509,6 @@ public class
                 HttpEntity entity = res.getEntity();
                 if (entity != null) {
                     entity = new BufferedHttpEntity(entity);
-                    System.out.println("响应内容：");
-                    System.out.println(EntityUtils.toString(entity));
                     // 从响应模型中获取响应实体
                     byte[] bytes = EntityUtils.toByteArray(entity);
                     if (bytes != null) {
@@ -584,7 +519,6 @@ public class
                     }
                 }
             }
-
         } catch (Exception e) {
             if (res == null) {
                 return "HttpResponse 为 null!";

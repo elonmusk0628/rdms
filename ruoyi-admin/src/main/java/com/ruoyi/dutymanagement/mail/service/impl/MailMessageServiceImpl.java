@@ -64,9 +64,9 @@ public class MailMessageServiceImpl implements IMailMessageService {
      * @return
      */
     @Override
-    public String getJsonObject(String status) throws Exception {
+    public String getJsonObject(String token,String fAccess) throws Exception {
         //调取值班管理系统短信接口
-        String jsonObject = httpPostClientService.doMail(status);
+        String jsonObject = httpPostClientService.doMail(token,fAccess);
         return jsonObject;
     }
 
@@ -107,7 +107,8 @@ public class MailMessageServiceImpl implements IMailMessageService {
      */
     @Override
     public String getMailFAccess(LoginInfo loginInfo) throws Exception {
-        String fAccess = httpPostClientService.getMailFAccess(loginInfo);
+        String token = httpPostClientService.getToken(loginInfo);
+        String fAccess = httpPostClientService.getFAccess(token);
         return fAccess;
     }
 }

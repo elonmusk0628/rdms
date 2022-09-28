@@ -3,6 +3,7 @@ package com.ruoyi.dutymanagement.tel.controller;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
 import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
 import com.ruoyi.dutymanagement.tel.domain.param.TelInfoParam;
 import com.ruoyi.dutymanagement.tel.domain.vo.TelInfoVO;
@@ -58,13 +59,18 @@ public class TelMessageController extends BaseController {
     /**
      * 调值班管理系统电话接口
      *
-     * @param status
+     * @param loginInfo
      * @return
      * @throws Exception
      */
     @GetMapping("/doTel")
-    public AjaxResult doTel(@RequestParam String status) throws Exception {
-        String jsonStr = httpClientService.doTel(status);
+    public AjaxResult doTel(LoginInfo loginInfo) throws Exception {
+        //获取token
+        String token = httpClientService.getToken(loginInfo);
+        //获取fAccess
+        String fAccess = httpClientService.getFAccess(token);
+
+        String jsonStr = httpClientService.doTel(token,fAccess);
         return AjaxResult.success(jsonStr);
     }
     /**
