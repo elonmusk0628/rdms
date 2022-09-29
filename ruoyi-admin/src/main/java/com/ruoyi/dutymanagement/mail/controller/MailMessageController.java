@@ -66,7 +66,14 @@ public class MailMessageController extends BaseController {
         if (status == null || "".equals(status)) {
             return AjaxResult.error("success参数不能为空！");
         }
-        String jsonObject = mailMessageService.getJsonObject(status);
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setUsername("admin");
+        loginInfo.setPassword("Fyc@87117781");
+        //获取token
+        String token = httpClientService.getToken(loginInfo);
+        //获取fAccess
+        String fAccess = httpClientService.getFAccess(token);
+        String jsonObject = mailMessageService.getJsonObject(token,fAccess);
         return AjaxResult.success(jsonObject);
     }
 
@@ -95,7 +102,14 @@ public class MailMessageController extends BaseController {
      */
     @GetMapping("/doMail")
     public AjaxResult doMail(@RequestParam String status) throws Exception {
-        String jsonObject = httpClientService.doMail(status);
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setUsername("admin");
+        loginInfo.setPassword("Fyc@87117781");
+        //获取token
+        String token = httpClientService.getToken(loginInfo);
+        //获取fAccess
+        String fAccess = httpClientService.getFAccess(token);
+        String jsonObject = httpClientService.doMail(token,fAccess);
         return AjaxResult.success(jsonObject);
     }
 

@@ -60,9 +60,9 @@ public class FaxMessageServiceImpl implements IFaxMessageService {
      * @return
      */
     @Override
-    public String getJsonObject(String status) throws Exception {
+    public String getJsonObject(String token,String fAccess) throws Exception {
         //调取值班管理系统传真接口
-        String jsonObject = httpPostClientService.doFax(status);
+        String jsonObject = httpPostClientService.doFax(token,fAccess);
         return jsonObject;
     }
     /**
