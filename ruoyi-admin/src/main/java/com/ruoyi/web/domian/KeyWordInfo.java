@@ -15,6 +15,7 @@ import java.util.Date;
 /**
  * 对应key_word_info表
  *
+ * @author fengzh
  */
 @Data
 @AllArgsConstructor

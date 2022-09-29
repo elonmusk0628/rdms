@@ -57,19 +57,18 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
     /**
      * 查询信息
      *
-     * @param str 查询参数
-     * @return 河道信息集合
+     * @param searchInfoStr 查询参数
+     * @return 查询信息集合
      */
     @Override
-    public SearchResponse selectRiverInfoByCondition(String str) {
+    public SearchResponse selectRiverInfoByCondition(String searchInfoStr) {
         List<SearchInfo> riverList = new ArrayList<>();
         SearchResponse resp = new SearchResponse();
         try {
-            // 1.请求过来的字符串进行ik分词
+            // 1.请求过来的字符串进行ik分词，放进map
             Map<Integer,String> keyWordMap = new HashMap<>();
-            StringReader stringReader = new StringReader(str.trim());
+            StringReader stringReader = new StringReader(searchInfoStr.trim());
             IKSegmenter ik = new IKSegmenter(stringReader,true);
-
             Integer i = 0;
             Lexeme lex;
             while((lex = ik.next())!=null){
@@ -127,6 +126,11 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
         }
     }
 
+    /**
+     * 查询所有名称
+     *
+     * @return 关键字结果集
+     */
     @Override
     public List<String> selectName() {
        return searchInfoMapper.selectName();
@@ -163,8 +167,8 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
             } else {
 
                 switch (attribute) {
-                    case BaseConstants.A_WATER_LEVEL:
-                        resp.setContent(info.getName() + BaseConstants.WATER_LEVEL + info.getWaterLevel());
+                    case BaseConstants.A_K_WATER_LEVEL:
+                        resp.setContent(info.getName() + BaseConstants.K_WATER_LEVEL + info.getWaterLevel());
                         break;
                     case BaseConstants.A_LIMIT_LEVEL:
                         resp.setContent(info.getName() + BaseConstants.LIMIT_LEVEL + info.getWarnLevel());

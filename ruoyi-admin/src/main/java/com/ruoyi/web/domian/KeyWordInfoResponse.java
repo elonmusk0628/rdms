@@ -3,6 +3,11 @@ package com.ruoyi.web.domian;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 关键字返回体
+ *
+ * @author fengzh
+ */
 @Data
 @NoArgsConstructor
 public class KeyWordInfoResponse {

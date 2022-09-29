@@ -20,7 +20,6 @@ public class SearchInfoController {
 
     private static final Logger log = LoggerFactory.getLogger(SearchInfoController.class);
 
-
     @Autowired
     private ISearchInfoService searchInfoService;
 
@@ -28,14 +27,14 @@ public class SearchInfoController {
     /**
      * 查询信息请求
      *
-     * @param str str
+     * @param searchInfoStr searchInfoStr
      */
     @GetMapping("/info")
-    public AjaxResult SearchInfo(@RequestParam(name = "str") String str) {
-        if (StringUtils.isEmpty(str)) {
+    public AjaxResult SearchInfo(@RequestParam(name = "str") String searchInfoStr) {
+        if (StringUtils.isEmpty(searchInfoStr)) {
             return AjaxResult.error(ExceptionEnum.NULL_REQUEST_PARAM.getErrorMsg());
         }
-        SearchResponse resp = searchInfoService.selectRiverInfoByCondition(str);
+        SearchResponse resp = searchInfoService.selectRiverInfoByCondition(searchInfoStr);
         if (!StringUtils.isNotEmpty(resp.getContent())) {
             resp.setContent(ExceptionEnum.NULL_RESULT.getErrorMsg());
         }

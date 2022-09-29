@@ -179,6 +179,11 @@ public class KeyWordServiceImpl implements IKeyWordService {
         return successMsg.toString();
     }
 
+    /**
+     * 刷新关键字字典
+     *
+     * @return String
+     */
     @Override
     public String refreshKeyWords()  {
         try {

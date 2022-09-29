@@ -10,6 +10,7 @@ import java.util.Date;
 /**
  * 对应river_info表
  *
+ * @author fengzh
  */
 @Data
 @NoArgsConstructor

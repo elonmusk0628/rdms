@@ -8,11 +8,15 @@ public interface BaseConstants {
 
     String METER_SUFFIX = "米";
 
-    String M2_S_SUFFIX = "平方米/秒";
+    String M2_S_SUFFIX = "立方米/秒";
 
     String WATER_LEVEL = "水位：";
 
     String A_WATER_LEVEL = "水位";
+
+    String K_WATER_LEVEL = "库水位：";
+
+    String A_K_WATER_LEVEL = "库水位";
 
     String WARN_LEVEL = "警戒水位：";
 
