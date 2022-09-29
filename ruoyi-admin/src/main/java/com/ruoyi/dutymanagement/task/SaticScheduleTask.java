@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.time.LocalDateTime;
 
 @Configuration      //1.主要用于标记配置类，兼备Component的效果。
 @EnableScheduling   // 2.开启定时任务
@@ -15,6 +14,7 @@ public class SaticScheduleTask {
 
     @Autowired
     private IHttpClientService iHttpClientService;
+
     //3.添加定时任务
     @Scheduled(cron = "0/1500 * * * * ?")
     private void configureTasks() throws Exception {
@@ -30,13 +30,13 @@ public class SaticScheduleTask {
         iHttpClientService.doMsm(token);
         //定时调取电话接口
         System.err.println("调取电话接口开始.........");
-        iHttpClientService.doTel(token,fAccess);
+        iHttpClientService.doTel(token, fAccess);
         //定时调取邮件接口
         System.err.println("调取邮件接口开始.........");
-        iHttpClientService.doMail(token,fAccess);
+        iHttpClientService.doMail(token, fAccess);
         //定时调取传真接口
         System.err.println("调取传真接口开始.........");
-        iHttpClientService.doFax(token,fAccess);
-        System.err.println("执行静态定时任务时间: " + LocalDateTime.now());
+        iHttpClientService.doFax(token, fAccess);
+//        System.err.println("执行静态定时任务时间: " + LocalDateTime.now());
     }
 }
