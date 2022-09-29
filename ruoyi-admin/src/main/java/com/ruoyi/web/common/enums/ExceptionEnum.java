@@ -7,7 +7,8 @@ public enum ExceptionEnum {
     ADD_FAILED(10003,"添加失败，关键字已存在"),
     UPDATE_FAILED(10004,"修改失败"),
     WRITE_TO_DOCUMENT_FAILED(10005,"写入关键字文档失败"),
-    DELETE_FAILED(10006,"删除失败，关键字不存在");
+    DELETE_FAILED(10006,"删除失败，关键字不存在"),
+    NAME_ERROR(10007,"参数名称解析错误");
 
     private int errorCode;
     private String errorMsg;

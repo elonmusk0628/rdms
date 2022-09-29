@@ -133,3 +133,7 @@ xss:
 # 词典配置路径
 keyword:
   filePath: "D:/CodeSource/rdms/ruoyi-admin/src/main/resources/ik_analyzer/ext.dic"
+
+# 默认年份为今年（2022）
+yearStr:
+  value: "2022年"

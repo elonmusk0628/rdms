@@ -34,16 +34,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="name !=null and name != ''">
                 and name LIKE CONCAT( '%' , #{name}, '%')
             </if>
-            <if test="status !=null">
+            <if test="status !=null and name != ''">
                 and status = #{status}
             </if>
             <if test="iDate != null and iDate != ''">
                 and i_date = #{iDate}
             </if>
-            <if test="iHour != null and iHour != ''">
+            <if test="iHour != null">
                 and i_hour = #{iHour}
             </if>
         </where>
+    </select>
+
+    <select id="selectName"  resultType="String">
+        SELECT DISTINCT name FROM `river_info`
     </select>
 
 

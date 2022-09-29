@@ -23,4 +23,11 @@ public interface SearchInfoMapper {
      * @return 信息集合
      */
     public List<SearchInfo> selectRiverInfoList(SearchRequest req);
+
+    /**
+     * 查询所有名称
+     *
+     * @return 关键字结果集
+     */
+    public List<String> selectName();
 }

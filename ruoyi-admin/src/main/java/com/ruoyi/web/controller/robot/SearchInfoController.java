@@ -36,11 +36,10 @@ public class SearchInfoController {
             return AjaxResult.error(ExceptionEnum.NULL_REQUEST_PARAM.getErrorMsg());
         }
         SearchResponse resp = searchInfoService.selectRiverInfoByCondition(str);
-        if (StringUtils.isNotEmpty(resp.getContent())) {
-            return AjaxResult.success(resp);
-        } else {
-            return AjaxResult.success(ExceptionEnum.NULL_RESULT.getErrorMsg());
+        if (!StringUtils.isNotEmpty(resp.getContent())) {
+            resp.setContent(ExceptionEnum.NULL_RESULT.getErrorMsg());
         }
+        return AjaxResult.success(resp);
     }
 
 }

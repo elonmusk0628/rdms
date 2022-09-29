@@ -3,6 +3,7 @@ package com.ruoyi.web.service;
 import com.ruoyi.web.domian.SearchResponse;
 
 import javax.jws.WebService;
+import java.util.List;
 
 /**
  * 河流信息 服务层
@@ -18,5 +19,13 @@ public interface ISearchInfoService {
      * @return 河道信息集合
      */
     public SearchResponse selectRiverInfoByCondition(String str);
+
+
+    /**
+     * 查询所有名称
+     *
+     * @return 关键字结果集
+     */
+    public List<String> selectName();
 
 }

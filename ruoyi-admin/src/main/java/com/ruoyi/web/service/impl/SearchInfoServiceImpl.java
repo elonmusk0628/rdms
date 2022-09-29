@@ -2,12 +2,14 @@ package com.ruoyi.web.service.impl;
 
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.web.common.constant.BaseConstants;
+import com.ruoyi.web.common.enums.ExceptionEnum;
 import com.ruoyi.web.domian.SearchInfo;
 import com.ruoyi.web.domian.SearchRequest;
 import com.ruoyi.web.domian.SearchResponse;
 import com.ruoyi.web.mapper.SearchInfoMapper;
 import com.ruoyi.web.service.ISearchInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wltea.analyzer.core.IKSegmenter;
 import org.wltea.analyzer.core.Lexeme;
@@ -44,6 +46,11 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
 
     private static final Integer ATTRIBUTE  = 6;
 
+    private static final String YEAR_PREFIX = "202";
+
+    @Value("${yearStr.value}")
+    private String YEAR_STR;
+
     @Autowired
     SearchInfoMapper searchInfoMapper;
 
@@ -71,29 +78,58 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
             }
 
             SearchRequest req = new SearchRequest();
+            String yearKeyWord = "";
+            String monthKeyWord = "";
+            String dayKeyWord = "";
+            String hourKeyWord = "";
+            String name = "";
+            String date = "";
             // 2.keyWordMap中获取对应参数值
-            String yearKeyWord = keyWordMap.get(YEAR_KEY);
-            String monthKeyWord = keyWordMap.get(MONTH_KEY);
-            String dayKeyWord = keyWordMap.get(DAY_KEY);
-            String hourKeyWord = keyWordMap.get(HOUR_KEY);
+            if (keyWordMap.get(YEAR_KEY).contains(YEAR_PREFIX)) {
+                yearKeyWord = keyWordMap.get(YEAR_KEY);
+                monthKeyWord = keyWordMap.get(MONTH_KEY);
+                dayKeyWord = keyWordMap.get(DAY_KEY);
+                hourKeyWord = keyWordMap.get(HOUR_KEY);
+                name = keyWordMap.get(NAME_KEY);
+            } else {
+                yearKeyWord = YEAR_STR;
+                monthKeyWord = keyWordMap.get(YEAR_KEY);
+                dayKeyWord = keyWordMap.get(MONTH_KEY);
+                hourKeyWord = keyWordMap.get(DAY_KEY);
+                name = keyWordMap.get(HOUR_KEY);
+            }
             // 3.大写小时转为int
-            int hour = packageHour(keyWordMap);
+            int hour = packageHour(hourKeyWord);
+
             // 4.截取日期，封装查询数据库请求体req
-            String date = yearKeyWord.substring(0, yearKeyWord.length()-1) + CONNECT_SYMBOL + monthKeyWord.substring(0, monthKeyWord.length()-1)
-                    + CONNECT_SYMBOL + dayKeyWord.substring(0, dayKeyWord.length()-1);
+            date = yearKeyWord.substring(0, yearKeyWord.length() - 1) + CONNECT_SYMBOL + monthKeyWord.substring(0, monthKeyWord.length() - 1)
+                    + CONNECT_SYMBOL + dayKeyWord.substring(0, dayKeyWord.length() - 1);
             req.setIDate(date);
             req.setIHour(hour);
-            req.setName(keyWordMap.get(NAME_KEY));
-            riverList = searchInfoMapper.selectRiverInfoList(req);
+            req.setName(name);
 
-            // 5.封装返回体参数，添加单位
-            packageParam(riverList);
-            // 6.封装到返回体中
-            resp = packageResp(riverList, keyWordMap);
+            // 5.校验名称是否正确
+            List<String> nameList = searchInfoMapper.selectName();
+            String nameStr = nameList.toString();
+            if (!nameStr.contains(name)) {
+                resp.setContent(ExceptionEnum.NAME_ERROR.getErrorMsg());
+            } else {
+                riverList = searchInfoMapper.selectRiverInfoList(req);
+                // 6.封装返回体参数，添加单位
+                packageParam(riverList);
+                // 7.封装到返回体中
+                resp = packageResp(riverList, keyWordMap);
+            }
+
             return resp;
         } catch (Exception e) {
             return resp;
         }
+    }
+
+    @Override
+    public List<String> selectName() {
+       return searchInfoMapper.selectName();
     }
 
     private void packageParam(List<SearchInfo> list) {
@@ -112,15 +148,21 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
     private SearchResponse packageResp(List<SearchInfo> list, Map<Integer,String> keyWordMap) {
         SearchInfo info = list.get(0);
         SearchResponse resp = new SearchResponse();
+        String attribute = "";
+        if (keyWordMap.get(YEAR_KEY).contains(YEAR_PREFIX)) {
+            attribute = keyWordMap.get(ATTRIBUTE);
+        } else {
+            attribute = keyWordMap.get(5);
+        }
         if (info.getType() == RESERVOIR_TYPE) {
-            if (StringUtils.isEmpty(keyWordMap.get(ATTRIBUTE))) {
+            if (StringUtils.isEmpty(attribute)) {
                 resp.setContent(info.getName() + BaseConstants.WATER_LEVEL + info.getWaterLevel() + BaseConstants.COMMA_SYMBOL
                         + BaseConstants.LIMIT_LEVEL + info.getWarnLevel() + BaseConstants.COMMA_SYMBOL + BaseConstants.RESERVOIR_IN
                         + info.getReservoirIn() + BaseConstants.COMMA_SYMBOL + BaseConstants.RESERVOIR_OUT + info.getReservoirOut()
                         + BaseConstants.COMMA_SYMBOL + BaseConstants.STATUS + info.getStatus());
             } else {
 
-                switch (keyWordMap.get(ATTRIBUTE)) {
+                switch (attribute) {
                     case BaseConstants.A_WATER_LEVEL:
                         resp.setContent(info.getName() + BaseConstants.WATER_LEVEL + info.getWaterLevel());
                         break;
@@ -145,13 +187,13 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
             }
         }
         if (info.getType() == RIVER_TYPE) {
-            if (StringUtils.isEmpty(keyWordMap.get(ATTRIBUTE))) {
+            if (StringUtils.isEmpty(attribute)) {
                 resp.setContent(info.getName() + BaseConstants.WATER_LEVEL + info.getWaterLevel() + BaseConstants.COMMA_SYMBOL
                         + BaseConstants.WARN_LEVEL + info.getWarnLevel() + BaseConstants.COMMA_SYMBOL + BaseConstants.RIVER_FLOW
                         + info.getRiverFlow() + BaseConstants.COMMA_SYMBOL + BaseConstants.WATER_POTENTIAL + info.getWaterPotential()
                         + BaseConstants.COMMA_SYMBOL + BaseConstants.STATUS + info.getStatus());
             } else {
-                switch (keyWordMap.get(ATTRIBUTE)) {
+                switch (attribute) {
                     case BaseConstants.A_WATER_LEVEL:
                         resp.setContent(info.getName() + BaseConstants.WATER_LEVEL + info.getWaterLevel());
                         break;
@@ -178,8 +220,7 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
         return resp;
     }
 
-    private int packageHour(Map<Integer,String> keyWordMap) {
-        String hourStr = keyWordMap.get(HOUR_KEY);
+    private int packageHour(String hourStr) {
         String hour = hourStr.substring(0, hourStr.length() - 1);
         switch (hour) {
             case BaseConstants.ZERO_OCLOCK:
