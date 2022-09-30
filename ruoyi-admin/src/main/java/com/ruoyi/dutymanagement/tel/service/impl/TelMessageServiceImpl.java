@@ -29,8 +29,8 @@ public class TelMessageServiceImpl implements ITelMessageService {
      * @return
      */
     @Override
-    public List<TelInfoVO> list(TelInfoParam telInfoParam) {
-        List<TelInfoVO> telInfoVOList = telMessageMapper.list(telInfoParam);
+    public List<TelInfoVO> getTelList(TelInfoParam telInfoParam) {
+        List<TelInfoVO> telInfoVOList = telMessageMapper.getTelList(telInfoParam);
         return telInfoVOList;
     }
 

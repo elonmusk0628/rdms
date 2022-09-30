@@ -21,7 +21,7 @@ public interface FaxMessageMapper {
      * @param faxParam
      * @return
      */
-    List<FaxVO> list(FaxParam faxParam);
+    List<FaxVO> getFaxList(FaxParam faxParam);
 
     /**
      * 查询传真信息
@@ -52,7 +52,7 @@ public interface FaxMessageMapper {
      *
      * @param faxEntity
      */
-    int add(FaxEntity faxEntity);
+    int addFaxInfo(FaxEntity faxEntity);
 
     /**
      * 新增传真子信息

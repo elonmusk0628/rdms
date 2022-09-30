@@ -6,8 +6,10 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
 import com.ruoyi.dutymanagement.msm.domain.param.MsmParam;
 import com.ruoyi.dutymanagement.msm.domain.vo.MsmVO;
+import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
 import com.ruoyi.dutymanagement.msm.service.IShortMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +28,8 @@ public class ShortMessageController extends BaseController {
     @Autowired
     private IShortMessageService shortMessageService;
 
+    @Autowired
+    private IHttpClientService msmHttpPostClientService;
 
     /**
      * 查询短信列表
@@ -34,10 +38,10 @@ public class ShortMessageController extends BaseController {
      * @return
      */
     @PreAuthorize("@ss.hasPermi('msm:message:list')")
-    @GetMapping("/list")
-    public TableDataInfo list(MsmParam msmParam) {
+    @GetMapping("/getMsmList")
+    public TableDataInfo getMsmList(MsmParam msmParam) {
         startPage();
-        List<MsmVO> msmVOList = shortMessageService.list(msmParam);
+        List<MsmVO> msmVOList = shortMessageService.getMsmList(msmParam);
         return getDataTable(msmVOList);
     }
 
@@ -63,11 +67,10 @@ public class ShortMessageController extends BaseController {
      * @return
      */
     @GetMapping("/getJsonObject")
-    public AjaxResult getJsonObject(@RequestParam String status) throws Exception {
-        if (status == null || "".equals(status)) {
-            return AjaxResult.error("success参数不能为空！");
-        }
-        String jsonObject = shortMessageService.getJsonObject(status);
+    public AjaxResult getJsonObject(LoginInfo loginInfo) throws Exception {
+        //获取token
+        String token = msmHttpPostClientService.getToken(loginInfo);
+        String jsonObject = msmHttpPostClientService.doMsm(token);
         return AjaxResult.success(jsonObject);
     }
 

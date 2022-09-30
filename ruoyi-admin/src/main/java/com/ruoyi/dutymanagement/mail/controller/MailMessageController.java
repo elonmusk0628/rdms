@@ -9,6 +9,7 @@ import com.ruoyi.dutymanagement.mail.service.IMailMessageService;
 import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
 import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class MailMessageController extends BaseController {
     private IMailMessageService mailMessageService;
 
     @Autowired
-    private IHttpClientService httpClientService;
+    private IHttpClientService iHttpClientService;
 
     /**
      * 查询邮件列表
@@ -36,10 +37,10 @@ public class MailMessageController extends BaseController {
      * @return
      */
     @PreAuthorize("@ss.hasPermi('mail:message:list')")
-    @GetMapping("/list")
-    public TableDataInfo list(MailParam mailParam) {
+    @GetMapping("/getMailList")
+    public TableDataInfo getMailList(MailParam mailParam) {
         startPage();
-        List<MailVO> mailVOList = mailMessageService.list(mailParam);
+        List<MailVO> mailVOList = mailMessageService.getMailList(mailParam);
         return getDataTable(mailVOList);
     }
 
@@ -62,17 +63,11 @@ public class MailMessageController extends BaseController {
      * @return
      */
     @GetMapping("/getJsonObject")
-    public AjaxResult getJsonObject(@RequestParam String status) throws Exception {
-        if (status == null || "".equals(status)) {
-            return AjaxResult.error("success参数不能为空！");
-        }
-        LoginInfo loginInfo = new LoginInfo();
-        loginInfo.setUsername("admin");
-        loginInfo.setPassword("Fyc@87117781");
+    public AjaxResult getJsonObject(LoginInfo loginInfo) throws Exception {
         //获取token
-        String token = httpClientService.getToken(loginInfo);
+        String token = iHttpClientService.getToken(loginInfo);
         //获取fAccess
-        String fAccess = httpClientService.getFAccess(token);
+        String fAccess = iHttpClientService.getFAccess(token);
         String jsonObject = mailMessageService.getJsonObject(token,fAccess);
         return AjaxResult.success(jsonObject);
     }
@@ -101,15 +96,12 @@ public class MailMessageController extends BaseController {
      * @return
      */
     @GetMapping("/doMail")
-    public AjaxResult doMail(@RequestParam String status) throws Exception {
-        LoginInfo loginInfo = new LoginInfo();
-        loginInfo.setUsername("admin");
-        loginInfo.setPassword("Fyc@87117781");
+    public AjaxResult doMail(LoginInfo loginInfo) throws Exception {
         //获取token
-        String token = httpClientService.getToken(loginInfo);
+        String token = iHttpClientService.getToken(loginInfo);
         //获取fAccess
-        String fAccess = httpClientService.getFAccess(token);
-        String jsonObject = httpClientService.doMail(token,fAccess);
+        String fAccess = iHttpClientService.getFAccess(token);
+        String jsonObject = iHttpClientService.doMail(token,fAccess);
         return AjaxResult.success(jsonObject);
     }
 

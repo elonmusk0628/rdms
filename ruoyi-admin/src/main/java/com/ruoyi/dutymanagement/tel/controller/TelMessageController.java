@@ -9,6 +9,7 @@ import com.ruoyi.dutymanagement.tel.domain.param.TelInfoParam;
 import com.ruoyi.dutymanagement.tel.domain.vo.TelInfoVO;
 import com.ruoyi.dutymanagement.tel.service.ITelMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,10 +37,10 @@ public class TelMessageController extends BaseController {
      * @return
      */
     @PreAuthorize("@ss.hasPermi('tel:message:list')")
-    @GetMapping("/list")
-    public TableDataInfo list(TelInfoParam telInfoParam) {
+    @GetMapping("/getTelList")
+    public TableDataInfo getTelList(TelInfoParam telInfoParam) {
         startPage();
-        List<TelInfoVO> telVOList = telMessageService.list(telInfoParam);
+        List<TelInfoVO> telVOList = telMessageService.getTelList(telInfoParam);
         return getDataTable(telVOList);
     }
 

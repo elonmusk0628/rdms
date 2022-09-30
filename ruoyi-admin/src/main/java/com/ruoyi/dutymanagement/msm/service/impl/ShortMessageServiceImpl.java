@@ -10,6 +10,7 @@ import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
 import com.ruoyi.dutymanagement.msm.service.IShortMessageService;
 import com.ruoyi.dutymanagement.msm.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +31,7 @@ public class ShortMessageServiceImpl implements IShortMessageService {
     private ShortMessageMapper shortMessageMapper;
 
     @Autowired
-    private IHttpClientService httpPostClientService;
+    private IHttpClientService tokenHttpPostClientService;
 
     /**
      * 查询短信列表
@@ -39,8 +40,8 @@ public class ShortMessageServiceImpl implements IShortMessageService {
      * @return
      */
     @Override
-    public List<MsmVO> list(MsmParam msmParam) {
-        List<MsmVO> msmVOList = shortMessageMapper.list(msmParam);
+    public List<MsmVO> getMsmList(MsmParam msmParam) {
+        List<MsmVO> msmVOList = shortMessageMapper.getMsmList(msmParam);
         return msmVOList;
     }
 
@@ -59,18 +60,6 @@ public class ShortMessageServiceImpl implements IShortMessageService {
         List<MsmInfoEntity> msmInfoEntityList = shortMessageMapper.getInfoById(mainId);
         msmVO.setMsmInfoList(msmInfoEntityList);
         return msmVO;
-    }
-
-    /**
-     * 与机器人接口
-     *
-     * @return
-     */
-    @Override
-    public String getJsonObject(String status) throws Exception {
-        //调取值班管理系统短信接口
-        String jsonObject = httpPostClientService.doMsm(status);
-        return jsonObject;
     }
 
     /**
@@ -119,7 +108,7 @@ public class ShortMessageServiceImpl implements IShortMessageService {
         msmEntity.setFailCount(msmParam.getFailCount());
         msmEntity.setSignaTure(msmParam.getSignaTure());
         msmEntity.setSuccess(msmParam.getSuccess());
-        shortMessageMapper.add(msmEntity);
+        shortMessageMapper.addMsmInfo(msmEntity);
     }
 
     /**
@@ -130,7 +119,7 @@ public class ShortMessageServiceImpl implements IShortMessageService {
      */
     @Override
     public String getToken(LoginInfo loginInfo) throws Exception {
-        String token = httpPostClientService.getToken(loginInfo);
+        String token = tokenHttpPostClientService.getToken(loginInfo);
         return token;
     }
 }

@@ -21,7 +21,7 @@ public interface MailMessageMapper {
      * @param mailParam
      * @return
      */
-    List<MailVO> list(MailParam mailParam);
+    List<MailVO> getMailList(MailParam mailParam);
 
     /**
      * 根据邮件附件id查询邮件
@@ -60,7 +60,7 @@ public interface MailMessageMapper {
      *
      * @param mailEntity
      */
-    int add(MailEntity mailEntity);
+    int addMialInfo(MailEntity mailEntity);
 
     /**
      * 修改邮件状态

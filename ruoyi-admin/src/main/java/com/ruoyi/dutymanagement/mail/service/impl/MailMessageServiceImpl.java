@@ -10,6 +10,7 @@ import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +29,7 @@ public class MailMessageServiceImpl implements IMailMessageService {
     private MailMessageMapper mailMessageMapper;
 
     @Autowired
-    private IHttpClientService httpPostClientService;
+    private IHttpClientService mailHttpPostClientService;
 
     /**
      * 查询邮件列表
@@ -37,8 +38,8 @@ public class MailMessageServiceImpl implements IMailMessageService {
      * @return
      */
     @Override
-    public List<MailVO> list(MailParam mailParam) {
-        List<MailVO> mailVOList = mailMessageMapper.list(mailParam);
+    public List<MailVO> getMailList(MailParam mailParam) {
+        List<MailVO> mailVOList = mailMessageMapper.getMailList(mailParam);
         return mailVOList;
     }
 
@@ -66,7 +67,7 @@ public class MailMessageServiceImpl implements IMailMessageService {
     @Override
     public String getJsonObject(String token,String fAccess) throws Exception {
         //调取值班管理系统短信接口
-        String jsonObject = httpPostClientService.doMail(token,fAccess);
+        String jsonObject = mailHttpPostClientService.doMail(token,fAccess);
         return jsonObject;
     }
 
@@ -107,8 +108,8 @@ public class MailMessageServiceImpl implements IMailMessageService {
      */
     @Override
     public String getMailFAccess(LoginInfo loginInfo) throws Exception {
-        String token = httpPostClientService.getToken(loginInfo);
-        String fAccess = httpPostClientService.getFAccess(token);
+        String token = mailHttpPostClientService.getToken(loginInfo);
+        String fAccess = mailHttpPostClientService.getFAccess(token);
         return fAccess;
     }
 }

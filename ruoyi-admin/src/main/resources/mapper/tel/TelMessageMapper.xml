@@ -21,7 +21,7 @@
         <result property="update_time"    column="updateTime"/>
         <result property="remark"    column="remark"/>
     </resultMap>
-<select id="list" parameterType="TelInfoParam" resultType="TelInfoVO">
+<select id="getTelList" parameterType="TelInfoParam" resultType="TelInfoVO">
     SELECT
         id as id,
         tel_record_id AS telRecordId,
@@ -94,7 +94,7 @@
             1 =1
           AND tel_record_id = #{telRecordId}
     </select>
-    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="TelInfoEntity">
+    <insert id="addTelInfo" useGeneratedKeys="true" keyProperty="id" parameterType="TelInfoEntity">
         insert into tel_info (
             tel_record_id,
             the_electricity_unit,

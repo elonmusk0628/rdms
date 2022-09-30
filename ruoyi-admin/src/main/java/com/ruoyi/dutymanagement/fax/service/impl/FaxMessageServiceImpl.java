@@ -7,6 +7,7 @@ import com.ruoyi.dutymanagement.fax.mapper.FaxMessageMapper;
 import com.ruoyi.dutymanagement.fax.service.IFaxMessageService;
 import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +34,8 @@ public class FaxMessageServiceImpl implements IFaxMessageService {
      * @return
      */
     @Override
-    public List<FaxVO> list(FaxParam faxParam) {
-        List<FaxVO> faxVOList = faxMessageMapper.list(faxParam);
+    public List<FaxVO> getFaxList(FaxParam faxParam) {
+        List<FaxVO> faxVOList = faxMessageMapper.getFaxList(faxParam);
         return faxVOList;
     }
 

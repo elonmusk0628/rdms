@@ -18,7 +18,7 @@ public interface IMailMessageService {
      * @param mailParam
      * @return
      */
-    List<MailVO> list(MailParam mailParam);
+    List<MailVO> getMailList(MailParam mailParam);
 
     /**
      * 查询邮件详情

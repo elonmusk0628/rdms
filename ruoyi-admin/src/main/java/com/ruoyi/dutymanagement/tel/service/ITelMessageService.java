@@ -17,7 +17,7 @@ public interface ITelMessageService {
      * @param telInfoParam
      * @return
      */
-    List<TelInfoVO> list(TelInfoParam telInfoParam);
+    List<TelInfoVO> getTelList(TelInfoParam telInfoParam);
 
     /**
      * 根据id查询通话记录详情

@@ -17,7 +17,7 @@ public interface IFaxMessageService {
      * @param faxParam
      * @return
      */
-    List<FaxVO> list(FaxParam faxParam);
+    List<FaxVO> getFaxList(FaxParam faxParam);
 
     /**
      * 查询传真信息详情

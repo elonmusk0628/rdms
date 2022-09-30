@@ -20,7 +20,7 @@ public interface TelMessageMapper {
      * @param telInfoParam
      * @return
      */
-    List<TelInfoVO> list(TelInfoParam telInfoParam);
+    List<TelInfoVO> getTelList(TelInfoParam telInfoParam);
 
     /**
      * 根据id查询通话记录详情
@@ -44,7 +44,7 @@ public interface TelMessageMapper {
      * @param telInfoEntity
      * @return
      */
-    int add(TelInfoEntity telInfoEntity);
+    int addTelInfo(TelInfoEntity telInfoEntity);
 
     /**
      * 查询id最大的一条数据

@@ -27,7 +27,7 @@
         <result property="taskTime"       column="task_time"    />
         <result property="taskTimeStr"    column="task_time_str"    />
     </resultMap>
-    <select id="list" parameterType="MsmParam" resultType="MsmEntity">
+    <select id="getMsmList" parameterType="MsmParam" resultType="MsmEntity">
         select
         id as id,
         send_info_id as sendInfoId,
@@ -79,7 +79,7 @@
         where 1=1
            and send_info_id = #{sendInfoId}
     </select>
-    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="MsmEntity">
+    <insert id="addMsmInfo" useGeneratedKeys="true" keyProperty="id" parameterType="MsmEntity">
         insert into msm (
         send_info_id,
         ageing,

@@ -12,7 +12,7 @@ import java.util.Date;
  * @Author fenghan
  */
 @Entity
-@Table(name = "fax_info", schema = "rdms")
+@Table(name = "fax_attachment", schema = "rdms")
 @Data
 public class FaxInfoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

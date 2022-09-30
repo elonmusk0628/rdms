@@ -12,7 +12,7 @@ import java.sql.Timestamp;
  * @Author fenghan
  */
 @Entity
-@Table(name = "mail_info", schema = "rdms")
+@Table(name = "mail_attachment", schema = "rdms")
 @Data
 public class MailInfoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -15,7 +15,6 @@ public class FaxVO {
 
     private Integer id;
 
-
     private String fileManageId;
 
     private String name;

@@ -21,7 +21,7 @@
             <result property="remark"    column="remark"/>
         </resultMap>
 
-    <select id="list" parameterType="FaxParam" resultType="FaxVO">
+    <select id="getFaxList" parameterType="FaxParam" resultType="FaxVO">
         select
         id as id,
         file_manage_id as fileManageId,
@@ -58,11 +58,11 @@
             file_id as fileId,
             file_name as fileName,
             file_path as filePath
-            from fax_info
+            from fax_attachment
             where 1=1
             and main_id=#{mainId}
     </select>
-    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="FaxEntity">
+    <insert id="addFaxInfo" useGeneratedKeys="true" keyProperty="id" parameterType="FaxEntity">
         insert into fax (
             file_manage_id,
             name,
@@ -82,7 +82,7 @@
                         )
     </insert>
     <insert id="addItem" useGeneratedKeys="true" keyProperty="id" parameterType="FaxInfoEntity">
-        insert into fax_info (
+        insert into fax_attachment (
             main_id,
             file_id,
             file_type,

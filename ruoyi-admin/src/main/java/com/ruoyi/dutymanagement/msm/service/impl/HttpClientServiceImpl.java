@@ -122,7 +122,7 @@ public class
                         MsmVO msmVO = shortMessageMapper.getShortMessageById(sendInfoId);
                         if (msmVO == null) {
                             //短信主信息入库
-                            int count = shortMessageMapper.add(msmEntity);
+                            int count = shortMessageMapper.addMsmInfo(msmEntity);
                             int mainId = msmEntity.getId();
                             Object receiverList = object.get("receiverList");
                             if (receiverList == null) {
@@ -220,8 +220,8 @@ public class
                         //根据messageId查询短信
                         MailVO mailVO = mailMessageMapper.getMailByMessageId(messageId);
                         if (mailVO == null) {
-                            //短信信息入库
-                            int count = mailMessageMapper.add(mailEntity);
+                            //邮件信息入库
+                            int count = mailMessageMapper.addMialInfo(mailEntity);
                             int mainId = mailEntity.getId();
                             Object fileInfoList = object.get("fileInfoList");
                             if (fileInfoList == null) {
@@ -315,7 +315,7 @@ public class
                         FaxVO faxVO = faxMessageMapper.getFaxByManageId(fileManageId);
                         if (faxVO == null) {
                             //短信信息入库
-                            int count = faxMessageMapper.add(faxEntity);
+                            int count = faxMessageMapper.addFaxInfo(faxEntity);
                             Object fileInfoList = object.get("fileInfoList");
                             if (fileInfoList == null) {
                                 continue;
@@ -419,7 +419,7 @@ public class
                         TelInfoVO telInfoVO = telMessageMapper.getTelByTelRecordId(Integer.parseInt(telRecordId));
                         if (telInfoVO == null) {
                             //短信信息入库
-                            int count = telMessageMapper.add(telInfoEntity);
+                            int count = telMessageMapper.addTelInfo(telInfoEntity);
                             return String.valueOf(count);
                         } else {
                             continue;

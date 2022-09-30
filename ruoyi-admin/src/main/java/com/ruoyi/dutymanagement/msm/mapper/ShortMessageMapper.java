@@ -21,7 +21,7 @@ public interface ShortMessageMapper {
      * @param msmParam
      * @return
      */
-    List<MsmVO> list(MsmParam msmParam);
+    List<MsmVO> getMsmList(MsmParam msmParam);
 
     /**
      * 根据id查询短信信息
@@ -44,7 +44,7 @@ public interface ShortMessageMapper {
      *
      * @param msmEntity
      */
-    int add(MsmEntity msmEntity);
+    int addMsmInfo(MsmEntity msmEntity);
 
     /**
      * 新增短信子信息

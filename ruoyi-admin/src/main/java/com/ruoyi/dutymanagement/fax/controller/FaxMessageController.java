@@ -9,6 +9,7 @@ import com.ruoyi.dutymanagement.fax.service.IFaxMessageService;
 import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
 import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class FaxMessageController extends BaseController {
     private IFaxMessageService faxMessageService;
 
     @Autowired
-    private IHttpClientService httpClientService;
+    private IHttpClientService faxHttpClientService;
 
 
     /**
@@ -37,10 +38,10 @@ public class FaxMessageController extends BaseController {
      * @return
      */
     @PreAuthorize("@ss.hasPermi('fax:message:list')")
-        @GetMapping("/list")
-    public TableDataInfo list(FaxParam faxParam) {
+        @GetMapping("/getFaxList")
+    public TableDataInfo getFaxList(FaxParam faxParam) {
         startPage();
-        List<FaxVO> faxVOList = faxMessageService.list(faxParam);
+        List<FaxVO> faxVOList = faxMessageService.getFaxList(faxParam);
         return getDataTable(faxVOList);
     }
 
@@ -68,9 +69,9 @@ public class FaxMessageController extends BaseController {
     @GetMapping("/getJsonObject")
     public AjaxResult getJsonObject(LoginInfo loginInfo) throws Exception {
         //获取token
-        String token = httpClientService.getToken(loginInfo);
+        String token = faxHttpClientService.getToken(loginInfo);
         //获取fAccess
-        String fAccess = httpClientService.getFAccess(token);
+        String fAccess = faxHttpClientService.getFAccess(token);
         String jsonObject = faxMessageService.getJsonObject(token,fAccess);
         return AjaxResult.success(jsonObject);
     }

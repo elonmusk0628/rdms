@@ -23,7 +23,7 @@
         <result property="status"     column="status" />
     </resultMap>
 
-    <select id="list" parameterType="MailParam" resultType="MailEntity">
+    <select id="getMailList" parameterType="MailParam" resultType="MailEntity">
       select
       id as id,
       message_Id as messageId,
@@ -76,7 +76,7 @@
             file_id AS fileId,
             file_name AS fileName
         FROM
-            mail_info
+            mail_attachment
         WHERE
             1 = 1
             AND main_id = #{mainId}
@@ -102,7 +102,7 @@
         1 = 1
             AND status = #{status}
     </select>
-    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="MailEntity">
+    <insert id="addMialInfo" useGeneratedKeys="true" keyProperty="id" parameterType="MailEntity">
         insert into mail (
         message_Id,
         mail_attachment_id,
@@ -129,7 +129,7 @@
         update mail set status ="1" where id=#{id}
     </update>
     <insert id="addMailInfo" useGeneratedKeys="true" keyProperty="item_id" parameterType="MailInfoEntity">
-        insert into mail_info (
+        insert into mail_attachment (
             main_id,
             file_id,
             mail_attachment_id,

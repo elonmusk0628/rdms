@@ -22,7 +22,7 @@ public interface IShortMessageService {
      * @param msmParam
      * @return
      */
-    List<MsmVO> list(MsmParam msmParam);
+    List<MsmVO> getMsmList(MsmParam msmParam);
 
     /**
      * 查询短信详情
@@ -31,13 +31,6 @@ public interface IShortMessageService {
      * @return
      */
     MsmVO getInfoById(String sendInfoId);
-
-    /**
-     * 调其它系统接口
-     *
-     * @return
-     */
-    String getJsonObject(String status) throws Exception;
 
     /**
      * 测试方法
