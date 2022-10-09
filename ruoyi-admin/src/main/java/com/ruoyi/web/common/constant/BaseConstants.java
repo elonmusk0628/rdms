@@ -58,7 +58,7 @@ public interface BaseConstants {
 
     String ONE_CLOCK = "一";
 
-    String TWO_CLOCK = "二";
+    String TWO_CLOCK = "两";
 
     String THREE_CLOCK = "三";
 
