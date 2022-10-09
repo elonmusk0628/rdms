@@ -134,8 +134,8 @@ public class KeyWordServiceImpl implements IKeyWordService {
         {
             try {
                 if (StringUtils.isNotEmpty(info.getType()) && StringUtils.isNotEmpty(info.getKeyWord())) {
-                    if (BaseConstants.SHUI_KU.equals(info.getType()) || BaseConstants.HE_DAO.equals(info.getType())
-                            || BaseConstants.JI_GOU.equals(info.getType())) {
+                    if (BaseConstants.RESERVOIR.equals(info.getType()) || BaseConstants.RIVERWAY.equals(info.getType())
+                            || BaseConstants.AGENCY.equals(info.getType())) {
 
                         // 验证该关键字是否存在
                         KeyWordInfo keyInfo = keyWordMapper.selectByKeyWord(info.getKeyWord(), info.getType());
