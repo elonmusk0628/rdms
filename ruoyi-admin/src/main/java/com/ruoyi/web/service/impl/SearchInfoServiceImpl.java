@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * 河流信息 服务层实现类
  *
- * @author ruoyi
+ * @author
  */
 @Service
 public class SearchInfoServiceImpl implements ISearchInfoService {
@@ -232,31 +232,30 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
     private int packageHour(String hourStr) {
         String hour = hourStr.substring(0, hourStr.length() - 1);
         switch (hour) {
-            case BaseConstants.ZERO_OCLOCK:
+            case BaseConstants.ZERO_CLOCK:
                 return 0;
-            case BaseConstants.ONE_OCLOCK:
+            case BaseConstants.ONE_CLOCK:
                 return 1;
-            case BaseConstants.TWO_OCLOCK:
+            case BaseConstants.TWO_CLOCK:
                 return 2;
-            case BaseConstants.THREE_OCLOCK:
+            case BaseConstants.THREE_CLOCK:
                 return 3;
-            case BaseConstants.FOUR_OCLOCK:
+            case BaseConstants.FOUR_CLOCK:
                 return 4;
-            case BaseConstants.FIVE_OCLOCK:
+            case BaseConstants.FIVE_CLOCK:
                 return 5;
-            case BaseConstants.SIX_OCLOCK:
+            case BaseConstants.SIX_CLOCK:
                 return 6;
-            case BaseConstants.SEVEN_OCLOCK:
+            case BaseConstants.SEVEN_CLOCK:
                 return 7;
-            case BaseConstants.EIGHT_OCLOCK:
+            case BaseConstants.EIGHT_CLOCK:
                 return 8;
-            case BaseConstants.NINE_OCLOCK:
+            case BaseConstants.NINE_CLOCK:
                 return 9;
-            case BaseConstants.TEN_OCLOCK:
+            case BaseConstants.TEN_CLOCK:
                 return 10;
             default:
                 return Integer.parseInt(hour);
         }
     }
-
 }
