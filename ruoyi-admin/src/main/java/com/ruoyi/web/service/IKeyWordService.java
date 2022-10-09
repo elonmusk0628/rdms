@@ -22,7 +22,9 @@ public interface IKeyWordService {
      * @param startTime 开始时间
      * @param endTime 结束时间
      */
-    public PageInfo<KeyWordInfo> selectKeyWordInfoList(String keyWord, String type, String startTime, String endTime, Integer pageNum, Integer pageSize);
+    PageInfo<KeyWordInfo> selectKeyWordInfoList(String keyWord, String type,
+                                                       String startTime, String endTime,
+                                                       Integer pageNum, Integer pageSize);
 
     /**
      * 新增关键字信息
@@ -30,7 +32,7 @@ public interface IKeyWordService {
      * @param req 请求体
      * @return 关键字信息集合
      */
-    public int addKeyWordInfo(KeyWordInfo req) throws IOException;
+    int addKeyWordInfo(KeyWordInfo req) throws IOException;
 
     /**
      * 修改关键字信息
@@ -38,7 +40,7 @@ public interface IKeyWordService {
      * @param req 请求体
      * @return 结果行数
      */
-    public int updateKeyWordInfo(KeyWordInfo req);
+    int updateKeyWordInfo(KeyWordInfo req);
 
     /**
      * 删除关键字请求
@@ -46,7 +48,7 @@ public interface IKeyWordService {
      * @param ids ids
      * @return 结果行数
      */
-    public int deleteKeyWordInfo(List<Integer> ids);
+    int deleteKeyWordInfo(List<Integer> ids);
 
     /**
      * 批量新增关键字
@@ -54,12 +56,12 @@ public interface IKeyWordService {
      * @param list list
      * @return String
      */
-    public String addKeyWordTemplate(List<KeyWordInfo> list) throws IOException;
+    String addKeyWordTemplate(List<KeyWordInfo> list) throws IOException;
 
     /**
      * 修改，删除关键字表时更新字典
      *
      * @return String
      */
-    public String refreshKeyWords() throws IOException;
+    String refreshKeyWords() throws IOException;
 }
