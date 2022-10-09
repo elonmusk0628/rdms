@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 河流信息 服务层
+ * 河流信息 服务层实现类
  *
  * @author ruoyi
  */
@@ -139,11 +139,11 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
     private void packageParam(List<SearchInfo> list) {
         SearchInfo searchInfo = list.get(0);
         if (searchInfo.getType() == RESERVOIR_TYPE) {
-            searchInfo.setReservoirIn(searchInfo.getReservoirIn() + BaseConstants.M2_S_SUFFIX);
-            searchInfo.setReservoirOut(searchInfo.getReservoirOut() + BaseConstants.M2_S_SUFFIX);
+            searchInfo.setReservoirIn(searchInfo.getReservoirIn() + BaseConstants.M3_S_SUFFIX);
+            searchInfo.setReservoirOut(searchInfo.getReservoirOut() + BaseConstants.M3_S_SUFFIX);
         }
         if (searchInfo.getType() == RIVER_TYPE) {
-            searchInfo.setRiverFlow(searchInfo.getRiverFlow() + BaseConstants.M2_S_SUFFIX);
+            searchInfo.setRiverFlow(searchInfo.getRiverFlow() + BaseConstants.M3_S_SUFFIX);
         }
         searchInfo.setWaterLevel(searchInfo.getWaterLevel() + BaseConstants.METER_SUFFIX);
         searchInfo.setWarnLevel(searchInfo.getWarnLevel() + BaseConstants.METER_SUFFIX);
@@ -224,6 +224,11 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
         return resp;
     }
 
+    /**
+     * 时间转换方法
+     * @param hourStr 汉字小时参数
+     * @return int类型小时数值
+     */
     private int packageHour(String hourStr) {
         String hour = hourStr.substring(0, hourStr.length() - 1);
         switch (hour) {
@@ -231,34 +236,24 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
                 return 0;
             case BaseConstants.ONE_OCLOCK:
                 return 1;
-
             case BaseConstants.TWO_OCLOCK:
                 return 2;
-
             case BaseConstants.THREE_OCLOCK:
                 return 3;
-
             case BaseConstants.FOUR_OCLOCK:
                 return 4;
-
             case BaseConstants.FIVE_OCLOCK:
                 return 5;
-
             case BaseConstants.SIX_OCLOCK:
                 return 6;
-
             case BaseConstants.SEVEN_OCLOCK:
                 return 7;
-
             case BaseConstants.EIGHT_OCLOCK:
                 return 8;
-
             case BaseConstants.NINE_OCLOCK:
                 return 9;
-
             case BaseConstants.TEN_OCLOCK:
                 return 10;
-
             default:
                 return Integer.parseInt(hour);
         }
