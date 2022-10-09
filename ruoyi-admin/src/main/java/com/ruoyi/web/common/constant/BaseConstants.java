@@ -8,7 +8,7 @@ public interface BaseConstants {
 
     String METER_SUFFIX = "米";
 
-    String M2_S_SUFFIX = "立方米/秒";
+    String M3_S_SUFFIX = "立方米/秒";
 
     String WATER_LEVEL = "水位：";
 
@@ -46,13 +46,7 @@ public interface BaseConstants {
 
     String A_RESERVOIR_OUT = "出库";
 
-    String EMPTY = "";
-
     String COMMA_SYMBOL = "，";
-
-    int RESERVOIR_TYPE  = 1;
-
-    int RIVER_TYPE  = 2;
 
     String SHUI_KU = "水库";
 
@@ -64,7 +58,7 @@ public interface BaseConstants {
 
     String ONE_OCLOCK = "一";
 
-    String TWO_OCLOCK = "两";
+    String TWO_OCLOCK = "二";
 
     String THREE_OCLOCK = "三";
 
@@ -81,5 +75,4 @@ public interface BaseConstants {
     String NINE_OCLOCK = "九";
 
     String TEN_OCLOCK = "十";
-
 }
