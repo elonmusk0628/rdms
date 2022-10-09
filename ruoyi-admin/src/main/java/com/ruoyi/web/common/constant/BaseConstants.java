@@ -48,31 +48,31 @@ public interface BaseConstants {
 
     String COMMA_SYMBOL = "，";
 
-    String SHUI_KU = "水库";
+    String RESERVOIR = "水库";
 
-    String HE_DAO = "河道";
+    String RIVERWAY = "河道";
 
-    String JI_GOU = "机构";
+    String AGENCY = "机构";
 
-    String ZERO_OCLOCK = "零";
+    String ZERO_CLOCK = "零";
 
-    String ONE_OCLOCK = "一";
+    String ONE_CLOCK = "一";
 
-    String TWO_OCLOCK = "二";
+    String TWO_CLOCK = "二";
 
-    String THREE_OCLOCK = "三";
+    String THREE_CLOCK = "三";
 
-    String FOUR_OCLOCK = "四";
+    String FOUR_CLOCK = "四";
 
-    String FIVE_OCLOCK = "五";
+    String FIVE_CLOCK = "五";
 
-    String SIX_OCLOCK = "六";
+    String SIX_CLOCK = "六";
 
-    String SEVEN_OCLOCK = "七";
+    String SEVEN_CLOCK = "七";
 
-    String EIGHT_OCLOCK = "八";
+    String EIGHT_CLOCK = "八";
 
-    String NINE_OCLOCK = "九";
+    String NINE_CLOCK = "九";
 
-    String TEN_OCLOCK = "十";
+    String TEN_CLOCK = "十";
 }
