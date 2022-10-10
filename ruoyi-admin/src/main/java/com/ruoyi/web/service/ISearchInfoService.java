@@ -20,7 +20,6 @@ public interface ISearchInfoService {
      */
     public SearchResponse selectRiverInfoByCondition(String str);
 
-
     /**
      * 查询所有名称
      *

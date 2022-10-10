@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.wltea.analyzer.core.IKSegmenter;
 import org.wltea.analyzer.core.Lexeme;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,16 +67,9 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
         SearchResponse resp = new SearchResponse();
         try {
             // 1.请求过来的字符串进行ik分词，放进map
-            Map<Integer,String> keyWordMap = new HashMap<>();
-            StringReader stringReader = new StringReader(searchInfoStr.trim());
-            IKSegmenter ik = new IKSegmenter(stringReader,true);
-            Integer i = 0;
-            Lexeme lex;
-            while((lex = ik.next())!=null){
-                i++;
-                keyWordMap.put(i, lex.getLexemeText());
-            }
+            Map<Integer, String> keyWordMap = ikAnalyzer(searchInfoStr);
 
+            // 2.keyWordMap中获取对应参数值
             SearchRequest req = new SearchRequest();
             String yearKeyWord = "";
             String monthKeyWord = "";
@@ -83,7 +77,6 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
             String hourKeyWord = "";
             String name = "";
             String date = "";
-            // 2.keyWordMap中获取对应参数值
             if (keyWordMap.get(YEAR_KEY).contains(YEAR_PREFIX)) {
                 yearKeyWord = keyWordMap.get(YEAR_KEY);
                 monthKeyWord = keyWordMap.get(MONTH_KEY);
@@ -257,5 +250,18 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
             default:
                 return Integer.parseInt(hour);
         }
+    }
+
+    public Map<Integer,String> ikAnalyzer(String searchInfoStr) throws IOException {
+        Map<Integer,String> keyWordMap = new HashMap<>();
+        StringReader stringReader = new StringReader(searchInfoStr.trim());
+        IKSegmenter ik = new IKSegmenter(stringReader,true);
+        Integer i = 0;
+        Lexeme lex;
+        while((lex = ik.next())!=null){
+            i++;
+            keyWordMap.put(i, lex.getLexemeText());
+        }
+        return keyWordMap;
     }
 }
