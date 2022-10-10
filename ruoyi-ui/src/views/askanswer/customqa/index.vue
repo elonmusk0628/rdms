@@ -79,6 +79,16 @@
           v-hasPermi="['key:word:importKeyWords']"
         >导入</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['key:word:export']"
+        >导出</el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -317,10 +327,10 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const waterIds = row.id || this.selection.map(item => item.id);
-      this.$modal.confirm('是否确认删除编号为"' + waterIds + '"的数据项？').then(function() {
+      const qaIds = row.id || this.selection.map(item => item.id);
+      this.$modal.confirm('是否确认删除编号为"' + qaIds + '"的数据项？').then(function() {
         return delWord({
-          id: waterIds.toString()
+          id: qaIds.toString()
         });
       }).then(() => {
         refreshWord().then(() => {
@@ -334,10 +344,16 @@ export default {
       this.upload.title = "导入问答";
       this.upload.open = true;
     },
+    /** 导出按钮操作 */
+    handleExport() {
+      this.download('key/word/export', {
+        ...this.queryParams
+      }, `qa_${new Date().getTime()}.xlsx`)
+    },
     /** 下载模板操作 */
     importTemplate() {
       this.download('key/word/downloadTemplate', {
-      }, `keyWord_template_${new Date().getTime()}.xlsx`)
+      }, `qa_template_${new Date().getTime()}.xlsx`)
     },
     // 文件上传之前，限制文件格式
     beforeUpload(file) {
