@@ -128,6 +128,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/fax/message/**").permitAll()
                 //电话
                 .antMatchers("/tel/message/**").permitAll()
+                //排班
+                .antMatchers("/roster/message/**").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()

@@ -21,6 +21,11 @@ import com.ruoyi.dutymanagement.msm.util.DateUtils;
 import com.ruoyi.dutymanagement.tel.domain.TelInfoEntity;
 import com.ruoyi.dutymanagement.tel.domain.vo.TelInfoVO;
 import com.ruoyi.dutymanagement.tel.mapper.TelMessageMapper;
+import com.ruoyi.web.common.constant.BaseConstants;
+import com.ruoyi.web.domian.RosterEntity;
+import com.ruoyi.web.domian.RosteringEntity;
+import com.ruoyi.web.domian.vo.RosteringVO;
+import com.ruoyi.web.mapper.RosterMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -50,8 +55,7 @@ import java.util.Date;
  */
 @Service
 @Transactional
-public class
- HttpClientServiceImpl implements IHttpClientService {
+public class HttpClientServiceImpl implements IHttpClientService {
     @Autowired
     private ShortMessageMapper shortMessageMapper;
 
@@ -64,6 +68,9 @@ public class
     @Autowired
     private TelMessageMapper telMessageMapper;
 
+    @Autowired
+    private RosterMapper rosterMapper;
+
     /**
      * 调值班管理系统短信接口
      *
@@ -75,7 +82,7 @@ public class
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
-        HttpGet httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/fxb/sendinfo/getMore");
+        HttpGet httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/fxb/sendinfo/getMore");
         //Get请求中添加token
         httpGet.addHeader("Authorization", token);
         //入库对象
@@ -174,7 +181,7 @@ public class
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
-        HttpGet httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/baseFile/mailMsg/list");
+        HttpGet httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/baseFile/mailMsg/list");
         //Get请求中添加token
         httpGet.addHeader("Authorization", token);
         //Gtt请求中添加鉴权码F-Access
@@ -273,7 +280,7 @@ public class
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
-        HttpGet httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/baseFile/filemanage/list?category=3");
+        HttpGet httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/baseFile/filemanage/list?category=3");
         //Get请求中添加token
         httpGet.addHeader("Authorization", token);
         //Gtt请求中添加鉴权码F-Access
@@ -369,7 +376,7 @@ public class
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
-        HttpGet httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/fxb/telrecord/list");
+        HttpGet httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/fxb/telrecord/list");
         //Get请求中添加token
         httpGet.addHeader("Authorization", token);
         //Gtt请求中添加鉴权码F-Access
@@ -440,6 +447,170 @@ public class
         }
         return null;
     }
+    /**
+     * 调值班管理系统排班接口
+     * @param token
+     * @param fAccess
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public String doRostering(String token,String fAccess) throws Exception {
+        // 1. 创建HttpClient对象
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        // 2. 创建HttpGet对象
+        HttpGet httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/schedule/info/V2/list");
+        //Get请求中添加token
+        httpGet.addHeader("Authorization", token);
+        //Gtt请求中添加鉴权码F-Access
+        httpGet.addHeader("F-Access", fAccess);
+        //入库对象
+        RosteringEntity rosteringEntity = new RosteringEntity();
+        RosterEntity rosterEntity = new RosterEntity();
+        // 4. 执行请求并处理响应
+        try {
+            CloseableHttpResponse response = httpClient.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                entity = new BufferedHttpEntity(entity);
+                // 从响应模型中获取响应实体
+                byte[] bytes = EntityUtils.toByteArray(entity);
+                if (bytes != null) {
+                    String resultStr = new String(bytes, "UTF-8");
+                    JSONObject jsonObject = JSONObject.parseObject(resultStr);
+                    JSONArray jsonArray = JSONArray.parseArray(jsonObject.get("rows").toString());
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        JSONObject object = (JSONObject) jsonArray.get(i);
+                        //类型转换
+                        String createBy = String.valueOf(object.get("createBy"));
+                        String createTime = String.valueOf(object.get("createTime"));
+                        int scheduleInfoV2Id = Integer.parseInt(String.valueOf(object.get("scheduleInfoV2Id")));
+                        String yyyyMm = String.valueOf(object.get("yyyyMm"));
+                        String date = String.valueOf(object.get("date"));
+                        String week = String.valueOf(object.get("week"));
+                        String dateType = String.valueOf(object.get("dateType"));
+                        //值班领导列表
+                        Object dutyHeader = object.get("dutyHeader");
+                        //值班人列表
+                        Object onDutier1 = object.get("onDutier1");
+                        //副班人列表
+                        Object onDutier2 = object.get("onDutier2");
+                        //数据组装
+                        if(createBy == null || "".equals(createBy)){
+                            rosteringEntity.setCreateBy("admin");
+                        } else {
+                            rosteringEntity.setCreateBy(createBy);
+                        }
+                        if(createTime != null && !"".equals(createTime) && !"null".equals(createTime)){
+                            rosteringEntity.setCreateTime(createTime);
+                        } else {
+                            rosteringEntity.setCreateTime(date);
+                        }
+                        rosteringEntity.setScheduleId(scheduleInfoV2Id);
+                        rosteringEntity.setYears(yyyyMm);
+                        rosteringEntity.setDate(date);
+                        rosteringEntity.setWeek(week);
+                        rosteringEntity.setDateType(dateType);
+                        //根据ScheduleId查询排班信息
+                        RosteringVO rosteringVO = rosterMapper.getRosterByScheduleId(scheduleInfoV2Id);
+                        if (rosteringVO == null) {
+                            //排班信息入库
+                            int count = rosterMapper.addRosteringInfo(rosteringEntity);
+                            //解析值班领导列表
+                            if (dutyHeader == null) {
+                                continue;
+                            } else {
+                                String objectStr = dutyHeader.toString();
+                                JSONArray jsonArrayItem = JSONArray.parseArray(objectStr);
+                                for (int j = 0; j < jsonArrayItem.size(); j++) {
+                                    JSONObject objectItem = (JSONObject) jsonArrayItem.get(j);
+                                    int scheduleId = Integer.parseInt(String.valueOf(objectItem.get("scheduleInfoV2Id")));
+                                    int memberId = Integer.parseInt(String.valueOf(objectItem.get("scheduleInfoV2MemberId")));
+                                    String scheduleType = String.valueOf(objectItem.get("scheduleType"));
+                                    int userId = Integer.parseInt(String.valueOf(objectItem.get("userId")));
+                                    String nickName = String.valueOf(objectItem.get("nickName"));
+                                    rosterEntity.setScheduleId(scheduleId);
+                                    rosterEntity.setMemberId(memberId);
+                                    //领班0
+                                    rosterEntity.setScheduleType("0");
+                                    rosterEntity.setUserId(userId);
+                                    rosterEntity.setNickName(nickName);
+                                    rosterEntity.setMainId(rosteringEntity.getId());
+                                    rosterEntity.setCreateTime(DateUtils.dateRurnString(new Date()));
+                                    rosterMapper.addRosterInfo(rosterEntity);
+                                }
+                            }
+                            //解析值班人列表
+                            if(onDutier1 == null){
+                                continue;
+                            }else {
+                                String objectStr = onDutier1.toString();
+                                JSONArray jsonArrayItem = JSONArray.parseArray(objectStr);
+                                for (int k = 0; k < jsonArrayItem.size(); k++) {
+                                    JSONObject objectItem = (JSONObject) jsonArrayItem.get(k);
+                                    int scheduleId = Integer.parseInt(String.valueOf(objectItem.get("scheduleInfoV2Id")));
+                                    int memberId = Integer.parseInt(String.valueOf(objectItem.get("scheduleInfoV2MemberId")));
+                                    String scheduleType = String.valueOf(objectItem.get("scheduleType"));
+                                    int userId = Integer.parseInt(String.valueOf(objectItem.get("userId")));
+                                    String nickName = String.valueOf(objectItem.get("nickName"));
+                                    rosterEntity.setScheduleId(scheduleId);
+                                    rosterEntity.setMemberId(memberId);
+                                    //值班
+                                    rosterEntity.setScheduleType("1");
+                                    rosterEntity.setUserId(userId);
+                                    rosterEntity.setNickName(nickName);
+                                    rosterEntity.setMainId(rosteringEntity.getId());
+                                    rosterEntity.setCreateTime(DateUtils.dateRurnString(new Date()));
+                                    rosterMapper.addRosterInfo(rosterEntity);
+                                }
+                            }
+                            //解析副班人列表
+                            if(onDutier2 == null){
+                                continue;
+                            }else {
+                                String objectStr = onDutier2.toString();
+                                JSONArray jsonArrayItem = JSONArray.parseArray(objectStr);
+                                for (int z = 0; z < jsonArrayItem.size(); z++) {
+                                    JSONObject objectItem = (JSONObject) jsonArrayItem.get(z);
+                                    int scheduleId = Integer.parseInt(String.valueOf(objectItem.get("scheduleInfoV2Id")));
+                                    int memberId = Integer.parseInt(String.valueOf(objectItem.get("scheduleInfoV2MemberId")));
+                                    String scheduleType = String.valueOf(objectItem.get("scheduleType"));
+                                    String userIdStr = String.valueOf(objectItem.get("userId"));
+                                    int userId = 0;
+                                    if(userIdStr != "null"){
+                                        userId = Integer.parseInt(userIdStr);
+                                    }
+                                    String nickName = String.valueOf(objectItem.get("nickName"));
+                                    rosterEntity.setScheduleId(scheduleId);
+                                    rosterEntity.setMemberId(memberId);
+                                    rosterEntity.setScheduleType("2");
+                                    rosterEntity.setUserId(userId);
+                                    rosterEntity.setNickName(nickName);
+                                    rosterEntity.setMainId(rosteringEntity.getId());
+                                    rosterEntity.setCreateTime(DateUtils.dateRurnString(new Date()));
+                                    rosterMapper.addRosterInfo(rosterEntity);
+                                }
+                            }
+                        } else {
+                            continue;
+                        }
+                    }
+                    return jsonObject.toString();
+                }
+            }
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 5. 释放资源
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 
     /**
      * 获取token
@@ -453,7 +624,7 @@ public class
         // 1. 创建HttpClient对象
         CloseableHttpClient client = HttpClientBuilder.create().build();
         // 2. 创建HttpPost对象
-        HttpPost post = new HttpPost("http://192.168.1.3:18092/zwfxzb/login");
+        HttpPost post = new HttpPost(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/login");
         String token = "";
         HttpResponse res = null;
         try {
@@ -499,7 +670,7 @@ public class
         String fAccess = null;
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        HttpGet httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/fxb/file/fileAuth");
+        HttpGet httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/fxb/file/fileAuth");
         HttpResponse res = null;
         try {
             //Get请求中添加token
@@ -549,13 +720,13 @@ public class
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
         if("FAX".equals(sign)){
-            httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/baseFile/filemanage/list?category=3");
+            httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/baseFile/filemanage/list?category=3");
         }else if("MAIL".equals(sign)){
-            httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/baseFile/mailMsg/list");
+            httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/baseFile/mailMsg/list");
         }else if("MSM".equals(sign)){
-            httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/fxb/sendinfo/getMore");
+            httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/fxb/sendinfo/getMore");
         }else if ("TEL".equals(sign)){
-            httpGet = new HttpGet("http://192.168.1.3:18092/zwfxzb/fxb/telrecord/list");
+            httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/fxb/telrecord/list");
         }
         //Get请求中添加token
         httpGet.addHeader("Authorization", token);
