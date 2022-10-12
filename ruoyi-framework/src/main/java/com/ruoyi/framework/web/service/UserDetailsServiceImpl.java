@@ -33,6 +33,12 @@ public class UserDetailsServiceImpl implements UserDetailsService
     @Autowired
     private SysPermissionService permissionService;
 
+    /**
+     * 根据用户名称加载用户信息
+     * @param username 用户名称
+     * @return 用户信息
+     * @throws UsernameNotFoundException 用户名称未找到异常
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
