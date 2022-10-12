@@ -83,4 +83,15 @@ public interface BaseConstants {
 
     String PORT = "18092";
 
+    String TODAY = "今天";
+
+    String TOMORROW = "明天";
+
+    String YESTER_DAY = "昨天";
+
+    String ZERO = "0";
+
+    String ONE = "1";
+
+    String TWO = "2";
 }

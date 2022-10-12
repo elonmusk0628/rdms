@@ -1,31 +1,62 @@
 package com.ruoyi.web.controller.roster;
 
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
 import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
+import com.ruoyi.web.common.enums.ExceptionEnum;
+import com.ruoyi.web.service.IRosterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
+/**
+ * 值班 控制层
+ *
+ * @Author fenghan
+ */
 @RestController
 @RequestMapping("/roster/message")
 public class RosterController {
     @Autowired
     private IHttpClientService rosterHttpClientService;
 
+    @Autowired
+    private IRosterService rosterService;
+
     /**
      * 调值班系统值班接口
+     *
      * @param loginInfo
      * @return
      * @throws Exception
      */
     @PostMapping("/doRoster")
-    public AjaxResult doRoster(@RequestBody LoginInfo loginInfo) throws Exception{
+    public AjaxResult doRoster(@RequestBody LoginInfo loginInfo) throws Exception {
         //获取token
         String token = rosterHttpClientService.getToken(loginInfo);
         //获取fAccess
         String fAccess = rosterHttpClientService.getFAccess(token);
-        String str = rosterHttpClientService.doRostering(token,fAccess);
+        String str = rosterHttpClientService.doRostering(token, fAccess);
         return AjaxResult.success(str);
     }
 
+    /**
+     * 机器人语音交互
+     *
+     * @param strParam
+     * @return
+     */
+    @GetMapping("/getRobotData")
+    public AjaxResult getRobotData(@RequestParam String strParam) throws IOException {
+        if (StringUtils.isEmpty(strParam)) {
+            return AjaxResult.error(ExceptionEnum.NULL_REQUEST_PARAM.getErrorMsg());
+        }
+        String resp = rosterService.getRobotData(strParam);
+        if (!StringUtils.isNotEmpty(resp)) {
+            AjaxResult.error(ExceptionEnum.NULL_RESULT.getErrorMsg());
+        }
+        return AjaxResult.success(resp);
+    }
 }
