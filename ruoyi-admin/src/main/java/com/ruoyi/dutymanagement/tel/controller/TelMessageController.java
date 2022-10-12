@@ -64,8 +64,8 @@ public class TelMessageController extends BaseController {
      * @return
      * @throws Exception
      */
-    @GetMapping("/doTel")
-    public AjaxResult doTel(LoginInfo loginInfo) throws Exception {
+    @PostMapping("/doTel")
+    public AjaxResult doTel(@RequestBody LoginInfo loginInfo) throws Exception {
         //获取token
         String token = httpClientService.getToken(loginInfo);
         //获取fAccess

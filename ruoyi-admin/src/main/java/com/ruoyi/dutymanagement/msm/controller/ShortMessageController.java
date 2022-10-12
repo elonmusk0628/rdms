@@ -66,8 +66,8 @@ public class ShortMessageController extends BaseController {
      *
      * @return
      */
-    @GetMapping("/getJsonObject")
-    public AjaxResult getJsonObject(LoginInfo loginInfo) throws Exception {
+    @PostMapping("/getJsonObject")
+    public AjaxResult getJsonObject(@RequestBody LoginInfo loginInfo) throws Exception {
         //获取token
         String token = msmHttpPostClientService.getToken(loginInfo);
         String jsonObject = msmHttpPostClientService.doMsm(token);

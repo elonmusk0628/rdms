@@ -15,10 +15,10 @@ public interface IHttpClientService {
     /**
      * 调值班管理系统短信接口
      *
-     * @param status
+     * @param token
      * @return
      */
-    String doMsm(String status) throws Exception;
+    String doMsm(String token) throws Exception;
 
     /**
      * 调其它系统邮件接口
@@ -42,6 +42,15 @@ public interface IHttpClientService {
      * @return
      */
     String doTel(String token,String fAccess) throws Exception;
+
+    /**
+     * 调值班管理系统排班接口
+     * @param token
+     * @param fAccess
+     * @return
+     * @throws Exception
+     */
+    String doRostering(String token,String fAccess) throws Exception;
 
     /**
      * 获取token

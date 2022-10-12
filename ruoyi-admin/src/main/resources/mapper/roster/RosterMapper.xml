@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.RosterMapper">
+    <resultMap type="com.ruoyi.web.domian.RosteringEntity" id="RosteringResult">
+    <id property="scheduleId"     column="schedule_id"      />
+        <result property="years"    column="years"/>
+        <result property="date"    column="date"/>
+        <result property="week"    column="week"/>
+        <result property="dateType"    column="date_type"/>
+        <result property="createBy"    column="create_by"/>
+        <result property="createTime"    column="create_time"/>
+        <result property="updateBy"    column="update_by"/>
+        <result property="updateTime"    column="update_time"/>
+    </resultMap>
+    <select id="getRosterByScheduleId" parameterType="Integer" resultType="com.ruoyi.web.domian.vo.RosteringVO">
+        SELECT
+            id as id,
+            schedule_id AS scheduleId,
+            years AS years,
+            date AS date,
+            WEEK AS WEEK,
+            date_type AS dateType,
+            create_by AS createBy,
+            create_time AS createTime,
+            update_by AS updateBy,
+            update_time AS updateTime
+        FROM
+            rostering
+        WHERE
+            schedule_id = #{scheduleId}
+    </select>
+    <insert id="addRosteringInfo" useGeneratedKeys="true" keyProperty="id" parameterType="com.ruoyi.web.domian.RosteringEntity">
+        insert into rostering (
+            schedule_id,
+            years,
+            date,
+            week,
+            date_type,
+            create_by,
+            create_time
+        ) VALUES (
+            #{scheduleId},
+            #{years},
+            #{date},
+            #{week},
+            #{dateType},
+            #{createBy},
+            #{createTime}
+                         )
+    </insert>
+    <insert id="addRosterInfo" useGeneratedKeys="true" keyProperty="id" parameterType="com.ruoyi.web.domian.RosterEntity">
+        insert into roster (
+                main_id,
+                member_id,
+                schedule_id,
+                user_id,
+                nick_name,
+                schedule_type,
+                create_time
+        ) VALUES (
+                #{mainId},
+                #{memberId},
+                #{scheduleId},
+                #{userId},
+                #{nickName},
+                #{scheduleType},
+                #{createTime}
+                         )
+    </insert>
+</mapper>

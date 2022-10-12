@@ -75,4 +75,12 @@ public interface BaseConstants {
     String NINE_CLOCK = "九";
 
     String TEN_CLOCK = "十";
+    String NINE_OCLOCK = "九";
+
+    String TEN_OCLOCK = "十";
+
+    String IP = "http://192.168.1.3";
+
+    String PORT = "18092";
+
 }
