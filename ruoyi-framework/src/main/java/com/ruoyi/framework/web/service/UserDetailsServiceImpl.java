@@ -58,6 +58,11 @@ public class UserDetailsServiceImpl implements UserDetailsService
         return createLoginUser(user);
     }
 
+    /**
+     * 创建登录用户
+     * @param user 用户信息
+     * @return 登录用户信息
+     */
     public UserDetails createLoginUser(SysUser user)
     {
         return new LoginUser(user.getUserId(), user.getDeptId(), user, permissionService.getMenuPermission(user));
