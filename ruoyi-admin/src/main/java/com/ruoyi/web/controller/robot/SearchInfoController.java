@@ -5,6 +5,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.web.common.enums.ExceptionEnum;
 import com.ruoyi.web.domian.SearchResponse;
+import com.ruoyi.web.service.IQuestionAndAnswerInfoService;
 import com.ruoyi.web.service.ISearchInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,9 @@ public class SearchInfoController {
     @Autowired
     private ISearchInfoService searchInfoService;
 
+    @Autowired
+    private IQuestionAndAnswerInfoService qAndAInfoService;
+
 
     /**
      * 查询信息请求
@@ -35,6 +39,23 @@ public class SearchInfoController {
             return AjaxResult.error(ExceptionEnum.NULL_REQUEST_PARAM.getErrorMsg());
         }
         SearchResponse resp = searchInfoService.selectRiverInfoByCondition(searchInfoStr);
+        if (!StringUtils.isNotEmpty(resp.getContent())) {
+             resp.setContent(ExceptionEnum.NULL_RESULT.getErrorMsg());
+        }
+        return AjaxResult.success(resp);
+    }
+
+    /**
+     * 知识问答请求
+     *
+     * @param qAndAInfoStr qAndAInfoStr
+     */
+    @GetMapping("/answer")
+    public AjaxResult QAndAInfo(@RequestParam(name = "str") String qAndAInfoStr) {
+        if (StringUtils.isEmpty(qAndAInfoStr)) {
+            return AjaxResult.error(ExceptionEnum.NULL_REQUEST_PARAM.getErrorMsg());
+        }
+        SearchResponse resp = qAndAInfoService.selectAnswerByCondition(qAndAInfoStr);
         if (!StringUtils.isNotEmpty(resp.getContent())) {
             resp.setContent(ExceptionEnum.NULL_RESULT.getErrorMsg());
         }

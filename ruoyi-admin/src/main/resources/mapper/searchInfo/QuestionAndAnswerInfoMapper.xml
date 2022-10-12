@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.QuestionAndAnswerInfoMapper">
+    
+    <resultMap type="com.ruoyi.web.domian.QuestionAndAnswerInfo" id="AnswerInfoResult">
+    	<id     property="id"      column="id"      />
+        <result property="type"    column="type"    />
+        <result property="question"     column="question"     />
+        <result property="answer"   column="answer"   />
+        <result property="creator"    column="creator"    />
+        <result property="createTime"      column="create_time"      />
+        <result property="updateTime"      column="update_time"      />
+    </resultMap>
+
+    <sql id="selectAnswer">
+        SELECT id, type, question, answer, creator, create_time, update_time FROM question_answer_info
+    </sql>
+
+    <select id="selectAnswerInfoList" parameterType="com.ruoyi.web.domian.QuestionAndAnswerRequest" resultMap="AnswerInfoResult">
+        <include refid="selectAnswer"/>
+        <where>
+            <if test="question !=null and question != ''">
+                and question LIKE CONCAT( '%' , #{question}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAnswerList" parameterType="String" resultMap="AnswerInfoResult">
+        <include refid="selectAnswer"/>
+        <where>
+            <if test="question !=null and question != ''">
+                and question LIKE CONCAT( '%' , #{question}, '%')
+            </if>
+            <if test="answer !=null and answer !=''">
+                and answer = #{answer}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and date_format(create_time,'%y%m%d%H%i%s') &gt;= date_format(#{startTime},'%y%m%d%H%i%s')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and date_format(create_time,'%y%m%d%H%i%s') &lt;= date_format(#{endTime},'%y%m%d%H%i%s')
+            </if>
+
+        </where>
+    </select>
+
+    <insert id="addAnswerInfo" parameterType="com.ruoyi.web.domian.QuestionAndAnswerInfo">
+        insert into question_answer_info (type, question, answer, creator, create_time, update_time)
+        values(#{type}, #{question}, #{answer}, #{creator}, #{createTime}, #{updateTime})
+    </insert>
+
+    <update id="updateAnswerInfo" parameterType="com.ruoyi.web.domian.QuestionAndAnswerInfo">
+        update question_answer_info
+        <set>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="question != null and question != ''">question = #{question},</if>
+            <if test="answer != null and question != ''">answer = #{answer},</if>
+            update_time = #{updateTime}
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAnswerInfo" parameterType="int">
+        delete from question_answer_info
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </delete>
+
+    <select id="selectByQuestion" parameterType="String" resultMap="AnswerInfoResult">
+        <include refid="selectAnswer"/>
+        <where>
+            and question = #{question}
+        </where>
+    </select>
+
+</mapper>
