@@ -17,6 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+/**
+ * 自定义问答控制层
+ *
+ * @Author fengzh
+ */
 @RestController
 @RequestMapping("/QAndA")
 public class QuestionAndAnswerController {

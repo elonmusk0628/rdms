@@ -18,6 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * 关键字控制层
+ *
+ * @Author fengzh
+ */
 @RestController
 @RequestMapping("/key/word")
 public class KeyWordController {
