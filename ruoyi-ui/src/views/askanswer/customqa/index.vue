@@ -44,7 +44,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['key:word:add']"
+          v-hasPermi="['QAndA:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -55,7 +55,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['key:word:update']"
+          v-hasPermi="['QAndA:update']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -66,7 +66,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['key:word:delete']"
+          v-hasPermi="['QAndA:delete']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -76,7 +76,7 @@
           icon="el-icon-upload2"
           size="mini"
           @click="handleImport"
-          v-hasPermi="['key:word:importKeyWords']"
+          v-hasPermi="['QAndA:importAnswerInfo']"
         >导入</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -86,7 +86,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['key:word:export']"
+          v-hasPermi="['QAndA:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -109,14 +109,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['key:word:update']"
+            v-hasPermi="['QAndA:update']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['key:word:delete']"
+            v-hasPermi="['QAndA:delete']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -177,7 +177,7 @@
 </template>
 
 <script>
-import { listWord, delWord, addWord, updateWord, refreshWord } from "@/api/askanswer/customqa";
+import { listQAndA, delQAndA, addQAndA, updateQAndA } from "@/api/askanswer/customqa";
 import { getToken } from "@/utils/auth";
 
 export default {
@@ -233,7 +233,7 @@ export default {
         // 设置上传的请求头部
         headers: { Authorization: "Bearer " + getToken() },
         // 上传的地址
-        url: process.env.VUE_APP_BASE_API + "/key/word/importKeyWords"
+        url: process.env.VUE_APP_BASE_API + "/QAndA/importAnswerInfo"
       }
     };
   },
@@ -246,7 +246,7 @@ export default {
       this.loading = true;
       this.queryParams.start_time = this.datetimerange[0];
       this.queryParams.end_time = this.datetimerange[1];
-      listWord(this.queryParams).then(response => {
+      listQAndA(this.queryParams).then(response => {
           this.typeList = response.data.list;
           this.total = response.data.total;
           this.loading = false;
@@ -306,20 +306,16 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-              updateWord(this.form).then(response => {
+              updateQAndA(this.form).then(response => {
                 this.$modal.msgSuccess("修改成功");
                 this.open = false;
-                refreshWord().then(() => {
-                  this.getList();
-                });
+                this.getList();
               });
             } else {
-              addWord(this.form).then(response => {
+              addQAndA(this.form).then(response => {
                 this.$modal.msgSuccess("新增成功");
                 this.open = false;
-                refreshWord().then(() => {
-                  this.getList();
-                });
+                this.getList();
               });
             }
         }
@@ -329,13 +325,11 @@ export default {
     handleDelete(row) {
       const qaIds = row.id || this.selection.map(item => item.id);
       this.$modal.confirm('是否确认删除编号为"' + qaIds + '"的数据项？').then(function() {
-        return delWord({
+        return delQAndA({
           id: qaIds.toString()
         });
       }).then(() => {
-        refreshWord().then(() => {
-          this.getList();
-        });
+        this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
@@ -346,13 +340,13 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('key/word/export', {
+      this.download('QAndA/export', {
         ...this.queryParams
       }, `qa_${new Date().getTime()}.xlsx`)
     },
     /** 下载模板操作 */
     importTemplate() {
-      this.download('key/word/downloadTemplate', {
+      this.download('QAndA/downloadTemplate', {
       }, `qa_template_${new Date().getTime()}.xlsx`)
     },
     // 文件上传之前，限制文件格式
@@ -374,9 +368,7 @@ export default {
       this.upload.isUploading = false;
       this.$refs.upload.clearFiles();
       this.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", { dangerouslyUseHTMLString: true });
-      refreshWord().then(() => {
-        this.getList();
-      });
+      this.getList();
     },
     // 提交上传文件
     submitFileForm() {

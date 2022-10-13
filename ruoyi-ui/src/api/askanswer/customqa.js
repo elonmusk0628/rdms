@@ -1,45 +1,37 @@
 import request from '@/utils/request'
 
 // 查询问答列表
-export function listWord(query) {
+export function listQAndA(query) {
   return request({
-    url: '/key/word/select',
+    url: '/QAndA/select',
     method: 'get',
     params: query
   })
 }
 
 // 修改问答
-export function updateWord(data) {
+export function updateQAndA(data) {
   return request({
-    url: '/key/word/update',
+    url: '/QAndA/update',
     method: 'post',
     data: data
   })
 }
 
 // 新增问答
-export function addWord(data) {
+export function addQAndA(data) {
   return request({
-    url: '/key/word/add',
+    url: '/QAndA/add',
     method: 'post',
     data: data
   })
 }
 
 // 删除问答
-export function delWord(query) {
+export function delQAndA(query) {
   return request({
-    url: '/key/word/delete',
+    url: '/QAndA/delete',
     method: 'get',
     params: query
-  })
-}
-
-// 刷新问答
-export function refreshWord() {
-  return request({
-    url: '/key/word/refresh',
-    method: 'get'
   })
 }
