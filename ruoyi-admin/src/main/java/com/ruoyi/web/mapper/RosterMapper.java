@@ -3,6 +3,7 @@ package com.ruoyi.web.mapper;
 import com.ruoyi.web.domian.RosterEntity;
 import com.ruoyi.web.domian.RosteringEntity;
 import com.ruoyi.web.domian.vo.RosteringVO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -51,5 +52,5 @@ public interface RosterMapper {
      * @param scheduleType
      * @return
      */
-    RosterEntity getRosterByTypeAndId(int scheduleId, String scheduleType);
+    RosterEntity getRosterByTypeAndId(@Param("scheduleId")Integer scheduleId, @Param("scheduleType")String scheduleType);
 }

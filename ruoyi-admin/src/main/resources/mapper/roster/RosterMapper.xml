@@ -14,7 +14,7 @@
         <result property="updateBy"    column="update_by"/>
         <result property="updateTime"    column="update_time"/>
     </resultMap>
-    <select id="getRosterByTime" parameterType="Integer" resultType="com.ruoyi.web.domian.vo.RosteringVO">
+    <select id="getRosterByTime" parameterType="java.lang.String" resultType="com.ruoyi.web.domian.vo.RosteringVO">
         SELECT
             id as id,
             schedule_id AS scheduleId,
@@ -31,7 +31,7 @@
         WHERE
             date = #{timeParam}
     </select>
-    <select id="getRosterByScheduleId" parameterType="Integer" resultType="com.ruoyi.web.domian.vo.RosteringVO">
+    <select id="getRosterByScheduleId" parameterType="java.lang.Integer" resultType="com.ruoyi.web.domian.vo.RosteringVO">
         SELECT
             id as id,
             schedule_id AS scheduleId,
