@@ -3,6 +3,11 @@ package com.ruoyi.web.domian.vo;
 
 import lombok.Data;
 
+/**
+ * 返回数据体
+ *
+ * @Author fenghan
+ */
 @Data
 public class RosteringVO {
 

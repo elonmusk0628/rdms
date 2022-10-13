@@ -14,6 +14,11 @@ public class Md5Utils
 {
     private static final Logger log = LoggerFactory.getLogger(Md5Utils.class);
 
+    /**
+     * MD5加密方法
+     * @param s 字符串参数
+     * @return 字符串加密结果
+     */
     private static byte[] md5(String s)
     {
         MessageDigest algorithm;
@@ -32,6 +37,11 @@ public class Md5Utils
         return null;
     }
 
+    /**
+     * 转换16进制
+     * @param hash hash数组
+     * @return 16进制转换结果
+     */
     private static final String toHex(byte hash[])
     {
         if (hash == null)
@@ -52,6 +62,11 @@ public class Md5Utils
         return buf.toString();
     }
 
+    /**
+     * 字符串转hash方法
+     * @param s 字符串参数
+     * @return 转换结果
+     */
     public static String hash(String s)
     {
         try

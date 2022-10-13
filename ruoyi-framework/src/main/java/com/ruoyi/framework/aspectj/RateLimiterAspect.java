@@ -47,6 +47,12 @@ public class RateLimiterAspect
         this.limitScript = limitScript;
     }
 
+    /**
+     * 限流首先执行的方法，用于资源的申请
+     * @param point 结合点
+     * @param rateLimiter 限流参数
+     * @throws Throwable 异常
+     */
     @Before("@annotation(rateLimiter)")
     public void doBefore(JoinPoint point, RateLimiter rateLimiter) throws Throwable
     {
@@ -75,9 +81,16 @@ public class RateLimiterAspect
         }
     }
 
+    /**
+     * 取得限流KEY
+     * @param rateLimiter 限流参数
+     * @param point 结合点
+     * @return
+     */
     public String getCombineKey(RateLimiter rateLimiter, JoinPoint point)
     {
         StringBuffer stringBuffer = new StringBuffer(rateLimiter.key());
+        // 根据请求者IP进行限流
         if (rateLimiter.limitType() == LimitType.IP)
         {
             stringBuffer.append(IpUtils.getIpAddr(ServletUtils.getRequest())).append("-");

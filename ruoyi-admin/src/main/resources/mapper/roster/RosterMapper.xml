@@ -14,7 +14,24 @@
         <result property="updateBy"    column="update_by"/>
         <result property="updateTime"    column="update_time"/>
     </resultMap>
-    <select id="getRosterByScheduleId" parameterType="Integer" resultType="com.ruoyi.web.domian.vo.RosteringVO">
+    <select id="getRosterByTime" parameterType="java.lang.String" resultType="com.ruoyi.web.domian.vo.RosteringVO">
+        SELECT
+            id as id,
+            schedule_id AS scheduleId,
+            years AS years,
+            date AS date,
+            WEEK AS WEEK,
+            date_type AS dateType,
+            create_by AS createBy,
+            create_time AS createTime,
+            update_by AS updateBy,
+            update_time AS updateTime
+        FROM
+            rostering
+        WHERE
+            date = #{timeParam}
+    </select>
+    <select id="getRosterByScheduleId" parameterType="java.lang.Integer" resultType="com.ruoyi.web.domian.vo.RosteringVO">
         SELECT
             id as id,
             schedule_id AS scheduleId,
@@ -30,6 +47,22 @@
             rostering
         WHERE
             schedule_id = #{scheduleId}
+    </select>
+    <select id="getRosterByTypeAndId" resultType="com.ruoyi.web.domian.RosterEntity">
+        SELECT
+            id AS id,
+            main_id AS mainId,
+            member_id AS memberId,
+            schedule_id AS scheduleId,
+            user_id AS userId,
+            nick_name AS nickName,
+            schedule_type AS scheduleType,
+            create_time createTime
+        FROM
+            roster
+        WHERE
+            schedule_id = #{scheduleId}
+          AND schedule_type = #{scheduleType}
     </select>
     <insert id="addRosteringInfo" useGeneratedKeys="true" keyProperty="id" parameterType="com.ruoyi.web.domian.RosteringEntity">
         insert into rostering (

@@ -33,6 +33,12 @@ public class UserDetailsServiceImpl implements UserDetailsService
     @Autowired
     private SysPermissionService permissionService;
 
+    /**
+     * 根据用户名称加载用户信息
+     * @param username 用户名称
+     * @return 用户信息
+     * @throws UsernameNotFoundException 用户名称未找到异常
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
@@ -58,6 +64,11 @@ public class UserDetailsServiceImpl implements UserDetailsService
         return createLoginUser(user);
     }
 
+    /**
+     * 创建登录用户
+     * @param user 用户信息
+     * @return 登录用户信息
+     */
     public UserDetails createLoginUser(SysUser user)
     {
         return new LoginUser(user.getUserId(), user.getDeptId(), user, permissionService.getMenuPermission(user));
