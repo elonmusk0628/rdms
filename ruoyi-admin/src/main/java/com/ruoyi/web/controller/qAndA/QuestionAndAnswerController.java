@@ -1,10 +1,13 @@
 package com.ruoyi.web.controller.qAndA;
 
 import com.github.pagehelper.PageInfo;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.web.common.enums.ExceptionEnum;
 import com.ruoyi.web.domian.QuestionAndAnswerInfo;
+import com.ruoyi.web.domian.QuestionAndAnswerRequest;
 import com.ruoyi.web.service.IQuestionAndAnswerInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,7 +113,7 @@ public class QuestionAndAnswerController {
     public void importTemplate(HttpServletResponse response)
     {
         ExcelUtil<QuestionAndAnswerInfo> util = new ExcelUtil<QuestionAndAnswerInfo>(QuestionAndAnswerInfo.class);
-        util.importTemplateExcel(response, "自定义问答模板");
+        util.importTemplateExcel(response, "自定义问答导入模板");
     }
 
     /**
@@ -126,6 +129,24 @@ public class QuestionAndAnswerController {
         List<QuestionAndAnswerInfo> answerInfoList = util.importExcel(file.getInputStream());
         String message = qAndAService.addAnswerTemplate(answerInfoList);
         return AjaxResult.success(message);
+    }
+
+    /**
+     * 导出问答列表
+     *
+     * @param response response
+     * @param req 自定义问答请求体
+     */
+    @PostMapping("/export")
+    @PreAuthorize("@ss.hasPermi('question:answer:export')")
+    @Log(title = "自定义知识问答列表", businessType = BusinessType.EXPORT)
+    public void export(HttpServletResponse response, QuestionAndAnswerRequest req)
+    {
+        PageInfo<QuestionAndAnswerInfo> answerInfoPage = qAndAService.selectAnswerInfoList(req.getQuestion(), req.getAnswer(),
+                req.getStartTime(), req.getEndTime(), req.getPageNum(), req.getPageSize());
+        List<QuestionAndAnswerInfo> AnswerInfosList = answerInfoPage.getList();
+        ExcelUtil<QuestionAndAnswerInfo> util = new ExcelUtil<QuestionAndAnswerInfo>(QuestionAndAnswerInfo.class);
+        util.exportExcel(response, AnswerInfosList, "自定义知识问答");
     }
 
 }
