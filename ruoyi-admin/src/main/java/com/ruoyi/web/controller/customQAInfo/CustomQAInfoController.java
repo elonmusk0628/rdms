@@ -1,10 +1,13 @@
 package com.ruoyi.web.controller.customQAInfo;
 
 import com.github.pagehelper.PageInfo;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.web.common.enums.ExceptionEnum;
 import com.ruoyi.web.domian.QuestionAndAnswerInfo;
+import com.ruoyi.web.domian.QuestionAndAnswerRequest;
 import com.ruoyi.web.service.ICustomQAInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +43,7 @@ public class CustomQAInfoController {
      * @param endTime 结束时间
      */
     @GetMapping("/select")
-    @PreAuthorize("@ss.hasPermi('question:answer:select')")
+    @PreAuthorize("@ss.hasPermi('customQA:select')")
     public AjaxResult selectAnswerInfo(@RequestParam(value = "question", required = false) String question,
                                     @RequestParam(value = "answer", required = false) String answer,
                                     @RequestParam(value = "start_time", required = false) String startTime,
@@ -58,7 +61,7 @@ public class CustomQAInfoController {
      * @param req 请求体
      */
     @PostMapping("/add")
-    @PreAuthorize("@ss.hasPermi('question:answer:add')")
+    @PreAuthorize("@ss.hasPermi('customQA:add')")
     public AjaxResult addAnswerInfo(@Validated @RequestBody QuestionAndAnswerInfo req) {
             int i = customQAInfoService.addAnswerInfo(req);
             if (i > 0) {
@@ -75,7 +78,7 @@ public class CustomQAInfoController {
      * @param req 请求体
      */
     @PostMapping("/update")
-    @PreAuthorize("@ss.hasPermi('question:answer:update')")
+    @PreAuthorize("@ss.hasPermi('customQA:update')")
     public AjaxResult updateAnswerInfo(@Validated @RequestBody QuestionAndAnswerInfo req) {
             int i = customQAInfoService.updateAnswerInfo(req);
             if (i > 0) {
@@ -91,7 +94,7 @@ public class CustomQAInfoController {
      * @param ids id
      */
     @GetMapping("/delete")
-    @PreAuthorize("@ss.hasPermi('question:answer:delete')")
+    @PreAuthorize("@ss.hasPermi('customQA:delete')")
     public AjaxResult deleteAnswerInfo(@RequestParam(value = "id", required = true) List<Integer> ids) {
         int i = customQAInfoService.deleteAnswerInfo(ids);
         if (i > 0) {
@@ -119,13 +122,31 @@ public class CustomQAInfoController {
      * @param file file
      */
     @PostMapping("/importAnswerInfo")
-    @PreAuthorize("@ss.hasPermi('question:answer:importKeyWords')")
+    @PreAuthorize("@ss.hasPermi('customQA:importAnswerInfo')")
     public AjaxResult addAnswerInfoTemplate(MultipartFile file) throws Exception
     {
         ExcelUtil<QuestionAndAnswerInfo> util = new ExcelUtil<QuestionAndAnswerInfo>(QuestionAndAnswerInfo.class);
         List<QuestionAndAnswerInfo> answerInfoList = util.importExcel(file.getInputStream());
         String message = customQAInfoService.addAnswerTemplate(answerInfoList);
         return AjaxResult.success(message);
+    }
+
+    /**
+     * 导出问答列表
+     *
+     * @param response response
+     * @param req 自定义问答请求体
+     */
+    @PostMapping("/export")
+    @PreAuthorize("@ss.hasPermi('customQA:export')")
+    @Log(title = "自定义知识问答列表", businessType = BusinessType.EXPORT)
+    public void export(HttpServletResponse response, QuestionAndAnswerRequest req)
+    {
+        PageInfo<QuestionAndAnswerInfo> answerInfoPage = customQAInfoService.selectAnswerInfoList(req.getQuestion(), req.getAnswer(),
+                req.getStartTime(), req.getEndTime(), req.getPageNum(), req.getPageSize());
+        List<QuestionAndAnswerInfo> AnswerInfosList = answerInfoPage.getList();
+        ExcelUtil<QuestionAndAnswerInfo> util = new ExcelUtil<QuestionAndAnswerInfo>(QuestionAndAnswerInfo.class);
+        util.exportExcel(response, AnswerInfosList, "自定义知识问答");
     }
 
 }
