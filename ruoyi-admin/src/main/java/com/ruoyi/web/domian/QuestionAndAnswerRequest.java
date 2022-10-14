@@ -23,4 +23,16 @@ public class QuestionAndAnswerRequest {
     /** 类型 */
     private String type;
 
+    /** 开始时间 */
+    private String startTime;
+
+    /** 结束时间 */
+    private String endTime;
+
+    /** 页码 */
+    private Integer pageNum;
+
+    /** 每页条数 */
+    private Integer pageSize;
+
 }

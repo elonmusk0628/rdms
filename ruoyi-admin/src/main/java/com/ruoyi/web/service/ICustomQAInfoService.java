@@ -12,7 +12,7 @@ import java.util.List;
  *
  */
 @WebService
-public interface IQuestionAndAnswerInfoService {
+public interface ICustomQAInfoService {
 
     /**
      * 知识问答信息

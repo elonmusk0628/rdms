@@ -34,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and question LIKE CONCAT( '%' , #{question}, '%')
             </if>
             <if test="answer !=null and answer !=''">
-                and answer = #{answer}
+                and answer LIKE CONCAT( '%' , #{answer}, '%')
             </if>
             <if test="startTime != null and startTime != ''">
                 and date_format(create_time,'%y%m%d%H%i%s') &gt;= date_format(#{startTime},'%y%m%d%H%i%s')
