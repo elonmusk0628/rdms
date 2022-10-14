@@ -1,14 +1,11 @@
-package com.ruoyi.web.controller.qAndA;
+package com.ruoyi.web.controller.customQAInfo;
 
 import com.github.pagehelper.PageInfo;
-import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.web.common.enums.ExceptionEnum;
 import com.ruoyi.web.domian.QuestionAndAnswerInfo;
-import com.ruoyi.web.domian.QuestionAndAnswerRequest;
-import com.ruoyi.web.service.IQuestionAndAnswerInfoService;
+import com.ruoyi.web.service.ICustomQAInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +23,13 @@ import java.util.List;
  * @Author fengzh
  */
 @RestController
-@RequestMapping("/QAndA")
-public class QuestionAndAnswerController {
+@RequestMapping("/customQA")
+public class CustomQAInfoController {
 
     @Autowired
-    IQuestionAndAnswerInfoService qAndAService;
+    ICustomQAInfoService customQAInfoService;
 
-    private static final Logger log = LoggerFactory.getLogger(QuestionAndAnswerController.class);
+    private static final Logger log = LoggerFactory.getLogger(CustomQAInfoController.class);
 
     /**
      * 查询自定义问答请求
@@ -50,7 +47,7 @@ public class QuestionAndAnswerController {
                                     @RequestParam(value = "end_time", required = false) String endTime,
                                     @RequestParam(value = "page_num", required = false) Integer pageNum,
                                     @RequestParam(value = "page_size", required = false) Integer pageSize) {
-        PageInfo<QuestionAndAnswerInfo> answerInfoPage = qAndAService.selectAnswerInfoList(question, answer, startTime, endTime, pageNum, pageSize);
+        PageInfo<QuestionAndAnswerInfo> answerInfoPage = customQAInfoService.selectAnswerInfoList(question, answer, startTime, endTime, pageNum, pageSize);
         List<QuestionAndAnswerInfo> AnswerInfos = answerInfoPage.getList();
         return AjaxResult.success(answerInfoPage);
     }
@@ -63,7 +60,7 @@ public class QuestionAndAnswerController {
     @PostMapping("/add")
     @PreAuthorize("@ss.hasPermi('question:answer:add')")
     public AjaxResult addAnswerInfo(@Validated @RequestBody QuestionAndAnswerInfo req) {
-            int i = qAndAService.addAnswerInfo(req);
+            int i = customQAInfoService.addAnswerInfo(req);
             if (i > 0) {
                 return AjaxResult.success();
             } else {
@@ -80,7 +77,7 @@ public class QuestionAndAnswerController {
     @PostMapping("/update")
     @PreAuthorize("@ss.hasPermi('question:answer:update')")
     public AjaxResult updateAnswerInfo(@Validated @RequestBody QuestionAndAnswerInfo req) {
-            int i = qAndAService.updateAnswerInfo(req);
+            int i = customQAInfoService.updateAnswerInfo(req);
             if (i > 0) {
                 return AjaxResult.success();
             } else {
@@ -96,7 +93,7 @@ public class QuestionAndAnswerController {
     @GetMapping("/delete")
     @PreAuthorize("@ss.hasPermi('question:answer:delete')")
     public AjaxResult deleteAnswerInfo(@RequestParam(value = "id", required = true) List<Integer> ids) {
-        int i = qAndAService.deleteAnswerInfo(ids);
+        int i = customQAInfoService.deleteAnswerInfo(ids);
         if (i > 0) {
             return AjaxResult.success();
         } else {
@@ -113,7 +110,7 @@ public class QuestionAndAnswerController {
     public void importTemplate(HttpServletResponse response)
     {
         ExcelUtil<QuestionAndAnswerInfo> util = new ExcelUtil<QuestionAndAnswerInfo>(QuestionAndAnswerInfo.class);
-        util.importTemplateExcel(response, "自定义问答导入模板");
+        util.importTemplateExcel(response, "自定义问答模板");
     }
 
     /**
@@ -127,26 +124,8 @@ public class QuestionAndAnswerController {
     {
         ExcelUtil<QuestionAndAnswerInfo> util = new ExcelUtil<QuestionAndAnswerInfo>(QuestionAndAnswerInfo.class);
         List<QuestionAndAnswerInfo> answerInfoList = util.importExcel(file.getInputStream());
-        String message = qAndAService.addAnswerTemplate(answerInfoList);
+        String message = customQAInfoService.addAnswerTemplate(answerInfoList);
         return AjaxResult.success(message);
-    }
-
-    /**
-     * 导出问答列表
-     *
-     * @param response response
-     * @param req 自定义问答请求体
-     */
-    @PostMapping("/export")
-    @PreAuthorize("@ss.hasPermi('question:answer:export')")
-    @Log(title = "自定义知识问答列表", businessType = BusinessType.EXPORT)
-    public void export(HttpServletResponse response, QuestionAndAnswerRequest req)
-    {
-        PageInfo<QuestionAndAnswerInfo> answerInfoPage = qAndAService.selectAnswerInfoList(req.getQuestion(), req.getAnswer(),
-                req.getStartTime(), req.getEndTime(), req.getPageNum(), req.getPageSize());
-        List<QuestionAndAnswerInfo> AnswerInfosList = answerInfoPage.getList();
-        ExcelUtil<QuestionAndAnswerInfo> util = new ExcelUtil<QuestionAndAnswerInfo>(QuestionAndAnswerInfo.class);
-        util.exportExcel(response, AnswerInfosList, "自定义知识问答");
     }
 
 }

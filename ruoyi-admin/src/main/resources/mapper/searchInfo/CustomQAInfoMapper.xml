@@ -15,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectAnswer">
-        SELECT id, type, question, answer, creator, create_time, update_time FROM question_answer_info
+        SELECT id, type, question, answer, creator, create_time, update_time FROM customQA_info
     </sql>
 
     <select id="selectAnswerInfoList" parameterType="com.ruoyi.web.domian.QuestionAndAnswerRequest" resultMap="AnswerInfoResult">
@@ -47,12 +47,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <insert id="addAnswerInfo" parameterType="com.ruoyi.web.domian.QuestionAndAnswerInfo">
-        insert into question_answer_info (type, question, answer, creator, create_time, update_time)
+        insert into customQA_info (type, question, answer, creator, create_time, update_time)
         values(#{type}, #{question}, #{answer}, #{creator}, #{createTime}, #{updateTime})
     </insert>
 
     <update id="updateAnswerInfo" parameterType="com.ruoyi.web.domian.QuestionAndAnswerInfo">
-        update question_answer_info
+        update customQA_info
         <set>
             <if test="type != null and type != ''">type = #{type},</if>
             <if test="question != null and question != ''">question = #{question},</if>
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteAnswerInfo" parameterType="int">
-        delete from question_answer_info
+        delete from customQA_info
         <where>
             <if test="id != null">
                 and id = #{id}

@@ -1,11 +1,10 @@
 package com.ruoyi.web.controller.robot;
 
-
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.web.common.enums.ExceptionEnum;
 import com.ruoyi.web.domian.SearchResponse;
-import com.ruoyi.web.service.IQuestionAndAnswerInfoService;
+import com.ruoyi.web.service.ICustomQAInfoService;
 import com.ruoyi.web.service.ISearchInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +24,7 @@ public class SearchInfoController {
     private ISearchInfoService searchInfoService;
 
     @Autowired
-    private IQuestionAndAnswerInfoService qAndAInfoService;
+    private ICustomQAInfoService customQAInfoService;
 
 
     /**
@@ -55,7 +54,7 @@ public class SearchInfoController {
         if (StringUtils.isEmpty(qAndAInfoStr)) {
             return AjaxResult.error(ExceptionEnum.NULL_REQUEST_PARAM.getErrorMsg());
         }
-        SearchResponse resp = qAndAInfoService.selectAnswerByCondition(qAndAInfoStr);
+        SearchResponse resp = customQAInfoService.selectAnswerByCondition(qAndAInfoStr);
         if (!StringUtils.isNotEmpty(resp.getContent())) {
             resp.setContent(ExceptionEnum.NULL_RESULT.getErrorMsg());
         }

@@ -23,7 +23,7 @@ public interface KeyWordMapper {
      * @param startTime 开始时间
      * @param endTime 结束时间
      */
-    public List<KeyWordInfo> selectKeyWordInfoList(@Param("keyWord")String keyWord, @Param("type")String type,
+    List<KeyWordInfo> selectKeyWordInfoList(@Param("keyWord")String keyWord, @Param("type")String type,
                                                    @Param("startTime")String startTime, @Param("endTime")String endTime);
 
     /**
@@ -32,7 +32,7 @@ public interface KeyWordMapper {
      * @param req 请求体
      * @return 关键字信息集合
      */
-    public int addKeyWordInfo(KeyWordInfo req);
+    int addKeyWordInfo(KeyWordInfo req);
 
     /**
      * 修改关键字信息
@@ -40,7 +40,7 @@ public interface KeyWordMapper {
      * @param req 请求体
      * @return 结果行数
      */
-    public int updateKeyWordInfo(KeyWordInfo req);
+    int updateKeyWordInfo(KeyWordInfo req);
 
     /**
      * 删除关键字信息
@@ -48,7 +48,7 @@ public interface KeyWordMapper {
      * @param id id
      * @return 结果行数
      */
-    public int deleteWordInfo(Integer id);
+    int deleteWordInfo(Integer id);
 
     /**
      * 查询关键字
@@ -56,12 +56,12 @@ public interface KeyWordMapper {
      * @param keyWord keyWord
      * @return 结果行数
      */
-    public KeyWordInfo selectByKeyWord(@Param("keyWord")String keyWord, @Param("type")String type);
+    KeyWordInfo selectByKeyWord(@Param("keyWord")String keyWord, @Param("type")String type);
 
     /**
      * 查询全表
      *
      * @return 关键字结果集
      */
-    public List<KeyWordInfo> selectAll();
+    List<KeyWordInfo> selectAll();
 }

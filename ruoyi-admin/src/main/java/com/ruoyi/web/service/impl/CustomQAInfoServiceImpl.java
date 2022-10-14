@@ -8,7 +8,7 @@ import com.ruoyi.web.domian.QuestionAndAnswerInfo;
 import com.ruoyi.web.domian.QuestionAndAnswerRequest;
 import com.ruoyi.web.domian.SearchResponse;
 import com.ruoyi.web.mapper.QuestionAndAnswerInfoMapper;
-import com.ruoyi.web.service.IQuestionAndAnswerInfoService;
+import com.ruoyi.web.service.ICustomQAInfoService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +24,12 @@ import java.util.List;
  * @author
  */
 @Service
-public class QuestionAndAnswerInfoServiceImpl implements IQuestionAndAnswerInfoService {
+public class CustomQAInfoServiceImpl implements ICustomQAInfoService {
 
     @Autowired
     QuestionAndAnswerInfoMapper qAndAInfoMapper;
 
-    private static final Logger log = LoggerFactory.getLogger(QuestionAndAnswerInfoServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(CustomQAInfoServiceImpl.class);
 
 
     /**
