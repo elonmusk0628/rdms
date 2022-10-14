@@ -312,9 +312,9 @@ export default {
     handleUpdate(row) {
       this.reset();
       if (row.id) {
-        this.form = row;
+        this.form = JSON.parse(JSON.stringify(row));
       } else {
-        this.form = this.selection[0];
+        this.form = JSON.parse(JSON.stringify(this.selection[0]));
       }
       this.open = true;
       this.title = "修改水文水情信息";

@@ -44,7 +44,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['QAndA:add']"
+          v-hasPermi="['CustomQA:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -55,7 +55,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['QAndA:update']"
+          v-hasPermi="['CustomQA:update']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -66,7 +66,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['QAndA:delete']"
+          v-hasPermi="['CustomQA:delete']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -76,7 +76,7 @@
           icon="el-icon-upload2"
           size="mini"
           @click="handleImport"
-          v-hasPermi="['QAndA:importAnswerInfo']"
+          v-hasPermi="['CustomQA:importAnswerInfo']"
         >导入</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -86,7 +86,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['QAndA:export']"
+          v-hasPermi="['CustomQA:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -109,14 +109,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['QAndA:update']"
+            v-hasPermi="['CustomQA:update']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['QAndA:delete']"
+            v-hasPermi="['CustomQA:delete']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -233,7 +233,7 @@ export default {
         // 设置上传的请求头部
         headers: { Authorization: "Bearer " + getToken() },
         // 上传的地址
-        url: process.env.VUE_APP_BASE_API + "/QAndA/importAnswerInfo"
+        url: process.env.VUE_APP_BASE_API + "/CustomQA/importAnswerInfo"
       }
     };
   },
@@ -294,9 +294,9 @@ export default {
     handleUpdate(row) {
       this.reset();
       if (row.id) {
-        this.form = row;
+        this.form = JSON.parse(JSON.stringify(row));
       } else {
-        this.form = this.selection[0];
+        this.form = JSON.parse(JSON.stringify(this.selection[0]));
       }
       this.open = true;
       this.title = "修改问答";
@@ -340,13 +340,13 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('QAndA/export', {
+      this.download('CustomQA/export', {
         ...this.queryParams
       }, `qa_${new Date().getTime()}.xlsx`)
     },
     /** 下载模板操作 */
     importTemplate() {
-      this.download('QAndA/downloadTemplate', {
+      this.download('CustomQA/downloadTemplate', {
       }, `qa_template_${new Date().getTime()}.xlsx`)
     },
     // 文件上传之前，限制文件格式
