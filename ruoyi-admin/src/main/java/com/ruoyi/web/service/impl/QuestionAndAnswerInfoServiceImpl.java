@@ -94,14 +94,9 @@ public class QuestionAndAnswerInfoServiceImpl implements IQuestionAndAnswerInfoS
      */
     @Override
     public int updateAnswerInfo(QuestionAndAnswerInfo req) {
-        QuestionAndAnswerInfo info = qAndAInfoMapper.selectByQuestion(req.getQuestion());
-        if (info == null) {
             req.setUpdateTime(new Date());
             int i = qAndAInfoMapper.updateAnswerInfo(req);
             return i;
-        } else {
-            return 0;
-        }
     }
 
     /**

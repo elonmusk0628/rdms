@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
- * 对应question_answer_info表
+ * 对应customqa_info表
  *
  * @author fengzh
  */
