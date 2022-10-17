@@ -26,7 +26,7 @@ import java.util.List;
  * @Author fengzh
  */
 @RestController
-@RequestMapping("/customQA")
+@RequestMapping("/CustomQA")
 public class CustomQAInfoController {
 
     @Autowired
@@ -37,20 +37,12 @@ public class CustomQAInfoController {
     /**
      * 查询自定义问答请求
      *
-     * @param question 问题
-     * @param answer 答案
-     * @param startTime 开始时间
-     * @param endTime 结束时间
+     * @param req
      */
     @GetMapping("/select")
-    @PreAuthorize("@ss.hasPermi('customQA:select')")
-    public AjaxResult selectAnswerInfo(@RequestParam(value = "question", required = false) String question,
-                                    @RequestParam(value = "answer", required = false) String answer,
-                                    @RequestParam(value = "start_time", required = false) String startTime,
-                                    @RequestParam(value = "end_time", required = false) String endTime,
-                                    @RequestParam(value = "page_num", required = false) Integer pageNum,
-                                    @RequestParam(value = "page_size", required = false) Integer pageSize) {
-        PageInfo<QuestionAndAnswerInfo> answerInfoPage = customQAInfoService.selectAnswerInfoList(question, answer, startTime, endTime, pageNum, pageSize);
+    @PreAuthorize("@ss.hasPermi('CustomQA:select')")
+    public AjaxResult selectAnswerInfo(QuestionAndAnswerRequest req) {
+        PageInfo<QuestionAndAnswerInfo> answerInfoPage = customQAInfoService.selectAnswerInfoList(req.getQuestion(), req.getAnswer(), req.getStartTime(), req.getEndTime(), req.getPageNum(), req.getPageSize());
         List<QuestionAndAnswerInfo> AnswerInfos = answerInfoPage.getList();
         return AjaxResult.success(answerInfoPage);
     }
@@ -61,7 +53,7 @@ public class CustomQAInfoController {
      * @param req 请求体
      */
     @PostMapping("/add")
-    @PreAuthorize("@ss.hasPermi('customQA:add')")
+    @PreAuthorize("@ss.hasPermi('CustomQA:add')")
     public AjaxResult addAnswerInfo(@Validated @RequestBody QuestionAndAnswerInfo req) {
             int i = customQAInfoService.addAnswerInfo(req);
             if (i > 0) {
@@ -78,7 +70,7 @@ public class CustomQAInfoController {
      * @param req 请求体
      */
     @PostMapping("/update")
-    @PreAuthorize("@ss.hasPermi('customQA:update')")
+    @PreAuthorize("@ss.hasPermi('CustomQA:update')")
     public AjaxResult updateAnswerInfo(@Validated @RequestBody QuestionAndAnswerInfo req) {
             int i = customQAInfoService.updateAnswerInfo(req);
             if (i > 0) {
@@ -94,7 +86,7 @@ public class CustomQAInfoController {
      * @param ids id
      */
     @GetMapping("/delete")
-    @PreAuthorize("@ss.hasPermi('customQA:delete')")
+    @PreAuthorize("@ss.hasPermi('CustomQA:delete')")
     public AjaxResult deleteAnswerInfo(@RequestParam(value = "id", required = true) List<Integer> ids) {
         int i = customQAInfoService.deleteAnswerInfo(ids);
         if (i > 0) {
@@ -122,7 +114,7 @@ public class CustomQAInfoController {
      * @param file file
      */
     @PostMapping("/importAnswerInfo")
-    @PreAuthorize("@ss.hasPermi('customQA:importAnswerInfo')")
+    @PreAuthorize("@ss.hasPermi('CustomQA:importAnswerInfo')")
     public AjaxResult addAnswerInfoTemplate(MultipartFile file) throws Exception
     {
         ExcelUtil<QuestionAndAnswerInfo> util = new ExcelUtil<QuestionAndAnswerInfo>(QuestionAndAnswerInfo.class);
@@ -138,7 +130,7 @@ public class CustomQAInfoController {
      * @param req 自定义问答请求体
      */
     @PostMapping("/export")
-    @PreAuthorize("@ss.hasPermi('customQA:export')")
+    @PreAuthorize("@ss.hasPermi('CustomQA:export')")
     @Log(title = "自定义知识问答列表", businessType = BusinessType.EXPORT)
     public void export(HttpServletResponse response, QuestionAndAnswerRequest req)
     {
