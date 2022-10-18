@@ -6,8 +6,8 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.web.common.enums.ExceptionEnum;
-import com.ruoyi.web.domian.QuestionAndAnswerInfo;
-import com.ruoyi.web.domian.QuestionAndAnswerRequest;
+import com.ruoyi.web.domian.CustomQAInfo;
+import com.ruoyi.web.domian.CustomQAInfoRequest;
 import com.ruoyi.web.service.ICustomQAInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +41,9 @@ public class CustomQAInfoController {
      */
     @GetMapping("/select")
     @PreAuthorize("@ss.hasPermi('CustomQA:select')")
-    public AjaxResult selectAnswerInfo(QuestionAndAnswerRequest req) {
-        PageInfo<QuestionAndAnswerInfo> answerInfoPage = customQAInfoService.selectAnswerInfoList(req.getQuestion(), req.getAnswer(), req.getStartTime(), req.getEndTime(), req.getPageNum(), req.getPageSize());
-        List<QuestionAndAnswerInfo> AnswerInfos = answerInfoPage.getList();
+    public AjaxResult selectAnswerInfo(CustomQAInfoRequest req) {
+        PageInfo<CustomQAInfo> answerInfoPage = customQAInfoService.selectAnswerInfoList(req.getQuestion(), req.getAnswer(), req.getStartTime(), req.getEndTime(), req.getPageNum(), req.getPageSize());
+        List<CustomQAInfo> AnswerInfos = answerInfoPage.getList();
         return AjaxResult.success(answerInfoPage);
     }
 
@@ -54,7 +54,7 @@ public class CustomQAInfoController {
      */
     @PostMapping("/add")
     @PreAuthorize("@ss.hasPermi('CustomQA:add')")
-    public AjaxResult addAnswerInfo(@Validated @RequestBody QuestionAndAnswerInfo req) {
+    public AjaxResult addAnswerInfo(@Validated @RequestBody CustomQAInfo req) {
             int i = customQAInfoService.addAnswerInfo(req);
             if (i > 0) {
                 return AjaxResult.success();
@@ -71,7 +71,7 @@ public class CustomQAInfoController {
      */
     @PostMapping("/update")
     @PreAuthorize("@ss.hasPermi('CustomQA:update')")
-    public AjaxResult updateAnswerInfo(@Validated @RequestBody QuestionAndAnswerInfo req) {
+    public AjaxResult updateAnswerInfo(@Validated @RequestBody CustomQAInfo req) {
             int i = customQAInfoService.updateAnswerInfo(req);
             if (i > 0) {
                 return AjaxResult.success();
@@ -104,7 +104,7 @@ public class CustomQAInfoController {
     @PostMapping("/downloadTemplate")
     public void importTemplate(HttpServletResponse response)
     {
-        ExcelUtil<QuestionAndAnswerInfo> util = new ExcelUtil<QuestionAndAnswerInfo>(QuestionAndAnswerInfo.class);
+        ExcelUtil<CustomQAInfo> util = new ExcelUtil<CustomQAInfo>(CustomQAInfo.class);
         util.importTemplateExcel(response, "自定义问答模板");
     }
 
@@ -117,8 +117,8 @@ public class CustomQAInfoController {
     @PreAuthorize("@ss.hasPermi('CustomQA:importAnswerInfo')")
     public AjaxResult addAnswerInfoTemplate(MultipartFile file) throws Exception
     {
-        ExcelUtil<QuestionAndAnswerInfo> util = new ExcelUtil<QuestionAndAnswerInfo>(QuestionAndAnswerInfo.class);
-        List<QuestionAndAnswerInfo> answerInfoList = util.importExcel(file.getInputStream());
+        ExcelUtil<CustomQAInfo> util = new ExcelUtil<CustomQAInfo>(CustomQAInfo.class);
+        List<CustomQAInfo> answerInfoList = util.importExcel(file.getInputStream());
         String message = customQAInfoService.addAnswerTemplate(answerInfoList);
         return AjaxResult.success(message);
     }
@@ -132,12 +132,12 @@ public class CustomQAInfoController {
     @PostMapping("/export")
     @PreAuthorize("@ss.hasPermi('CustomQA:export')")
     @Log(title = "自定义知识问答列表", businessType = BusinessType.EXPORT)
-    public void export(HttpServletResponse response, QuestionAndAnswerRequest req)
+    public void export(HttpServletResponse response, CustomQAInfoRequest req)
     {
-        PageInfo<QuestionAndAnswerInfo> answerInfoPage = customQAInfoService.selectAnswerInfoList(req.getQuestion(), req.getAnswer(),
+        PageInfo<CustomQAInfo> answerInfoPage = customQAInfoService.selectAnswerInfoList(req.getQuestion(), req.getAnswer(),
                 req.getStartTime(), req.getEndTime(), req.getPageNum(), req.getPageSize());
-        List<QuestionAndAnswerInfo> AnswerInfosList = answerInfoPage.getList();
-        ExcelUtil<QuestionAndAnswerInfo> util = new ExcelUtil<QuestionAndAnswerInfo>(QuestionAndAnswerInfo.class);
+        List<CustomQAInfo> AnswerInfosList = answerInfoPage.getList();
+        ExcelUtil<CustomQAInfo> util = new ExcelUtil<CustomQAInfo>(CustomQAInfo.class);
         util.exportExcel(response, AnswerInfosList, "自定义知识问答");
     }
 

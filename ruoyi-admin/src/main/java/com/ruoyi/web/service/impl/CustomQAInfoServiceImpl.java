@@ -4,10 +4,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.web.domian.QuestionAndAnswerInfo;
-import com.ruoyi.web.domian.QuestionAndAnswerRequest;
+import com.ruoyi.web.domian.CustomQAInfo;
+import com.ruoyi.web.domian.CustomQAInfoRequest;
 import com.ruoyi.web.domian.SearchResponse;
-import com.ruoyi.web.mapper.QuestionAndAnswerInfoMapper;
+import com.ruoyi.web.mapper.CustomQAInfoMapper;
 import com.ruoyi.web.service.ICustomQAInfoService;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ import java.util.List;
 public class CustomQAInfoServiceImpl implements ICustomQAInfoService {
 
     @Autowired
-    QuestionAndAnswerInfoMapper qAndAInfoMapper;
+    CustomQAInfoMapper qAndAInfoMapper;
 
     private static final Logger log = LoggerFactory.getLogger(CustomQAInfoServiceImpl.class);
 
@@ -41,9 +41,9 @@ public class CustomQAInfoServiceImpl implements ICustomQAInfoService {
     @Override
     public SearchResponse selectAnswerByCondition(String qAndAInfoStr) {
         SearchResponse resp = new SearchResponse();
-        QuestionAndAnswerRequest req = new QuestionAndAnswerRequest();
+        CustomQAInfoRequest req = new CustomQAInfoRequest();
         req.setQuestion(qAndAInfoStr);
-        List<QuestionAndAnswerInfo> questionAndAnswerInfo = qAndAInfoMapper.selectAnswerInfoList(req);
+        List<CustomQAInfo> questionAndAnswerInfo = qAndAInfoMapper.selectAnswerInfoList(req);
         if (CollectionUtils.isNotEmpty(questionAndAnswerInfo)) {
             resp.setContent(questionAndAnswerInfo.get(0).getAnswer());
         }
@@ -59,10 +59,10 @@ public class CustomQAInfoServiceImpl implements ICustomQAInfoService {
      * @param endTime 结束时间
      */
     @Override
-    public PageInfo<QuestionAndAnswerInfo> selectAnswerInfoList(String question, String answer, String startTime, String endTime, Integer pageNum, Integer pageSize) {
+    public PageInfo<CustomQAInfo> selectAnswerInfoList(String question, String answer, String startTime, String endTime, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<QuestionAndAnswerInfo> AnswerInfos = qAndAInfoMapper.selectAnswerList(question, answer, startTime, endTime);
-        return new PageInfo<QuestionAndAnswerInfo>(AnswerInfos);
+        List<CustomQAInfo> AnswerInfos = qAndAInfoMapper.selectAnswerList(question, answer, startTime, endTime);
+        return new PageInfo<CustomQAInfo>(AnswerInfos);
     }
 
     /**
@@ -72,9 +72,9 @@ public class CustomQAInfoServiceImpl implements ICustomQAInfoService {
      * @return 关键字信息集合
      */
     @Override
-    public int addAnswerInfo(QuestionAndAnswerInfo req) {
+    public int addAnswerInfo(CustomQAInfo req) {
         // 1.校验问题是否录入
-        QuestionAndAnswerInfo info = qAndAInfoMapper.selectByQuestion(req.getQuestion());
+        CustomQAInfo info = qAndAInfoMapper.selectByQuestion(req.getQuestion());
         if (info == null) {
             // 2.写入数据库
             req.setCreateTime(new Date());
@@ -93,7 +93,7 @@ public class CustomQAInfoServiceImpl implements ICustomQAInfoService {
      * @return 结果行数
      */
     @Override
-    public int updateAnswerInfo(QuestionAndAnswerInfo req) {
+    public int updateAnswerInfo(CustomQAInfo req) {
             req.setUpdateTime(new Date());
             int i = qAndAInfoMapper.updateAnswerInfo(req);
             return i;
@@ -121,7 +121,7 @@ public class CustomQAInfoServiceImpl implements ICustomQAInfoService {
      * @return String
      */
     @Override
-    public String addAnswerTemplate(List<QuestionAndAnswerInfo> AnswerInfoList) {
+    public String addAnswerTemplate(List<CustomQAInfo> AnswerInfoList) {
         if (StringUtils.isNull(AnswerInfoList) || AnswerInfoList.size() == 0)
         {
             throw new ServiceException("导入问答数据不能为空！");
@@ -131,12 +131,12 @@ public class CustomQAInfoServiceImpl implements ICustomQAInfoService {
         StringBuilder successMsg = new StringBuilder();
         StringBuilder failureMsg = new StringBuilder();
 
-        for (QuestionAndAnswerInfo info : AnswerInfoList)
+        for (CustomQAInfo info : AnswerInfoList)
         {
             try {
                 if (StringUtils.isNotEmpty(info.getQuestion()) && StringUtils.isNotEmpty(info.getAnswer())) {
                         // 校验该问题是否录入
-                    QuestionAndAnswerInfo answer = qAndAInfoMapper.selectByQuestion(info.getQuestion());
+                    CustomQAInfo answer = qAndAInfoMapper.selectByQuestion(info.getQuestion());
                         if (answer == null) {
                             successNum++;
                             // 不存在写入数据库

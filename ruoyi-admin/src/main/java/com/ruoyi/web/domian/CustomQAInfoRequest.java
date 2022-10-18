@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class QuestionAndAnswerRequest {
+public class CustomQAInfoRequest {
 
     private static final long serialVersionUID = 6154604954980315349L;
 
