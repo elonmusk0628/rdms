@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: '若依管理系统',
+      title: '防汛值班机器人管理系统',
       logo: logoImg
     }
   }
