@@ -43,9 +43,9 @@ public class CustomQAInfoServiceImpl implements ICustomQAInfoService {
         SearchResponse resp = new SearchResponse();
         CustomQAInfoRequest req = new CustomQAInfoRequest();
         req.setQuestion(qAndAInfoStr);
-        List<CustomQAInfo> questionAndAnswerInfo = qAndAInfoMapper.selectAnswerInfoList(req);
-        if (CollectionUtils.isNotEmpty(questionAndAnswerInfo)) {
-            resp.setContent(questionAndAnswerInfo.get(0).getAnswer());
+        List<CustomQAInfo> customQAInfo = qAndAInfoMapper.selectAnswerInfoList(req);
+        if (CollectionUtils.isNotEmpty(customQAInfo)) {
+            resp.setContent(customQAInfo.get(0).getAnswer());
         }
         return resp;
     }
