@@ -125,8 +125,8 @@
     <pagination
       v-show="total>0"
       :total="total"
-      :page.sync="queryParams.page_num"
-      :limit.sync="queryParams.page_size"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
 
@@ -206,8 +206,8 @@ export default {
       open: false,
       // 查询参数
       queryParams: {
-        page_num: 1,
-        page_size: 10,
+        pageNum: 1,
+        pageSize: 10,
         question: undefined,
         answer: undefined
       },
@@ -244,8 +244,8 @@ export default {
     /** 查询问答列表 */
     getList() {
       this.loading = true;
-      this.queryParams.start_time = this.datetimerange[0];
-      this.queryParams.end_time = this.datetimerange[1];
+      this.queryParams.startTime = this.datetimerange[0];
+      this.queryParams.endTime = this.datetimerange[1];
       listQAndA(this.queryParams).then(response => {
           this.typeList = response.data.list;
           this.total = response.data.total;
@@ -269,7 +269,7 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.page_num = 1;
+      this.queryParams.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
