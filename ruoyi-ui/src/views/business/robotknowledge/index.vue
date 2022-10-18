@@ -143,7 +143,7 @@
             v-model="form.type"
             placeholder="请选择"
             clearable
-            style="width: 240px"
+            style="width: 100%"
           >
             <el-option
               v-for="item in waterType"

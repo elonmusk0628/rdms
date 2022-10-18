@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询邮件列表
 export function list(query) {
   return request({
-    url: '/mail/message/list',
+    url: '/mail/message/getMailList',
     method: 'get',
     params: query
   })

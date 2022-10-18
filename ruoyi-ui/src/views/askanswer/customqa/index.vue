@@ -95,8 +95,8 @@
     <el-table v-loading="loading" :data="typeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="编号" align="center" prop="id" />
-      <el-table-column label="问题" align="center" prop="question" />
-      <el-table-column label="答案" align="center" prop="answer" :show-overflow-tooltip="true" />
+      <el-table-column label="问题" align="center" prop="question" :show-overflow-tooltip="true" width="500" />
+      <el-table-column label="答案" align="center" prop="answer" :show-overflow-tooltip="true" width="500" />
       <el-table-column label="创建时间" align="center">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.create_time) }}</span>

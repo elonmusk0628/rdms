@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询电话列表
 export function list(query) {
   return request({
-    url: '/tel/message/list',
+    url: '/tel/message/getTelList',
     method: 'get',
     params: query
   })

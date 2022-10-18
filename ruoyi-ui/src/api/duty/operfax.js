@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询传真列表
 export function list(query) {
   return request({
-    url: '/fax/message/list',
+    url: '/fax/message/getFaxList',
     method: 'get',
     params: query
   })
