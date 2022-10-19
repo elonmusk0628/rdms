@@ -28,21 +28,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="开始时间">
+      <el-form-item label="来电时间">
         <el-date-picker
-          v-model="queryParams.startDate"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetime"
-          placeholder="开始时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="结束时间">
-        <el-date-picker
-          v-model="queryParams.endDate"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetime"
-          placeholder="结束时间">
-        </el-date-picker>
+          v-model="dateRange"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        ></el-date-picker>
       </el-form-item>
       <el-form-item label="接话人" prop="answerPeople">
         <el-input
@@ -131,6 +126,8 @@ export default {
       total: 0,
       // 表格数据
       list: [],
+      // 日期范围
+      dateRange: [],
       // 是否显示弹出层
       open: false,
       // 表单参数
@@ -139,8 +136,6 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        startDate: undefined,
-        endDate: undefined,
         theElectricityUnit: undefined,
         tel: undefined,
         userName: undefined,
@@ -158,6 +153,8 @@ export default {
     /** 查询电话列表 */
     getList() {
       this.loading = true;
+      this.queryParams.startDate = this.dateRange[0];
+      this.queryParams.endDate = this.dateRange[1];
       list(this.queryParams).then( response => {
           this.list = response.rows;
           this.total = response.total;
@@ -172,8 +169,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.queryParams.startDate = undefined;
-      this.queryParams.endDate = undefined;
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },

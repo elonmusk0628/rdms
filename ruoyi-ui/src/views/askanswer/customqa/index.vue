@@ -21,13 +21,13 @@
       </el-form-item>
       <el-form-item label="创建时间">
         <el-date-picker
-          v-model="datetimerange"
-          style="width: 350px"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetimerange"
+          v-model="dateRange"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
           range-separator="-"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -94,15 +94,15 @@
 
     <el-table v-loading="loading" :data="typeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="编号" align="center" prop="id" />
-      <el-table-column label="问题" align="center" prop="question" :show-overflow-tooltip="true" width="500" />
-      <el-table-column label="答案" align="center" prop="answer" :show-overflow-tooltip="true" width="500" />
-      <el-table-column label="创建时间" align="center">
+      <el-table-column label="编号" align="center" prop="id" width="80" />
+      <el-table-column label="问题" align="center" prop="question" :show-overflow-tooltip="true" />
+      <el-table-column label="答案" align="center" prop="answer" :show-overflow-tooltip="true" />
+      <el-table-column label="创建时间" align="center" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.create_time) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="130">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -134,10 +134,10 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="50px">
         <el-form-item label="问题" prop="question">
-          <el-input v-model="form.question" type="textarea" placeholder="请输入问题"></el-input>
+          <el-input resize="none" v-model="form.question" type="textarea" placeholder="请输入问题"></el-input>
         </el-form-item>
         <el-form-item label="答案" prop="answer">
-          <el-input v-model="form.answer" type="textarea" placeholder="请输入答案"></el-input>
+          <el-input resize="none" v-model="form.answer" type="textarea" placeholder="请输入答案"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -199,7 +199,7 @@ export default {
       // 问答数据
       typeList: [],
       // 日期范围
-      datetimerange: [],
+      dateRange: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -244,8 +244,8 @@ export default {
     /** 查询问答列表 */
     getList() {
       this.loading = true;
-      this.queryParams.startTime = this.datetimerange[0];
-      this.queryParams.endTime = this.datetimerange[1];
+      this.queryParams.startTime = this.dateRange[0];
+      this.queryParams.endTime = this.dateRange[1];
       listQAndA(this.queryParams).then(response => {
           this.typeList = response.data.list;
           this.total = response.data.total;
@@ -274,7 +274,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.datetimerange = [];
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },
