@@ -60,7 +60,7 @@ public class RosterServiceImpl implements IRosterService {
                     String beOnDutyName = beOnDutyInfo.getNickName();
                     //副班人昵称
                     String deputyShiftName = deputyShiftInfo.getNickName();
-                    return "今日带班人是：" + leadShifName + ",值班人是：" + beOnDutyName + ",副班人是：" + deputyShiftName;
+                    return "今日带班：" + leadShifName + ",值班：" + beOnDutyName + ",副班：" + deputyShiftName;
                 }else {
                     return ExceptionEnum.NULL_RESULT.getErrorMsg();
                 }
@@ -83,7 +83,7 @@ public class RosterServiceImpl implements IRosterService {
                     String beOnDutyName = beOnDutyInfo.getNickName();
                     //副班人昵称
                     String deputyShiftName = deputyShiftInfo.getNickName();
-                    return "明日带班人是：" + leadShifName + ",值班人是：" + beOnDutyName + ",副班人是：" + deputyShiftName;
+                    return "明日带班：" + leadShifName + ",值班：" + beOnDutyName + ",副班：" + deputyShiftName;
                 }else {
                     return ExceptionEnum.NULL_RESULT.getErrorMsg();
                 }
@@ -106,7 +106,7 @@ public class RosterServiceImpl implements IRosterService {
                     String beOnDutyName = beOnDutyInfo.getNickName();
                     //副班人昵称
                     String deputyShiftName = deputyShiftInfo.getNickName();
-                    return "昨日带班人是：" + leadShifName + ",值班人是：" + beOnDutyName + ",副班人是：" + deputyShiftName;
+                    return "昨日带班：" + leadShifName + ",值班：" + beOnDutyName + ",副班：" + deputyShiftName;
                 }else {
                     return ExceptionEnum.NULL_RESULT.getErrorMsg();
                 }
