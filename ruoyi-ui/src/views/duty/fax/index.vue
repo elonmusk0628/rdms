@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { list, getFaxInfoById } from "@/api/duty/operfax";
+import { listFax, getFaxInfoById } from "@/api/duty/operfax";
 
 export default {
   name: "operfax",
@@ -139,7 +139,7 @@ export default {
       this.loading = true;
       this.queryParams.startDate = this.dateRange[0];
       this.queryParams.endDate = this.dateRange[1];
-      list(this.queryParams).then( response => {
+      listFax(this.queryParams).then( response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;

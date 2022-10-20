@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询短信列表
-export function list(query) {
+export function listMsm(query) {
   return request({
     url: '/msm/message/getMsmList',
     method: 'get',
