@@ -21,13 +21,13 @@
       </el-form-item>
       <el-form-item label="创建时间">
         <el-date-picker
-          v-model="datetimerange"
-          style="width: 350px"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetimerange"
+          v-model="dateRange"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
           range-separator="-"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -44,7 +44,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['QAndA:add']"
+          v-hasPermi="['CustomQA:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -55,7 +55,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['QAndA:update']"
+          v-hasPermi="['CustomQA:update']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -66,7 +66,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['QAndA:delete']"
+          v-hasPermi="['CustomQA:delete']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -76,7 +76,7 @@
           icon="el-icon-upload2"
           size="mini"
           @click="handleImport"
-          v-hasPermi="['QAndA:importAnswerInfo']"
+          v-hasPermi="['CustomQA:importAnswerInfo']"
         >导入</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -86,7 +86,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['QAndA:export']"
+          v-hasPermi="['CustomQA:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -94,29 +94,29 @@
 
     <el-table v-loading="loading" :data="typeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="编号" align="center" prop="id" />
-      <el-table-column label="问题" align="center" prop="question" />
+      <el-table-column label="编号" align="center" prop="id" width="80" />
+      <el-table-column label="问题" align="center" prop="question" :show-overflow-tooltip="true" />
       <el-table-column label="答案" align="center" prop="answer" :show-overflow-tooltip="true" />
-      <el-table-column label="创建时间" align="center">
+      <el-table-column label="创建时间" align="center" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.create_time) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="130">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['QAndA:update']"
+            v-hasPermi="['CustomQA:update']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['QAndA:delete']"
+            v-hasPermi="['CustomQA:delete']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -125,8 +125,8 @@
     <pagination
       v-show="total>0"
       :total="total"
-      :page.sync="queryParams.page_num"
-      :limit.sync="queryParams.page_size"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
 
@@ -134,10 +134,10 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="50px">
         <el-form-item label="问题" prop="question">
-          <el-input v-model="form.question" type="textarea" placeholder="请输入问题"></el-input>
+          <el-input resize="none" v-model="form.question" type="textarea" placeholder="请输入问题"></el-input>
         </el-form-item>
         <el-form-item label="答案" prop="answer">
-          <el-input v-model="form.answer" type="textarea" placeholder="请输入答案"></el-input>
+          <el-input resize="none" v-model="form.answer" type="textarea" placeholder="请输入答案"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -199,15 +199,15 @@ export default {
       // 问答数据
       typeList: [],
       // 日期范围
-      datetimerange: [],
+      dateRange: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
       // 查询参数
       queryParams: {
-        page_num: 1,
-        page_size: 10,
+        pageNum: 1,
+        pageSize: 10,
         question: undefined,
         answer: undefined
       },
@@ -233,7 +233,7 @@ export default {
         // 设置上传的请求头部
         headers: { Authorization: "Bearer " + getToken() },
         // 上传的地址
-        url: process.env.VUE_APP_BASE_API + "/QAndA/importAnswerInfo"
+        url: process.env.VUE_APP_BASE_API + "/CustomQA/importAnswerInfo"
       }
     };
   },
@@ -244,8 +244,8 @@ export default {
     /** 查询问答列表 */
     getList() {
       this.loading = true;
-      this.queryParams.start_time = this.datetimerange[0];
-      this.queryParams.end_time = this.datetimerange[1];
+      this.queryParams.startTime = this.dateRange[0];
+      this.queryParams.endTime = this.dateRange[1];
       listQAndA(this.queryParams).then(response => {
           this.typeList = response.data.list;
           this.total = response.data.total;
@@ -269,12 +269,12 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.page_num = 1;
+      this.queryParams.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.datetimerange = [];
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -294,9 +294,9 @@ export default {
     handleUpdate(row) {
       this.reset();
       if (row.id) {
-        this.form = row;
+        this.form = JSON.parse(JSON.stringify(row));
       } else {
-        this.form = this.selection[0];
+        this.form = JSON.parse(JSON.stringify(this.selection[0]));
       }
       this.open = true;
       this.title = "修改问答";
@@ -340,13 +340,13 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('QAndA/export', {
+      this.download('CustomQA/export', {
         ...this.queryParams
       }, `qa_${new Date().getTime()}.xlsx`)
     },
     /** 下载模板操作 */
     importTemplate() {
-      this.download('QAndA/downloadTemplate', {
+      this.download('CustomQA/downloadTemplate', {
       }, `qa_template_${new Date().getTime()}.xlsx`)
     },
     // 文件上传之前，限制文件格式

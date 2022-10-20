@@ -1,7 +1,7 @@
 package com.ruoyi.web.service;
 
 import com.github.pagehelper.PageInfo;
-import com.ruoyi.web.domian.QuestionAndAnswerInfo;
+import com.ruoyi.web.domian.CustomQAInfo;
 import com.ruoyi.web.domian.SearchResponse;
 
 import javax.jws.WebService;
@@ -30,7 +30,7 @@ public interface ICustomQAInfoService {
      * @param startTime 开始时间
      * @param endTime 结束时间
      */
-    PageInfo<QuestionAndAnswerInfo> selectAnswerInfoList(String question, String answer,
+    PageInfo<CustomQAInfo> selectAnswerInfoList(String question, String answer,
                                                           String startTime, String endTime,
                                                           Integer pageNum, Integer pageSize);
 
@@ -40,7 +40,7 @@ public interface ICustomQAInfoService {
      * @param req 请求体
      * @return 关键字信息集合
      */
-    int addAnswerInfo(QuestionAndAnswerInfo req);
+    int addAnswerInfo(CustomQAInfo req);
 
     /**
      * 自定义问答修改
@@ -48,7 +48,7 @@ public interface ICustomQAInfoService {
      * @param req 请求体
      * @return 结果行数
      */
-    int updateAnswerInfo(QuestionAndAnswerInfo req);
+    int updateAnswerInfo(CustomQAInfo req);
 
     /**
      * 自定义问答删除
@@ -64,6 +64,6 @@ public interface ICustomQAInfoService {
      * @param list list
      * @return String
      */
-    String addAnswerTemplate(List<QuestionAndAnswerInfo> list);
+    String addAnswerTemplate(List<CustomQAInfo> list);
 
 }

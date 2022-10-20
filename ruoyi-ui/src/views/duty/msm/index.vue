@@ -28,21 +28,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="开始时间">
+      <el-form-item label="发送时间">
         <el-date-picker
-          v-model="queryParams.startDate"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetime"
-          placeholder="选择">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="结束时间">
-        <el-date-picker
-          v-model="queryParams.endDate"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetime"
-          placeholder="选择">
-        </el-date-picker>
+          v-model="dateRange"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        ></el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -56,10 +51,14 @@
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column label="收件人" align="center" prop="remark" />
-      <el-table-column label="署名" align="center" prop="signaTure" />
+      <el-table-column label="收件人" align="center" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <span>{{ scope.row.remark == null ? '无' : scope.row.remark }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="署名" align="center" prop="signaTure" width="150" :show-overflow-tooltip="true" />
       <el-table-column label="发送内容" align="center" prop="content" :show-overflow-tooltip="true" />
-      <el-table-column label="发送是否成功" align="center" prop="success">
+      <el-table-column label="发送是否成功" align="center">
         <template slot-scope="scope">
           <el-tag size="small" :type="scope.row.success=='0'?'':'danger'">{{ scope.row.success == "0" ? "成功" : "失败" }}</el-tag>
         </template>
@@ -92,37 +91,32 @@
 
     <!-- 短信详细 -->
     <el-dialog title="短信详细" :visible.sync="open" width="700px" append-to-body>
-      <el-form ref="form" :model="form" label-width="100px" size="mini">
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="发送内容：" v-if="form.content">{{ form.content }}</el-form-item>
-          </el-col>
-          <el-col :span="24" class="card-box">
-            <el-form-item label="接收人列表：" v-if="form.msmInfoList&&form.msmInfoList.length>0">
-              <el-card>
-                <div class="el-table el-table--enable-row-hover el-table--medium">
-                  <table cellspacing="0" style="width: 100%;">
-                    <thead>
-                      <tr>
-                        <th class="el-table__cell is-leaf"><div class="cell">收件人</div></th>
-                        <th class="el-table__cell is-leaf"><div class="cell">发送状态</div></th>
-                        <th class="el-table__cell is-leaf"><div class="cell">电话号码</div></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(item, index) in form.msmInfoList" :key="index">
-                        <td class="el-table__cell is-leaf"><div class="cell">{{ item.userName }}</div></td>
-                        <td class="el-table__cell is-leaf"><div class="cell"><el-tag size="small">{{ item.success == "0" ? "成功" : "失败" }}</el-tag></div></td>
-                        <td class="el-table__cell is-leaf"><div class="cell">{{ item.phone }}</div></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </el-card>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+      <el-descriptions class="margin-top" :column="1" border>
+        <el-descriptions-item label="发送内容" :labelStyle="labelStyle" v-if="form.content">{{ form.content }}</el-descriptions-item>
+        <el-descriptions-item label="接收人列表" :labelStyle="labelStyle" v-if="form.msmInfoList&&form.msmInfoList.length>0">
+          <el-table
+            :data="form.msmInfoList"
+            stripe
+            style="width: 100%">
+            <el-table-column
+              prop="userName"
+              label="收件人"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              label="发送状态"
+              width="180">
+              <template slot-scope="scope">
+                <el-tag size="small" :type="scope.row.success=='0'?'':'danger'">{{ scope.row.success == "0" ? "成功" : "失败" }}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="phone"
+              label="电话号码">
+            </el-table-column>
+          </el-table>
+        </el-descriptions-item>
+      </el-descriptions>
       <div slot="footer" class="dialog-footer">
         <el-button @click="open = false">关 闭</el-button>
       </div>
@@ -145,6 +139,8 @@ export default {
       total: 0,
       // 表格数据
       list: [],
+      // 日期范围
+      dateRange: [],
       // 是否显示弹出层
       open: false,
       // 默认排序
@@ -155,12 +151,13 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        startDate: undefined,
-        endDate: undefined,
         remark: undefined,
         signaTure: undefined,
         content: undefined,
         success: undefined
+      },
+      labelStyle: {
+        'width': '100px'
       }
     };
   },
@@ -171,6 +168,8 @@ export default {
     /** 查询短信列表 */
     getList() {
       this.loading = true;
+      this.queryParams.startDate = this.dateRange[0];
+      this.queryParams.endDate = this.dateRange[1];
       list(this.queryParams).then( response => {
           this.list = response.rows;
           this.total = response.total;
@@ -185,8 +184,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.queryParams.startDate = undefined;
-      this.queryParams.endDate = undefined;
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.$refs.tables.sort(this.defaultSort.prop, this.defaultSort.order)
       this.handleQuery();

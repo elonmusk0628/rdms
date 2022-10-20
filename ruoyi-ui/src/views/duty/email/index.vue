@@ -25,21 +25,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="接收开始时间">
+      <el-form-item label="接收时间">
         <el-date-picker
-          v-model="queryParams.startDate"
+          v-model="dateRange"
+          style="width: 240px"
           value-format="yyyy-MM-dd"
-          type="date"
-          placeholder="开始时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="接收结束时间">
-        <el-date-picker
-          v-model="queryParams.endDate"
-          value-format="yyyy-MM-dd"
-          type="date"
-          placeholder="结束时间">
-        </el-date-picker>
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        ></el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -53,7 +48,7 @@
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column label="邮箱类型" align="center">
+      <el-table-column label="邮箱类型" align="center" width="100">
         <template slot-scope="scope">
           <div>{{ scope.row.mailType=='163'?'163邮箱':(scope.row.mailType=='pearlwater'?'珠江委邮箱':'') }}</div>
         </template>
@@ -89,10 +84,10 @@
 
     <!-- 邮件详细 -->
     <el-dialog title="邮件详细" :visible.sync="open" width="700px" append-to-body>
-      <el-descriptions class="margin-top" :column="1">
-        <el-descriptions-item label="创建时间" v-if="form.createTime">{{ form.createTime }}</el-descriptions-item>
-        <el-descriptions-item label="标题" v-if="form.mailName">{{ form.mailName }}</el-descriptions-item>
-        <el-descriptions-item label="附件" v-if="form.mailInfoList&&form.mailInfoList.length>0">
+      <el-descriptions class="margin-top" :column="1" border>
+        <el-descriptions-item label="创建时间" v-if="form.createTime" :labelStyle="labelStyle">{{ form.createTime }}</el-descriptions-item>
+        <el-descriptions-item label="标题" v-if="form.mailName" :labelStyle="labelStyle">{{ form.mailName }}</el-descriptions-item>
+        <el-descriptions-item label="附件" v-if="form.mailInfoList&&form.mailInfoList.length>0" :labelStyle="labelStyle">
           <div>
             <div v-for="(item, index) in form.mailInfoList" :key="index" style="padding-bottom: 10px">
               {{ item.fileName }}
@@ -122,6 +117,8 @@ export default {
       total: 0,
       // 表格数据
       list: [],
+      // 日期范围
+      dateRange: [],
       // 是否显示弹出层
       open: false,
       // 默认排序
@@ -132,8 +129,6 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        startDate: undefined,
-        endDate: undefined,
         mailName: undefined,
         mailType: undefined
       },
@@ -143,7 +138,10 @@ export default {
       },{
         value: 'pearlwater',
         label: '珠江委邮箱'
-      }]
+      }],
+      labelStyle: {
+        'width': '80px'
+      }
     };
   },
   created() {
@@ -153,6 +151,8 @@ export default {
     /** 查询邮件列表 */
     getList() {
       this.loading = true;
+      this.queryParams.startDate = this.dateRange[0];
+      this.queryParams.endDate = this.dateRange[1];
       list(this.queryParams).then( response => {
           this.list = response.rows;
           this.total = response.total;
@@ -167,8 +167,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.queryParams.startDate = undefined;
-      this.queryParams.endDate = undefined;
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.$refs.tables.sort(this.defaultSort.prop, this.defaultSort.order)
       this.handleQuery();

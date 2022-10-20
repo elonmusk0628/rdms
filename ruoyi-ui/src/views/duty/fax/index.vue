@@ -19,21 +19,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="开始时间">
+      <el-form-item label="发文时间">
         <el-date-picker
-          v-model="queryParams.startDate"
+          v-model="dateRange"
+          style="width: 240px"
           value-format="yyyy-MM-dd"
-          type="date"
-          placeholder="选择">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="结束时间">
-        <el-date-picker
-          v-model="queryParams.endDate"
-          value-format="yyyy-MM-dd"
-          type="date"
-          placeholder="选择">
-        </el-date-picker>
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        ></el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -48,8 +43,12 @@
         </template>
       </el-table-column>
       <el-table-column label="标题" align="center" prop="name" :show-overflow-tooltip="true" />
-      <el-table-column label="编号" align="center" prop="fileNum" />
-      <el-table-column label="附件" align="center" prop="fileName" :show-overflow-tooltip="true" />
+      <el-table-column label="编号" align="center" prop="fileNum" :show-overflow-tooltip="true" />
+      <el-table-column label="附件" align="center" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <span>{{ scope.row.fileName == null ? '无' : scope.row.fileName }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="发文时间" align="center" prop="draftDate" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
         <template slot-scope="scope">
           <span>{{ scope.row.draftDate }}</span>
@@ -78,10 +77,10 @@
 
     <!-- 传真详细 -->
     <el-dialog title="传真详细" :visible.sync="open" width="700px" append-to-body>
-      <el-descriptions class="margin-top" :column="1">
-        <el-descriptions-item label="创建时间" v-if="form.createTime">{{ form.createTime }}</el-descriptions-item>
-        <el-descriptions-item label="标题" v-if="form.name">{{ form.name }}</el-descriptions-item>
-        <el-descriptions-item label="文件名" v-if="form.faxInfoEntityList&&form.faxInfoEntityList.length>0">
+      <el-descriptions class="margin-top" :column="1" border>
+        <el-descriptions-item label="创建时间" v-if="form.createTime" :labelStyle="labelStyle">{{ form.createTime }}</el-descriptions-item>
+        <el-descriptions-item label="标题" v-if="form.name" :labelStyle="labelStyle">{{ form.name }}</el-descriptions-item>
+        <el-descriptions-item label="文件名" v-if="form.faxInfoEntityList&&form.faxInfoEntityList.length>0" :labelStyle="labelStyle">
           <div>
             <div v-for="(item, index) in form.faxInfoEntityList" :key="index" style="padding-bottom: 10px">
               {{ item.fileName }}
@@ -111,6 +110,8 @@ export default {
       total: 0,
       // 表格数据
       list: [],
+      // 日期范围
+      dateRange: [],
       // 是否显示弹出层
       open: false,
       // 默认排序
@@ -121,10 +122,11 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        startDate: undefined,
-        endDate: undefined,
         name: undefined,
         fileNum: undefined
+      },
+      labelStyle: {
+        'width': '80px'
       }
     };
   },
@@ -135,6 +137,8 @@ export default {
     /** 查询传真列表 */
     getList() {
       this.loading = true;
+      this.queryParams.startDate = this.dateRange[0];
+      this.queryParams.endDate = this.dateRange[1];
       list(this.queryParams).then( response => {
           this.list = response.rows;
           this.total = response.total;
@@ -149,8 +153,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.queryParams.startDate = undefined;
-      this.queryParams.endDate = undefined;
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.$refs.tables.sort(this.defaultSort.prop, this.defaultSort.order)
       this.handleQuery();

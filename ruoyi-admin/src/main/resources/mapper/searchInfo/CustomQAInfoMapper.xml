@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.web.mapper.QuestionAndAnswerInfoMapper">
+<mapper namespace="com.ruoyi.web.mapper.CustomQAInfoMapper">
     
-    <resultMap type="com.ruoyi.web.domian.QuestionAndAnswerInfo" id="AnswerInfoResult">
+    <resultMap type="com.ruoyi.web.domian.CustomQAInfo" id="CustomQAInfoResult">
     	<id     property="id"      column="id"      />
         <result property="type"    column="type"    />
         <result property="question"     column="question"     />
@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT id, type, question, answer, creator, create_time, update_time FROM customQA_info
     </sql>
 
-    <select id="selectAnswerInfoList" parameterType="com.ruoyi.web.domian.QuestionAndAnswerRequest" resultMap="AnswerInfoResult">
+    <select id="selectAnswerInfoList" parameterType="com.ruoyi.web.domian.CustomQAInfoRequest" resultMap="CustomQAInfoResult">
         <include refid="selectAnswer"/>
         <where>
             <if test="question !=null and question != ''">
@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectAnswerList" parameterType="String" resultMap="AnswerInfoResult">
+    <select id="selectAnswerList" parameterType="String" resultMap="CustomQAInfoResult">
         <include refid="selectAnswer"/>
         <where>
             <if test="question !=null and question != ''">
@@ -46,12 +46,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <insert id="addAnswerInfo" parameterType="com.ruoyi.web.domian.QuestionAndAnswerInfo">
+    <insert id="addAnswerInfo" parameterType="com.ruoyi.web.domian.CustomQAInfo">
         insert into customQA_info (type, question, answer, creator, create_time, update_time)
         values(#{type}, #{question}, #{answer}, #{creator}, #{createTime}, #{updateTime})
     </insert>
 
-    <update id="updateAnswerInfo" parameterType="com.ruoyi.web.domian.QuestionAndAnswerInfo">
+    <update id="updateAnswerInfo" parameterType="com.ruoyi.web.domian.CustomQAInfo">
         update customQA_info
         <set>
             <if test="type != null and type != ''">type = #{type},</if>
@@ -71,7 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </delete>
 
-    <select id="selectByQuestion" parameterType="String" resultMap="AnswerInfoResult">
+    <select id="selectByQuestion" parameterType="String" resultMap="CustomQAInfoResult">
         <include refid="selectAnswer"/>
         <where>
             and question = #{question}

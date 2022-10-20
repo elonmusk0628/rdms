@@ -1,8 +1,8 @@
 package com.ruoyi.web.mapper;
 
 
-import com.ruoyi.web.domian.QuestionAndAnswerInfo;
-import com.ruoyi.web.domian.QuestionAndAnswerRequest;
+import com.ruoyi.web.domian.CustomQAInfo;
+import com.ruoyi.web.domian.CustomQAInfoRequest;
 import org.apache.ibatis.annotations.Param;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.stereotype.Repository;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository
 @MapperScan
-public interface QuestionAndAnswerInfoMapper {
+public interface CustomQAInfoMapper {
 
     /**
      * 模糊匹配问答信息（机器人端）
@@ -23,7 +23,7 @@ public interface QuestionAndAnswerInfoMapper {
      * @param req 查询参数
      * @return 回答返回体
      */
-    public List<QuestionAndAnswerInfo> selectAnswerInfoList(QuestionAndAnswerRequest req);
+    public List<CustomQAInfo> selectAnswerInfoList(CustomQAInfoRequest req);
 
     /**
      * 自定义问答查询
@@ -33,7 +33,7 @@ public interface QuestionAndAnswerInfoMapper {
      * @param startTime 开始时间
      * @param endTime 结束时间
      */
-    public List<QuestionAndAnswerInfo> selectAnswerList(@Param("question")String question, @Param("answer")String answer,
+    public List<CustomQAInfo> selectAnswerList(@Param("question")String question, @Param("answer")String answer,
                                                    @Param("startTime")String startTime, @Param("endTime")String endTime);
 
     /**
@@ -42,7 +42,7 @@ public interface QuestionAndAnswerInfoMapper {
      * @param req 请求体
      * @return 问答信息集合
      */
-    public int addAnswerInfo(QuestionAndAnswerInfo req);
+    public int addAnswerInfo(CustomQAInfo req);
 
     /**
      * 自定义问答修改
@@ -50,7 +50,7 @@ public interface QuestionAndAnswerInfoMapper {
      * @param req 请求体
      * @return 结果行数
      */
-    public int updateAnswerInfo(QuestionAndAnswerInfo req);
+    public int updateAnswerInfo(CustomQAInfo req);
 
     /**
      * 自定义问答删除
@@ -66,5 +66,5 @@ public interface QuestionAndAnswerInfoMapper {
      * @param question keyWord
      * @return 结果行数
      */
-    public QuestionAndAnswerInfo selectByQuestion(@Param("question")String question);
+    public CustomQAInfo selectByQuestion(@Param("question")String question);
 }

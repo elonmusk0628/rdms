@@ -27,13 +27,13 @@
       </el-form-item>
       <el-form-item label="创建时间">
         <el-date-picker
-          v-model="datetimerange"
-          style="width: 350px"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetimerange"
+          v-model="dateRange"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
           range-separator="-"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -97,17 +97,17 @@
         </template>
       </el-table-column>
       <el-table-column label="关键字" align="center" prop="key_word" :show-overflow-tooltip="true" />
-      <el-table-column label="创建时间" align="center">
+      <el-table-column label="创建时间" align="center" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.create_time) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="修改时间" align="center">
+      <el-table-column label="修改时间" align="center" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.update_time) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="130">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -143,7 +143,7 @@
             v-model="form.type"
             placeholder="请选择"
             clearable
-            style="width: 240px"
+            style="width: 100%"
           >
             <el-option
               v-for="item in waterType"
@@ -154,7 +154,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="关键字" prop="key_word">
-          <el-input v-model="form.key_word" type="textarea" placeholder="请输入关键字"></el-input>
+          <el-input resize="none" v-model="form.key_word" type="textarea" placeholder="请输入关键字"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -216,7 +216,7 @@ export default {
       // 水情信息数据
       typeList: [],
       // 日期范围
-      datetimerange: [],
+      dateRange: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -262,8 +262,8 @@ export default {
     /** 查询水情信息列表 */
     getList() {
       this.loading = true;
-      this.queryParams.start_time = this.datetimerange[0];
-      this.queryParams.end_time = this.datetimerange[1];
+      this.queryParams.start_time = this.dateRange[0];
+      this.queryParams.end_time = this.dateRange[1];
       listWord(this.queryParams).then(response => {
           this.typeList = response.data.list;
           this.total = response.data.total;
@@ -292,7 +292,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.datetimerange = [];
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -312,9 +312,9 @@ export default {
     handleUpdate(row) {
       this.reset();
       if (row.id) {
-        this.form = row;
+        this.form = JSON.parse(JSON.stringify(row));
       } else {
-        this.form = this.selection[0];
+        this.form = JSON.parse(JSON.stringify(this.selection[0]));
       }
       this.open = true;
       this.title = "修改水文水情信息";

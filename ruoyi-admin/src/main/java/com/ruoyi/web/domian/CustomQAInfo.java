@@ -21,7 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Component
-public class QuestionAndAnswerInfo {
+public class CustomQAInfo {
 
     /** 主键id */
     private Integer id;
