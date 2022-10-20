@@ -2,6 +2,7 @@ package com.ruoyi.web.service.impl;
 
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.web.common.constant.BaseConstants;
+import com.ruoyi.web.common.enums.ConstantEnum;
 import com.ruoyi.web.common.enums.ExceptionEnum;
 import com.ruoyi.web.domian.*;
 import com.ruoyi.web.domian.vo.WrStatBVO;
@@ -150,6 +151,15 @@ public class WrResBServiceImpl implements IWrResBService {
 
     private void packageParamWrResB(List<WrResB> list) {
         WrResB resB = list.get(0);
+        if (resB.getRunCond().equals(ConstantEnum.STATUS_NORMAL.getCode())) {
+            resB.setRunCond(ConstantEnum.STATUS_NORMAL.getMsg());
+        }
+        if (resB.getRunCond().equals(ConstantEnum.STATUS_FAULT.getCode())) {
+            resB.setRunCond(ConstantEnum.STATUS_FAULT.getMsg());
+        }
+        if (resB.getRunCond().equals(ConstantEnum.STATUS_DISABLE.getCode())) {
+            resB.setRunCond(ConstantEnum.STATUS_DISABLE.getMsg());
+        }
         resB.setCatA(resB.getCatA() + BaseConstants.CAT_A);
         resB.setDesFz(resB.getDesFz() + BaseConstants.CAT_A);
         resB.setTotV(resB.getTotV() + BaseConstants.TOT_V);
@@ -276,6 +286,13 @@ public class WrResBServiceImpl implements IWrResBService {
         }
     }
 
+    /**
+     * 查询河道信息
+     *
+     * @param searchInfoStr 查询参数
+     * @param keyWordMap 关键字map
+     * @return 查询参数请求体
+     */
     public SearchRequest ikAnalyzer(String searchInfoStr, Map<Integer, String> keyWordMap) throws IOException {
         // 1.请求过来的字符串进行ik分词，放进map
         StringReader stringReader = new StringReader(searchInfoStr.trim());
@@ -317,6 +334,15 @@ public class WrResBServiceImpl implements IWrResBService {
 
     private void packageParamWrStatB(List<WrStatB> list, WrStatBVO statBVO) {
         WrStatB wrStatB = list.get(0);
+        if (wrStatB.getRunCond().equals(ConstantEnum.STATUS_NORMAL.getCode())) {
+            statBVO.setRunCond(ConstantEnum.STATUS_NORMAL.getMsg());
+        }
+        if (wrStatB.getRunCond().equals(ConstantEnum.STATUS_FAULT.getCode())) {
+            statBVO.setRunCond(ConstantEnum.STATUS_FAULT.getMsg());
+        }
+        if (wrStatB.getRunCond().equals(ConstantEnum.STATUS_DISABLE.getCode())) {
+            statBVO.setRunCond(ConstantEnum.STATUS_DISABLE.getMsg());
+        }
         statBVO.setStNm(wrStatB.getStNm());
         statBVO.setLoc(wrStatB.getLoc());
         statBVO.setDatElev(wrStatB.getDatElev() + BaseConstants.METER_SUFFIX);
@@ -339,6 +365,7 @@ public class WrResBServiceImpl implements IWrResBService {
                     + BaseConstants.BASE_HIGH + statBVO.getDatElev() + BaseConstants.COMMA_SYMBOL + BaseConstants.WATER_LEVEL
                     + statBVO.getZ() + BaseConstants.COMMA_SYMBOL + BaseConstants.RIVER_FLOW + statBVO.getQ()
                     + BaseConstants.COMMA_SYMBOL + BaseConstants.WATER_CAPACITY + statBVO.getW() + BaseConstants.COMMA_SYMBOL
+                    + BaseConstants.RUN_STATUS + statBVO.getRunCond() + BaseConstants.COMMA_SYMBOL
                     + BaseConstants.WADI_ITEM + BaseConstants.COMMA_SYMBOL + BaseConstants.FLOW_ITEM);
         } else {
             switch (attribute) {
@@ -362,6 +389,7 @@ public class WrResBServiceImpl implements IWrResBService {
                             + BaseConstants.BASE_HIGH + statBVO.getDatElev() + BaseConstants.COMMA_SYMBOL + BaseConstants.WATER_LEVEL
                             + statBVO.getZ() + BaseConstants.COMMA_SYMBOL + BaseConstants.RIVER_FLOW + statBVO.getQ()
                             + BaseConstants.COMMA_SYMBOL + BaseConstants.WATER_CAPACITY + statBVO.getW() + BaseConstants.COMMA_SYMBOL
+                            + BaseConstants.RUN_STATUS + statBVO.getRunCond() + BaseConstants.COMMA_SYMBOL
                             + BaseConstants.WADI_ITEM + BaseConstants.COMMA_SYMBOL + BaseConstants.FLOW_ITEM);
             }
         }

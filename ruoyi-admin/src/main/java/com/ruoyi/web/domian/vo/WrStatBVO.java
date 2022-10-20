@@ -44,6 +44,9 @@ public class WrStatBVO {
     /** 流量项目:1、河道流量 2、湖库进出水流量 3、泵站流量 4、堰闸流量 5、取水流量 6、排水流量 7、泉涌流量 9、其他 */
     private String itemQ;
 
+    /** 运行状况:1 在用良好（工程处于良好运行）2 在用故障（工程带故障运行）3 停用（工程已废弃、或其它原因停用） */
+    private String runCond;
+
     /** 时间戳 */
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date tS;

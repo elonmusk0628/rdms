@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <select id="selectWadiInfoList" parameterType="com.ruoyi.web.domian.SearchRequest" resultMap="BaseResult">
-        SELECT a.STCD, a.ST_NM, a.LOC, a.DAT_ELEV, b.Z, c.Q, d.W, e.ITEM_Z, e.ITEM_Q, b.TM
+        SELECT a.STCD, a.ST_NM, a.LOC, a.DAT_ELEV, a.RUN_COND, b.Z, c.Q, d.W, e.ITEM_Z, e.ITEM_Q, b.TM
         FROM wr_stat_b AS a
         LEFT JOIN wr_st_z_r AS b ON a.STCD = b.STCD
         LEFT JOIN wr_st_mq_r AS c ON a.STCD = c.STCD
