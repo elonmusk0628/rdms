@@ -49,10 +49,20 @@ public class RosterController {
      * @return
      */
     @GetMapping("/getRobotData")
-    public AjaxResult getRobotData(@RequestParam String strParam) throws IOException {
+    public AjaxResult getRobotData(@RequestParam String strParam) throws Exception {
         if (StringUtils.isEmpty(strParam)) {
             return AjaxResult.error(ExceptionEnum.NULL_REQUEST_PARAM.getErrorMsg());
         }
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setUsername("admin");
+        loginInfo.setPassword("Fyc@87117781");
+        //获取token
+        String token = rosterHttpClientService.getToken(loginInfo);
+        //获取fAccess
+        String fAccess = rosterHttpClientService.getFAccess(token);
+        //调取值班系统排班接口
+        rosterHttpClientService.doRostering(token, fAccess);
+        //语音播报信息
         String resp = rosterService.getRobotData(strParam);
         if (!StringUtils.isNotEmpty(resp)) {
             AjaxResult.error(ExceptionEnum.NULL_RESULT.getErrorMsg());
