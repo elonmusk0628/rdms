@@ -6,6 +6,7 @@ import com.ruoyi.web.common.enums.ExceptionEnum;
 import com.ruoyi.web.domian.SearchResponse;
 import com.ruoyi.web.service.ICustomQAInfoService;
 import com.ruoyi.web.service.ISearchInfoService;
+import com.ruoyi.web.service.IWrResBService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 机器人查询信息控制层
+ *
+ * @Author fengzh
+ */
 @RestController
 @RequestMapping("/search")
 public class SearchInfoController {
@@ -25,6 +31,9 @@ public class SearchInfoController {
 
     @Autowired
     private ICustomQAInfoService customQAInfoService;
+
+    @Autowired
+    private IWrResBService wrResBService;
 
 
     /**
@@ -55,6 +64,23 @@ public class SearchInfoController {
             return AjaxResult.error(ExceptionEnum.NULL_REQUEST_PARAM.getErrorMsg());
         }
         SearchResponse resp = customQAInfoService.selectAnswerByCondition(qAndAInfoStr);
+        if (!StringUtils.isNotEmpty(resp.getContent())) {
+            resp.setContent(ExceptionEnum.NULL_RESULT.getErrorMsg());
+        }
+        return AjaxResult.success(resp);
+    }
+
+    /**
+     * 机器人查询信息请求
+     *
+     * @param searchInfoStr searchInfoStr
+     */
+    @GetMapping("/info/v2")
+    public AjaxResult SearchInfoV2(@RequestParam(name = "str") String searchInfoStr) {
+        if (StringUtils.isEmpty(searchInfoStr)) {
+            return AjaxResult.error(ExceptionEnum.NULL_REQUEST_PARAM.getErrorMsg());
+        }
+        SearchResponse resp = wrResBService.selectInfo(searchInfoStr);
         if (!StringUtils.isNotEmpty(resp.getContent())) {
             resp.setContent(ExceptionEnum.NULL_RESULT.getErrorMsg());
         }

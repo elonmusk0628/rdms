@@ -14,6 +14,10 @@ public interface BaseConstants {
 
     String A_WATER_LEVEL = "水位";
 
+    String CAT_A = "平方千米";
+
+    String TOT_V = "百万立方米";
+
     String K_WATER_LEVEL = "库水位：";
 
     String A_K_WATER_LEVEL = "库水位";
@@ -46,6 +50,70 @@ public interface BaseConstants {
 
     String A_RESERVOIR_OUT = "出库";
 
+    String LOCAL = "所在地：";
+
+    String A_LOCAL = "所在地";
+
+    String BASE_TYPE = "基面类型：";
+
+    String A_BASE_TYPE = "基面类型";
+
+    String WATER_AREA = "集水面积：";
+
+    String A_WATER_AREA = "集水面积";
+
+    String DESIGN_FLOOD_LEVEL = "设计洪水位：";
+
+    String A_DESIGN_FLOOD_LEVEL = "设计洪水位";
+
+    String TOTAL_CAPACITY = "总库容：";
+
+    String A_TOTAL_CAPACITY = "总库容";
+
+    String FLOOD_CAPACITY = "调洪库容：";
+
+    String A_FLOOD_CAPACITY = "调洪库容";
+
+    String NORMAL_LEVEL = "正常蓄水位：";
+
+    String A_NORMAL_LEVEL = "正常蓄水位";
+
+    String PROSPER_CAPACITY = "兴利库容：";
+
+    String A_PROSPER_CAPACITY = "兴利库容";
+
+    String FLOOD_LIMIT_LEVEL = "防洪限制水位：";
+
+    String A_FLOOD_LIMIT_LEVEL = "防洪限制水位";
+
+    String DEAD_LEVEL = "死水位：";
+
+    String A_DEAD_LEVEL = "死水位";
+
+    String DEAD_CAPACITY = "死库容：";
+
+    String A_DEAD_CAPACITY = "死库容";
+
+    String MIN_LEAK_FLOW = "最小下泄流量：";
+
+    String A_MIN_LEAK_FLOW = "最小下泄流量";
+
+    String RUN_STATUS = "运行状况：";
+
+    String A_RUN_STATUS = "运行状况";
+
+    String BASE_HIGH = "基面高程：";
+
+    String A_BASE_HIGH = "基面高程";
+
+    String WATER_CAPACITY = "蓄水量：";
+
+    String A_WATER_CAPACITY = "蓄水量";
+
+    String WADI_ITEM = "水位项目：河道水位";
+
+    String FLOW_ITEM = "流量项目：河道流量";
+
     String COMMA_SYMBOL = "，";
 
     String RESERVOIR = "水库";
@@ -75,6 +143,7 @@ public interface BaseConstants {
     String NINE_CLOCK = "九";
 
     String TEN_CLOCK = "十";
+
     String NINE_OCLOCK = "九";
 
     String TEN_OCLOCK = "十";

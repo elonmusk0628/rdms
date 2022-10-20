@@ -17,6 +17,12 @@ public class SearchRequest {
     /** 名称 */
     private String name;
 
+    /** wr_res_b表水库名称 */
+    private String resNm;
+
+    /** wr_stat_b表测站名称 */
+    private String stNm;
+
     /** 类型 */
     private String type;
 
@@ -25,6 +31,9 @@ public class SearchRequest {
 
     /** 日期 */
     private String iDate;
+
+    /** 对应表日期 */
+    private String tS;
 
     /** 小时 */
     private int iHour;

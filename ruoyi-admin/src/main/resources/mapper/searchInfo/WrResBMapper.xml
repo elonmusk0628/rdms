@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.WrResBMapper">
+    
+    <resultMap type="com.ruoyi.web.domian.WrResB" id="WrResBResult">
+    	<id     property="resCd"      column="RES_CD"      />
+        <result property="resNm"    column="RES_NM"    />
+        <result property="loc"     column="LOC"     />
+        <result property="compYm"   column="COMP_YM"   />
+        <result property="projScal"    column="PROJ_SCAL"    />
+        <result property="datTp"      column="DAT_TP"      />
+        <result property="catA"      column="CAT_A"      />
+        <result property="desFz"    column="DES_FZ"    />
+        <result property="totV"      column="TOT_V"      />
+        <result property="frscV"      column="FRSC_V"      />
+        <result property="normWz"      column="NORM_WZ"      />
+        <result property="cfZ"    column="CF_Z"    />
+		<result property="utilV"    column="UTIL_V"    />
+		<result property="fsZ"    column="FS_Z"    />
+		<result property="fsZV"    column="FS_Z_V"    />
+		<result property="deadZ"    column="DEAD_Z"    />
+		<result property="deadV"    column="DEAD_V"    />
+		<result property="resRegTp"    column="RES_REG_TP"    />
+		<result property="minDisc"    column="MIN_DISC"    />
+		<result property="stEndLen"    column="ST_END_LEN"    />
+		<result property="rhcc"    column="RHCC"    />
+		<result property="runCond"    column="RUN_COND"    />
+		<result property="engManCd"    column="ENG_MAN_CD"    />
+		<result property="tS"    column="TS"    />
+		<result property="nT"    column="NT"    />
+    </resultMap>
+
+    <sql id="selectRiver">
+        select RES_CD, RES_NM, LOC, COMP_YM, PROJ_SCAL, DAT_TP, CAT_A, DES_FZ, TOT_V, FRSC_V,
+        NORM_WZ, CF_Z, UTIL_V, FS_Z, FS_Z_V, DEAD_Z, DEAD_V, RES_REG_TP, MIN_DISC, ST_END_LEN, RHCC,
+        RUN_COND, ENG_MAN_CD, TS, NT
+        from wr_res_b
+    </sql>
+
+
+    <select id="selectInfoList" parameterType="com.ruoyi.web.domian.SearchRequest" resultMap="WrResBResult">
+        <include refid="selectRiver"/>
+        <where>
+            <if test="name !=null and name != ''">
+                and RES_NM LIKE CONCAT( '%' , #{name}, '%')
+            </if>
+            <if test="tS != null and tS != ''">
+                and TS = #{tS}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectName"  resultType="String">
+        SELECT DISTINCT RES_NM FROM `wr_res_b`
+    </select>
+
+
+</mapper>

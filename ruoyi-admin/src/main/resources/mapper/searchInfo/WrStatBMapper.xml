@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.WrStatBMapper">
+    
+    <resultMap type="com.ruoyi.web.domian.WrStatB" id="BaseResult">
+    	<id     property="stcd"      column="STCD"      />
+        <result property="stNm"    column="ST_NM"    />
+        <result property="stTp"     column="ST_TP"     />
+        <result property="loc"   column="LOC"   />
+        <result property="stbk"    column="STBK"    />
+        <result property="flowDir"      column="FLOW_DIR"      />
+        <result property="datTp"      column="DAT_TP"      />
+        <result property="datElev"    column="DAT_ELEV"    />
+        <result property="modBasVal"      column="MOD_BAS_VAL"      />
+        <result property="modPara"      column="MOD_PARA"      />
+        <result property="monTpA"      column="MON_TP_A"      />
+        <result property="monTpB"    column="MON_TP_B"    />
+		<result property="estStYm"    column="EST_ST_YM"    />
+		<result property="runCond"    column="RUN_COND"    />
+		<result property="engManCd"    column="ENG_MAN_CD"    />
+		<result property="pinYinCd"    column="PIN_YIN_CD"    />
+		<result property="tS"    column="TS"    />
+		<result property="nT"    column="NT"    />
+        <collection property="itemB" ofType="com.ruoyi.web.domian.WrStatItemB" >
+            <id     property="stcd"      column="STCD"      />
+            <result property="itemP"    column="ITEM_P"    />
+            <result property="itemE"     column="ITEM_E"     />
+            <result property="itemZ"   column="ITEM_Z"   />
+            <result property="itemQ"    column="ITEM_Q"    />
+            <result property="itemGwDep"      column="ITEM_GW_DEP"      />
+            <result property="itemWq"      column="ITEM_WQ"      />
+            <result property="itemLandSubs"    column="ITEM_LAND_SUBS"    />
+            <result property="itemVsand"      column="ITEM_VSAND"      />
+            <result property="itemHsand"      column="ITEM_HSAND"      />
+            <result property="itemIcesl"      column="ITEM_ICESL"      />
+            <result property="itemTide"    column="ITEM_TIDE"    />
+            <result property="itemOthe"    column="ITEM_OTHE"    />
+            <result property="tS"    column="TS"    />
+            <result property="nT"    column="NT"    />
+        </collection>
+        <collection property="z" ofType="com.ruoyi.web.domian.WrStZR" >
+            <id     property="stcd"      column="STCD"      />
+            <result property="tM"    column="TM"    />
+            <result property="z"     column="Z"     />
+        </collection>
+        <collection property="q" ofType="com.ruoyi.web.domian.WrStMqR" >
+            <id     property="stcd"      column="STCD"      />
+            <result property="tM"    column="TM"    />
+            <result property="q"     column="Q"     />
+        </collection>
+        <collection property="w" ofType="com.ruoyi.web.domian.WrStWR" >
+            <id     property="stcd"      column="STCD"      />
+            <result property="tM"    column="TM"    />
+            <result property="w"     column="W"     />
+        </collection>
+    </resultMap>
+
+    <select id="selectWadiInfoList" parameterType="com.ruoyi.web.domian.SearchRequest" resultMap="BaseResult">
+        SELECT a.STCD, a.ST_NM, a.LOC, a.DAT_ELEV, b.Z, c.Q, d.W, e.ITEM_Z, e.ITEM_Q, b.TM
+        FROM wr_stat_b AS a
+        LEFT JOIN wr_st_z_r AS b ON a.STCD = b.STCD
+        LEFT JOIN wr_st_mq_r AS c ON a.STCD = c.STCD
+        LEFT JOIN wr_st_w_r AS d ON a.STCD = d.STCD
+        LEFT JOIN wr_stat_item_b AS e ON a.STCD = e.STCD
+        WHERE e.ITEM_Z = 1 AND e.ITEM_Q = 1
+        <if test="stNm !=null and stNm != ''">
+            AND a.ST_NM LIKE CONCAT( '%' , #{stNm}, '%')
+        </if>
+        <if test="tS != null and tS != ''">
+            AND b.TM = #{tS}
+            AND c.TM = #{tS}
+            AND d.TM = #{tS}
+        </if>
+    </select>
+
+
+</mapper>
