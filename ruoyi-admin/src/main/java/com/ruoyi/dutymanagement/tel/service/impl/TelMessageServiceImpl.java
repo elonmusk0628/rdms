@@ -58,7 +58,7 @@ public class TelMessageServiceImpl implements ITelMessageService {
         List<TelInfoVO> telInfoVOList = telMessageMapper.getRobotData(status);
         if (telInfoVOList.size() == 1) {
             for (TelInfoVO telInfoVO : telInfoVOList) {
-                String theTelTime = DateUtils.dateRurnString(telInfoVO.getTelTime());
+                String theTelTime = telInfoVO.getTelTime();
                 String theElectricity = telInfoVO.getTheElectricityUnit();
                 String theUserName = telInfoVO.getUserName();
                 String theTel = telInfoVO.getTel();

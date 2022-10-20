@@ -39,7 +39,7 @@ public class TelInfoEntity {
     @Basic
     @Column(name = "tel_time")
     /** 来电时间*/
-    private Date telTime;
+    private String telTime;
     @Basic
     @Column(name = "answer_people")
     /** 接听人*/

@@ -34,6 +34,7 @@
         ageing as ageing,
         send_time as sendTime,
         business_type as businessType,
+        remark as remark,
         status as status,
         content as content,
         signa_ture as signaTure,

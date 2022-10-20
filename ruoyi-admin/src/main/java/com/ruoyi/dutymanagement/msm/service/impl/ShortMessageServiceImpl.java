@@ -99,7 +99,7 @@ public class ShortMessageServiceImpl implements IShortMessageService {
     public void add(MsmParam msmParam) throws ParseException {
         MsmEntity msmEntity = new MsmEntity();
         msmEntity.setAgeing(msmParam.getAgeing());
-        Date sendTime = DateUtils.stringTurnDate(msmParam.getSendTime());
+        String sendTime = msmParam.getSendTime();
         msmEntity.setSendTime(sendTime);
         msmEntity.setBusinessType(msmParam.getBusinessType());
         msmEntity.setStatus(msmParam.getStatus());

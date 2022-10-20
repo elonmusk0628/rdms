@@ -21,7 +21,7 @@ public class TelInfoVO {
 
     private String userName;
 
-    private Date telTime;
+    private String telTime;
 
     private String answerPeople;
 

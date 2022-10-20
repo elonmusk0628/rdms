@@ -106,7 +106,8 @@ public class HttpClientServiceImpl implements IHttpClientService {
                         //类型转换
                         String ageing = String.valueOf(object.get("ageing"));
                         int sendInfoId = Integer.parseInt(String.valueOf(object.get("sendInfoId")));
-                        Date sendTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(String.valueOf(object.get("sendTime")));
+                        Date dateTime = new SimpleDateFormat("yyyy-MM-dd").parse(String.valueOf(object.get("sendTime")));
+                        String sendTime = DateUtils.dateRurnStrFormat(dateTime);
                         Date createTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(String.valueOf(object.get("createTime")));
                         String createBy = String.valueOf(object.get("createBy"));
                         String content = String.valueOf(object.get("content"));
@@ -403,7 +404,7 @@ public class HttpClientServiceImpl implements IHttpClientService {
                         String theElectricityUnit = String.valueOf(object.get("theElectricityUnit"));
                         String tel = String.valueOf(object.get("tel"));
                         String userName = String.valueOf(object.get("userName"));
-                        String telTime = String.valueOf(object.get("telTime"));
+                        Date telTime = DateUtils.stringTurnDate(String.valueOf(object.get("telTime")));
                         String answerPeople = String.valueOf(object.get("answerPeople"));
                         String phone = String.valueOf(object.get("phone"));
                         String title = String.valueOf(object.get("title"));
@@ -415,7 +416,7 @@ public class HttpClientServiceImpl implements IHttpClientService {
                         telInfoEntity.setTheElectricityUnit(theElectricityUnit);
                         telInfoEntity.setTel(tel);
                         telInfoEntity.setUserName(userName);
-                        telInfoEntity.setTelTime(DateUtils.stringTurnDate(telTime));
+                        telInfoEntity.setTelTime(DateUtils.dateRurnStrFormat(telTime));
                         telInfoEntity.setAnswerPeople(answerPeople);
                         telInfoEntity.setPhone(phone);
                         telInfoEntity.setTitle(title);
