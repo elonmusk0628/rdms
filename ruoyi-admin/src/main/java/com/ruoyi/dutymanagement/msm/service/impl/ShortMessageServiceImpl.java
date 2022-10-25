@@ -10,7 +10,6 @@ import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
 import com.ruoyi.dutymanagement.msm.service.IShortMessageService;
 import com.ruoyi.dutymanagement.msm.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +21,7 @@ import java.util.List;
  * 短信管理服务实现层
  *
  * @Author fenghan
+ * @Date 2022-09-02
  */
 @Service
 @Transactional
@@ -122,17 +122,19 @@ public class ShortMessageServiceImpl implements IShortMessageService {
         String token = tokenHttpPostClientService.getToken(loginInfo);
         return token;
     }
+
     /**
      * 当天未读新短信数
+     *
      * @param msmParam
      * @return
      */
     @Override
     public int getMsmCount(MsmParam msmParam) {
-        if(msmParam.getStartDate()==null){
+        if (msmParam.getStartDate() == null) {
             msmParam.setStartDate(DateUtils.dateRurnStrFormat(new Date()));
         }
-        if(msmParam.getEndDate() == null){
+        if (msmParam.getEndDate() == null) {
             msmParam.setEndDate(DateUtils.dateRurnStrFormat(new Date()));
         }
         int msmCount = shortMessageMapper.getMsmCount(msmParam);

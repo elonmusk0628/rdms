@@ -8,7 +8,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-
+/**
+ * 定时任务
+ *
+ * @Author fenghan
+ * @Date 2022-09-28
+ */
 @Configuration      //1.主要用于标记配置类，兼备Component的效果。
 @EnableScheduling   // 2.开启定时任务
 public class ScheduleTask {
@@ -16,7 +21,11 @@ public class ScheduleTask {
     @Autowired
     private IHttpClientService taskHttpClientService;
 
-    //3.添加定时任务
+    /**
+     * 添加定时任务
+     *
+     * @throws Exception
+     */
     @Scheduled(cron = "0/1500 * * * * ?")
     private void configureTasks() throws Exception {
         LoginInfo loginInfo = new LoginInfo();

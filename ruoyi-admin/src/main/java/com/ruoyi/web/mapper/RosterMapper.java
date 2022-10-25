@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
  * 值班 数据交互层
  *
  * @Author fenghan
+ * @Date 2022-10-8
  */
 @Repository
 public interface RosterMapper {
@@ -52,5 +53,5 @@ public interface RosterMapper {
      * @param scheduleType
      * @return
      */
-    RosterEntity getRosterByTypeAndId(@Param("scheduleId")Integer scheduleId, @Param("scheduleType")String scheduleType);
+    RosterEntity getRosterByTypeAndId(@Param("scheduleId") Integer scheduleId, @Param("scheduleType") String scheduleType);
 }

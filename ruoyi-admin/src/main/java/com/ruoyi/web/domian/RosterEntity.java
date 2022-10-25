@@ -8,6 +8,7 @@ import javax.persistence.*;
  * 成员信息表实体
  *
  * @Author fenghan
+ * @Date 2022-10-8
  */
 @Data
 @Entity

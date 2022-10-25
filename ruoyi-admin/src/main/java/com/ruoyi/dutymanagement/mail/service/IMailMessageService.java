@@ -10,6 +10,7 @@ import java.util.List;
  * 邮件管理服务层
  *
  * @Author fenghan
+ * @Date 2022-09-08
  */
 public interface IMailMessageService {
     /**
@@ -33,7 +34,7 @@ public interface IMailMessageService {
      *
      * @return
      */
-    String getJsonObject(String token,String fAccess) throws Exception;
+    String getJsonObject(String token, String fAccess) throws Exception;
 
     /**
      * 机器人接口
@@ -49,8 +50,10 @@ public interface IMailMessageService {
      * @return
      */
     String getMailFAccess(LoginInfo loginInfo) throws Exception;
+
     /**
      * 获取当天未读新邮件数
+     *
      * @param mailParam
      * @return
      */

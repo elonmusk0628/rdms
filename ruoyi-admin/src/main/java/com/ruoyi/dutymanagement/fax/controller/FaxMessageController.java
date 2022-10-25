@@ -8,7 +8,6 @@ import com.ruoyi.dutymanagement.fax.domain.vo.FaxVO;
 import com.ruoyi.dutymanagement.fax.service.IFaxMessageService;
 import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
 import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
-import com.ruoyi.web.common.enums.ExceptionEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +18,7 @@ import java.util.List;
  * 传真管理控制层
  *
  * @Author fenghan
+ * @Date 2022-09-12
  */
 @RestController()
 @RequestMapping("/fax/message")
@@ -72,7 +72,7 @@ public class FaxMessageController extends BaseController {
         String token = faxHttpClientService.getToken(loginInfo);
         //获取fAccess
         String fAccess = faxHttpClientService.getFAccess(token);
-        String jsonObject = faxMessageService.getJsonObject(token,fAccess);
+        String jsonObject = faxMessageService.getJsonObject(token, fAccess);
         return AjaxResult.success(jsonObject);
     }
 
@@ -92,8 +92,10 @@ public class FaxMessageController extends BaseController {
         }
         return AjaxResult.success(messageContent);
     }
+
     /**
      * 当天未读新传真数
+     *
      * @param faxParam
      * @return
      */

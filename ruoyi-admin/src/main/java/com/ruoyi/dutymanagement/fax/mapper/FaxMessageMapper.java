@@ -12,6 +12,7 @@ import java.util.List;
  * 传真管理数据交互层
  *
  * @Author fenghan
+ * @Date 2022-09-12
  */
 @Repository
 public interface FaxMessageMapper {
@@ -78,6 +79,7 @@ public interface FaxMessageMapper {
 
     /**
      * 当天未读新传真数
+     *
      * @param faxParam
      * @return
      */

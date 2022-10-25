@@ -16,6 +16,7 @@ import java.util.List;
  * 电话服务业务逻辑层
  *
  * @Author fenghan
+ * @Date 2022-09-16
  */
 @Service
 @Transactional
@@ -78,17 +79,19 @@ public class TelMessageServiceImpl implements ITelMessageService {
         }
         return resultStr;
     }
+
     /**
      * 当天未读新来电数
+     *
      * @param telInfoParam
      * @return
      */
     @Override
     public int getTelCount(TelInfoParam telInfoParam) {
-        if(telInfoParam.getStartDate()==null){
+        if (telInfoParam.getStartDate() == null) {
             telInfoParam.setStartDate(DateUtils.dateRurnStrFormat(new Date()));
         }
-        if(telInfoParam.getEndDate() == null){
+        if (telInfoParam.getEndDate() == null) {
             telInfoParam.setEndDate(DateUtils.dateRurnStrFormat(new Date()));
         }
         int telCount = telMessageMapper.getTelCount(telInfoParam);

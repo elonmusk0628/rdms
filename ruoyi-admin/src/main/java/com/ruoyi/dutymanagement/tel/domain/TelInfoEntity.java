@@ -9,6 +9,7 @@ import java.util.Date;
  * 电话记录实体
  *
  * @Author fenghan
+ * @Date 2022-09-16
  */
 @Entity
 @Table(name = "tel_info", schema = "rdms")

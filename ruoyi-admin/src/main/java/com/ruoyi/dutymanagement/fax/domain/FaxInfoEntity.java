@@ -10,6 +10,7 @@ import java.util.Date;
  * 传真附件实体类
  *
  * @Author fenghan
+ * @Date 2022-09-12
  */
 @Entity
 @Table(name = "fax_attachment", schema = "rdms")

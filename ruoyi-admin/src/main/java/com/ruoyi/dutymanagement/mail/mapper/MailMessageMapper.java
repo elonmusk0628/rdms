@@ -12,6 +12,7 @@ import java.util.List;
  * 邮件管理数据交互层
  *
  * @Author fenghan
+ * @Date 2022-09-08
  */
 @Repository
 public interface MailMessageMapper {
@@ -71,11 +72,14 @@ public interface MailMessageMapper {
 
     /**
      * 新增邮件附件信息
+     *
      * @param mailInfoEntity
      */
     void addMailAttachMent(MailInfoEntity mailInfoEntity);
+
     /**
      * 获取当天未读新邮件数
+     *
      * @param mailParam
      * @return
      */

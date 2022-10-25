@@ -10,6 +10,7 @@ import java.sql.Timestamp;
  * 邮件附件实体类
  *
  * @Author fenghan
+ * @Date 2022-09-08
  */
 @Entity
 @Table(name = "mail_attachment", schema = "rdms")

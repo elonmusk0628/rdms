@@ -52,6 +52,7 @@ import java.util.Date;
  * 调外系统接口实现
  *
  * @Author fenghan
+ * @Date 2022-09-02
  */
 @Service
 @Transactional
@@ -82,7 +83,7 @@ public class HttpClientServiceImpl implements IHttpClientService {
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
-        HttpGet httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/fxb/sendinfo/getMore");
+        HttpGet httpGet = new HttpGet(BaseConstants.IP + ":" + BaseConstants.PORT + "/zwfxzb/fxb/sendinfo/getMore");
         //Get请求中添加token
         httpGet.addHeader("Authorization", token);
         //入库对象
@@ -174,15 +175,16 @@ public class HttpClientServiceImpl implements IHttpClientService {
 
     /**
      * 调其它系统接口
+     *
      * @param token fAccess
      * @return
      */
     @Override
-    public String doMail(String token,String fAccess) throws Exception {
+    public String doMail(String token, String fAccess) throws Exception {
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
-        HttpGet httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/baseFile/mailMsg/list");
+        HttpGet httpGet = new HttpGet(BaseConstants.IP + ":" + BaseConstants.PORT + "/zwfxzb/baseFile/mailMsg/list");
         //Get请求中添加token
         httpGet.addHeader("Authorization", token);
         //Gtt请求中添加鉴权码F-Access
@@ -277,11 +279,11 @@ public class HttpClientServiceImpl implements IHttpClientService {
      * @return
      */
     @Override
-    public String doFax(String token,String fAccess) throws Exception {
+    public String doFax(String token, String fAccess) throws Exception {
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
-        HttpGet httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/baseFile/filemanage/list?category=3");
+        HttpGet httpGet = new HttpGet(BaseConstants.IP + ":" + BaseConstants.PORT + "/zwfxzb/baseFile/filemanage/list?category=3");
         //Get请求中添加token
         httpGet.addHeader("Authorization", token);
         //Gtt请求中添加鉴权码F-Access
@@ -373,11 +375,11 @@ public class HttpClientServiceImpl implements IHttpClientService {
      * @return
      */
     @Override
-    public String doTel(String token,String fAccess) throws Exception {
+    public String doTel(String token, String fAccess) throws Exception {
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
-        HttpGet httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/fxb/telrecord/list");
+        HttpGet httpGet = new HttpGet(BaseConstants.IP + ":" + BaseConstants.PORT + "/zwfxzb/fxb/telrecord/list");
         //Get请求中添加token
         httpGet.addHeader("Authorization", token);
         //Gtt请求中添加鉴权码F-Access
@@ -448,19 +450,21 @@ public class HttpClientServiceImpl implements IHttpClientService {
         }
         return null;
     }
+
     /**
      * 调值班管理系统排班接口
+     *
      * @param token
      * @param fAccess
      * @return
      * @throws Exception
      */
     @Override
-    public String doRostering(String token,String fAccess) throws Exception {
+    public String doRostering(String token, String fAccess) throws Exception {
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
-        HttpGet httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/schedule/info/V2/list");
+        HttpGet httpGet = new HttpGet(BaseConstants.IP + ":" + BaseConstants.PORT + "/zwfxzb/schedule/info/V2/list");
         //Get请求中添加token
         httpGet.addHeader("Authorization", token);
         //Gtt请求中添加鉴权码F-Access
@@ -497,12 +501,12 @@ public class HttpClientServiceImpl implements IHttpClientService {
                         //副班人列表
                         Object onDutier2 = object.get("onDutier2");
                         //数据组装
-                        if(createBy == null || "".equals(createBy)){
+                        if (createBy == null || "".equals(createBy)) {
                             rosteringEntity.setCreateBy("admin");
                         } else {
                             rosteringEntity.setCreateBy(createBy);
                         }
-                        if(createTime != null && !"".equals(createTime) && !"null".equals(createTime)){
+                        if (createTime != null && !"".equals(createTime) && !"null".equals(createTime)) {
                             rosteringEntity.setCreateTime(createTime);
                         } else {
                             rosteringEntity.setCreateTime(date);
@@ -542,9 +546,9 @@ public class HttpClientServiceImpl implements IHttpClientService {
                                 }
                             }
                             //解析值班人列表
-                            if(onDutier1 == null){
+                            if (onDutier1 == null) {
                                 continue;
-                            }else {
+                            } else {
                                 String objectStr = onDutier1.toString();
                                 JSONArray jsonArrayItem = JSONArray.parseArray(objectStr);
                                 for (int k = 0; k < jsonArrayItem.size(); k++) {
@@ -566,9 +570,9 @@ public class HttpClientServiceImpl implements IHttpClientService {
                                 }
                             }
                             //解析副班人列表
-                            if(onDutier2 == null){
+                            if (onDutier2 == null) {
                                 continue;
-                            }else {
+                            } else {
                                 String objectStr = onDutier2.toString();
                                 JSONArray jsonArrayItem = JSONArray.parseArray(objectStr);
                                 for (int z = 0; z < jsonArrayItem.size(); z++) {
@@ -578,7 +582,7 @@ public class HttpClientServiceImpl implements IHttpClientService {
                                     String scheduleType = String.valueOf(objectItem.get("scheduleType"));
                                     String userIdStr = String.valueOf(objectItem.get("userId"));
                                     int userId = 0;
-                                    if(userIdStr != "null"){
+                                    if (userIdStr != "null") {
                                         userId = Integer.parseInt(userIdStr);
                                     }
                                     String nickName = String.valueOf(objectItem.get("nickName"));
@@ -625,7 +629,7 @@ public class HttpClientServiceImpl implements IHttpClientService {
         // 1. 创建HttpClient对象
         CloseableHttpClient client = HttpClientBuilder.create().build();
         // 2. 创建HttpPost对象
-        HttpPost post = new HttpPost(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/login");
+        HttpPost post = new HttpPost(BaseConstants.IP + ":" + BaseConstants.PORT + "/zwfxzb/login");
         String token = "";
         HttpResponse res = null;
         try {
@@ -660,6 +664,7 @@ public class HttpClientServiceImpl implements IHttpClientService {
         }
         return token;
     }
+
     /**
      * 获取鉴权码F-Access
      *
@@ -671,7 +676,7 @@ public class HttpClientServiceImpl implements IHttpClientService {
         String fAccess = null;
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        HttpGet httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/fxb/file/fileAuth");
+        HttpGet httpGet = new HttpGet(BaseConstants.IP + ":" + BaseConstants.PORT + "/zwfxzb/fxb/file/fileAuth");
         HttpResponse res = null;
         try {
             //Get请求中添加token
@@ -702,8 +707,10 @@ public class HttpClientServiceImpl implements IHttpClientService {
         }
         return fAccess;
     }
+
     /**
-     *获取http请求数据
+     * 获取http请求数据
+     *
      * @param sign
      * @return
      * @throws Exception
@@ -720,14 +727,14 @@ public class HttpClientServiceImpl implements IHttpClientService {
         // 1. 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         // 2. 创建HttpGet对象
-        if("FAX".equals(sign)){
-            httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/baseFile/filemanage/list?category=3");
-        }else if("MAIL".equals(sign)){
-            httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/baseFile/mailMsg/list");
-        }else if("MSM".equals(sign)){
-            httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/fxb/sendinfo/getMore");
-        }else if ("TEL".equals(sign)){
-            httpGet = new HttpGet(BaseConstants.IP+":"+BaseConstants.PORT+"/zwfxzb/fxb/telrecord/list");
+        if ("FAX".equals(sign)) {
+            httpGet = new HttpGet(BaseConstants.IP + ":" + BaseConstants.PORT + "/zwfxzb/baseFile/filemanage/list?category=3");
+        } else if ("MAIL".equals(sign)) {
+            httpGet = new HttpGet(BaseConstants.IP + ":" + BaseConstants.PORT + "/zwfxzb/baseFile/mailMsg/list");
+        } else if ("MSM".equals(sign)) {
+            httpGet = new HttpGet(BaseConstants.IP + ":" + BaseConstants.PORT + "/zwfxzb/fxb/sendinfo/getMore");
+        } else if ("TEL".equals(sign)) {
+            httpGet = new HttpGet(BaseConstants.IP + ":" + BaseConstants.PORT + "/zwfxzb/fxb/telrecord/list");
         }
         //Get请求中添加token
         httpGet.addHeader("Authorization", token);

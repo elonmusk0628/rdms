@@ -47,6 +47,9 @@
         <if test="content!=null and content!=''">
             AND content like concat ('%',#{content},'%')
         </if>
+        <if test="remark!=null and remark!=''">
+            AND remark like concat ('%',#{remark},'%')
+        </if>
         <if test="success!=null and success!=''">
             AND success = #{success}
         </if>
