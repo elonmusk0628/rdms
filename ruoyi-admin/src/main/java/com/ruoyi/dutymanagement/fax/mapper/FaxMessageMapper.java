@@ -75,4 +75,11 @@ public interface FaxMessageMapper {
      * @param id
      */
     void updateStatus(Integer id);
+
+    /**
+     * 当天未读新传真数
+     * @param faxParam
+     * @return
+     */
+    int getFaxCount(FaxParam faxParam);
 }

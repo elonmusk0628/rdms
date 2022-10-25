@@ -54,4 +54,10 @@ public interface IShortMessageService {
      * @return
      */
     String getToken(LoginInfo loginInfo) throws Exception;
+    /**
+     * 当天未读新短信数
+     * @param msmParam
+     * @return
+     */
+    int getMsmCount(MsmParam msmParam);
 }

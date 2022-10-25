@@ -152,6 +152,10 @@ public interface BaseConstants {
 
     String PORT = "18092";
 
+    String USER_NAME = "admin";
+
+    String PASS_WORD = "Fyc@87117781";
+
     String TODAY = "今天";
 
     String TOMORROW = "明天";

@@ -41,5 +41,11 @@ public interface IFaxMessageService {
      * @return
      */
     String getRobotData(String status);
+    /**
+     * 当天未读新传真数
+     * @param faxParam
+     * @return
+     */
+    int getFaxCount(FaxParam faxParam);
 
 }

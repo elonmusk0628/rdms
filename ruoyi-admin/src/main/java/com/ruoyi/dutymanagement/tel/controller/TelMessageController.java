@@ -90,4 +90,18 @@ public class TelMessageController extends BaseController {
         }
         return AjaxResult.success(messageContent);
     }
+
+    /**
+     * 当天未读新来电数
+     * @param telInfoParam
+     * @return
+     */
+    @GetMapping("/getTelCount")
+    public AjaxResult getTelCount(TelInfoParam telInfoParam) {
+        if (telInfoParam.getStatus() == null || "".equals(telInfoParam.getStatus())) {
+            return AjaxResult.error("status参数不能为空！");
+        }
+        int telCount = telMessageService.getTelCount(telInfoParam);
+        return AjaxResult.success(telCount);
+    }
 }

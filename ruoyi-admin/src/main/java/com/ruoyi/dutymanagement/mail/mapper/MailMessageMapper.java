@@ -69,5 +69,15 @@ public interface MailMessageMapper {
      */
     void updateMailStatus(int id);
 
-    void addMailInfo(MailInfoEntity mailInfoEntity);
+    /**
+     * 新增邮件附件信息
+     * @param mailInfoEntity
+     */
+    void addMailAttachMent(MailInfoEntity mailInfoEntity);
+    /**
+     * 获取当天未读新邮件数
+     * @param mailParam
+     * @return
+     */
+    int getMailCount(MailParam mailParam);
 }

@@ -34,4 +34,11 @@ public interface ITelMessageService {
      * @return
      */
     String getRobotData(String status);
+
+    /**
+     * 当天未读新来电数
+     * @param telInfoParam
+     * @return
+     */
+    int getTelCount(TelInfoParam telInfoParam);
 }

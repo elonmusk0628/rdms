@@ -3,6 +3,7 @@ package com.ruoyi.dutymanagement.msm.controller;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.dutymanagement.fax.domain.param.FaxParam;
 import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
 import com.ruoyi.dutymanagement.msm.domain.param.MsmParam;
 import com.ruoyi.dutymanagement.msm.domain.vo.MsmVO;
@@ -113,5 +114,18 @@ public class ShortMessageController extends BaseController {
     public AjaxResult getToken(@RequestBody LoginInfo loginInfo) throws Exception {
         String token = shortMessageService.getToken(loginInfo);
         return AjaxResult.success(token);
+    }
+    /**
+     * 当天未读新短信数
+     * @param msmParam
+     * @return
+     */
+    @GetMapping("/getMsmCount")
+    public AjaxResult getMsmCount(MsmParam msmParam) {
+        if (msmParam.getStatus() == null) {
+            return AjaxResult.error("status参数不能为空！");
+        }
+        int msmCount = shortMessageService.getMsmCount(msmParam);
+        return AjaxResult.success(msmCount);
     }
 }

@@ -128,7 +128,7 @@
     <update id="updateMailStatus">
         update mail set status ="1" where id=#{id}
     </update>
-    <insert id="addMailInfo" useGeneratedKeys="true" keyProperty="item_id" parameterType="MailInfoEntity">
+    <insert id="addMailAttachMent" useGeneratedKeys="true" keyProperty="item_id" parameterType="MailInfoEntity">
         insert into mail_attachment (
             main_id,
             file_id,
@@ -160,5 +160,13 @@
         WHERE
             1 = 1
           AND message_Id = #{messageId}
+    </select>
+    <select id="getMailCount" parameterType="MailParam" resultType="Integer">
+        select
+            count(0)
+        from mail
+        where 1=1
+          and received_date BETWEEN #{startDate} AND #{endDate}
+          and status = #{status}
     </select>
 </mapper>

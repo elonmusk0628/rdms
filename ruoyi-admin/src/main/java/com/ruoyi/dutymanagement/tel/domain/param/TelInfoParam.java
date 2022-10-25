@@ -21,6 +21,6 @@ public class TelInfoParam {
     private String startDate;
     //来电结束时间
     private String endDate;
-
+    //状态
     private String status;
 }

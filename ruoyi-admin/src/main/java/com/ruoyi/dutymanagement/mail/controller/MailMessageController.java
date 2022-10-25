@@ -115,4 +115,18 @@ public class MailMessageController extends BaseController {
         String fAccess = mailMessageService.getMailFAccess(loginInfo);
         return AjaxResult.success(fAccess);
     }
+
+    /**
+     * 获取当天未读新邮件数
+     * @param mailParam
+     * @return
+     */
+    @GetMapping("/getMailCount")
+    public AjaxResult getMailCount(MailParam mailParam) {
+        if (mailParam.getStatus() == null) {
+            return AjaxResult.error("status参数不能为空！");
+        }
+        int mailCount = mailMessageService.getMailCount(mailParam);
+        return AjaxResult.success(mailCount);
+    }
 }

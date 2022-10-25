@@ -4,6 +4,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
 import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
+import com.ruoyi.web.common.constant.BaseConstants;
 import com.ruoyi.web.common.enums.ExceptionEnum;
 import com.ruoyi.web.service.IRosterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +55,8 @@ public class RosterController {
             return AjaxResult.error(ExceptionEnum.NULL_REQUEST_PARAM.getErrorMsg());
         }
         LoginInfo loginInfo = new LoginInfo();
-        loginInfo.setUsername("admin");
-        loginInfo.setPassword("Fyc@87117781");
+        loginInfo.setUsername(BaseConstants.USER_NAME);
+        loginInfo.setPassword(BaseConstants.PASS_WORD);
         //获取token
         String token = rosterHttpClientService.getToken(loginInfo);
         //获取fAccess

@@ -67,4 +67,11 @@ public interface TelMessageMapper {
      * @param id
      */
     void updateTelStatus(Integer id);
+
+    /**
+     * 当天未读新来电数
+     * @param telInfoParam
+     * @return
+     */
+    int getTelCount(TelInfoParam telInfoParam);
 }

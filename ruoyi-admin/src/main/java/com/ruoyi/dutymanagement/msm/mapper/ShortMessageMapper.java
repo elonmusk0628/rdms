@@ -67,4 +67,10 @@ public interface ShortMessageMapper {
      * @param id
      */
     void updatMsmStatus(Integer id);
+    /**
+     * 当天未读新短信数
+     * @param msmParam
+     * @return
+     */
+    int getMsmCount(MsmParam msmParam);
 }

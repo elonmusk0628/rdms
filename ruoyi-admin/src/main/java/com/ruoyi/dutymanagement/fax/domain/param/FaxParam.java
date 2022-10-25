@@ -21,4 +21,6 @@ public class FaxParam {
 
     /** 结束日期 */
     private String endDate;
+    /** 状态 */
+    private String status;
 }

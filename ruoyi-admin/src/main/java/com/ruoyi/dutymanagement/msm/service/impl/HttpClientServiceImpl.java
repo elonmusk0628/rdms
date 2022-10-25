@@ -246,7 +246,7 @@ public class HttpClientServiceImpl implements IHttpClientService {
                                     mailInfoEntity.setFileId(fileId);
                                     mailInfoEntity.setFileName(fileName);
                                     //附件入库
-                                    mailMessageMapper.addMailInfo(mailInfoEntity);
+                                    mailMessageMapper.addMailAttachMent(mailInfoEntity);
                                 }
                             }
                         } else {
@@ -710,8 +710,8 @@ public class HttpClientServiceImpl implements IHttpClientService {
      */
     public JSONObject getHttpClientService(String sign) throws Exception {
         LoginInfo loginInfo = new LoginInfo();
-        loginInfo.setUsername("admin");
-        loginInfo.setPassword("Fyc@87117781");
+        loginInfo.setUsername(BaseConstants.USER_NAME);
+        loginInfo.setPassword(BaseConstants.PASS_WORD);
         HttpGet httpGet = null;
         //获取token
         String token = getToken(loginInfo);

@@ -49,4 +49,10 @@ public interface IMailMessageService {
      * @return
      */
     String getMailFAccess(LoginInfo loginInfo) throws Exception;
+    /**
+     * 获取当天未读新邮件数
+     * @param mailParam
+     * @return
+     */
+    int getMailCount(MailParam mailParam);
 }

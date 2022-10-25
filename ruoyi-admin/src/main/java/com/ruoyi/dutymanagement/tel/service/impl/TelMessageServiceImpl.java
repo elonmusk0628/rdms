@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -76,5 +77,21 @@ public class TelMessageServiceImpl implements ITelMessageService {
             return null;
         }
         return resultStr;
+    }
+    /**
+     * 当天未读新来电数
+     * @param telInfoParam
+     * @return
+     */
+    @Override
+    public int getTelCount(TelInfoParam telInfoParam) {
+        if(telInfoParam.getStartDate()==null){
+            telInfoParam.setStartDate(DateUtils.dateRurnStrFormat(new Date()));
+        }
+        if(telInfoParam.getEndDate() == null){
+            telInfoParam.setEndDate(DateUtils.dateRurnStrFormat(new Date()));
+        }
+        int telCount = telMessageMapper.getTelCount(telInfoParam);
+        return telCount;
     }
 }

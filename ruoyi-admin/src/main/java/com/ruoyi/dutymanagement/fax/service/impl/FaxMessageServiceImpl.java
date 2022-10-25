@@ -6,11 +6,13 @@ import com.ruoyi.dutymanagement.fax.domain.vo.FaxVO;
 import com.ruoyi.dutymanagement.fax.mapper.FaxMessageMapper;
 import com.ruoyi.dutymanagement.fax.service.IFaxMessageService;
 import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
+import com.ruoyi.dutymanagement.msm.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -95,5 +97,21 @@ public class FaxMessageServiceImpl implements IFaxMessageService {
             return null;
         }
         return resultStr;
+    }
+    /**
+     * 当天未读新传真数
+     * @param faxParam
+     * @return
+     */
+    @Override
+    public int getFaxCount(FaxParam faxParam) {
+        if(faxParam.getStartDate()==null){
+            faxParam.setStartDate(DateUtils.dateRurnStrFormat(new Date()));
+        }
+        if(faxParam.getEndDate() == null){
+            faxParam.setEndDate(DateUtils.dateRurnStrFormat(new Date()));
+        }
+        int faxCount = faxMessageMapper.getFaxCount(faxParam);
+        return faxCount;
     }
 }

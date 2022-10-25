@@ -8,6 +8,7 @@ import com.ruoyi.dutymanagement.fax.domain.vo.FaxVO;
 import com.ruoyi.dutymanagement.fax.service.IFaxMessageService;
 import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
 import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
+import com.ruoyi.web.common.enums.ExceptionEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class FaxMessageController extends BaseController {
      * @return
      */
     @PreAuthorize("@ss.hasPermi('fax:message:list')")
-        @GetMapping("/getFaxList")
+    @GetMapping("/getFaxList")
     public TableDataInfo getFaxList(FaxParam faxParam) {
         startPage();
         List<FaxVO> faxVOList = faxMessageService.getFaxList(faxParam);
@@ -90,5 +91,18 @@ public class FaxMessageController extends BaseController {
             AjaxResult.error("没有新消息！");
         }
         return AjaxResult.success(messageContent);
+    }
+    /**
+     * 当天未读新传真数
+     * @param faxParam
+     * @return
+     */
+    @GetMapping("/getFaxCount")
+    public AjaxResult getFaxCount(FaxParam faxParam) {
+        if (faxParam.getStatus() == null) {
+            return AjaxResult.error("status参数不能为空！");
+        }
+        int faxCount = faxMessageService.getFaxCount(faxParam);
+        return AjaxResult.success(faxCount);
     }
 }

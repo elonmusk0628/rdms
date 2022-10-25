@@ -122,4 +122,20 @@ public class ShortMessageServiceImpl implements IShortMessageService {
         String token = tokenHttpPostClientService.getToken(loginInfo);
         return token;
     }
+    /**
+     * 当天未读新短信数
+     * @param msmParam
+     * @return
+     */
+    @Override
+    public int getMsmCount(MsmParam msmParam) {
+        if(msmParam.getStartDate()==null){
+            msmParam.setStartDate(DateUtils.dateRurnStrFormat(new Date()));
+        }
+        if(msmParam.getEndDate() == null){
+            msmParam.setEndDate(DateUtils.dateRurnStrFormat(new Date()));
+        }
+        int msmCount = shortMessageMapper.getMsmCount(msmParam);
+        return msmCount;
+    }
 }
