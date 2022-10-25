@@ -1,225 +1,209 @@
 <template>
   <div class="home-page">
     <el-row :gutter="10">
-      <el-col :span="6">
+      <el-card style="height: 260px;margin: 0 5px 10px;">
+        <el-col :span="24" style="margin: 20px 0;">
+          <span>今日值班概况</span>
+        </el-col>
+        <el-col :span="6">
+          <el-card class="duty-card" @click.native="handleJump('email')">
+            <svg-icon class="icon" icon-class="email" />
+            <div>邮件数量</div>
+            <span>{{emailNum}}</span>
+          </el-card>
+        </el-col>
+
+        <el-col :span="6">
+          <el-card class="duty-card" @click.native="handleJump('fax')">
+            <svg-icon class="icon" icon-class="fax" />
+            <div>传真数量</div>
+            <span>{{faxNum}}</span>
+          </el-card>
+        </el-col>
+
+        <el-col :span="6">
+          <el-card class="duty-card" @click.native="handleJump('msm')">
+            <svg-icon class="icon" icon-class="msm" />
+            <div>短信数量</div>
+            <span>{{msmNum}}</span>
+          </el-card>
+        </el-col>
+
+        <el-col :span="6">
+          <el-card class="duty-card" @click.native="handleJump('telephone')">
+            <svg-icon class="icon" icon-class="telephone" />
+            <div>电话数量</div>
+            <span>{{telephoneNum}}</span>
+          </el-card>
+        </el-col>
+      </el-card>
+      <el-col :span="12" class="pie-duty">
         <el-card>
-          <div slot="header">
-            <span>邮件管理</span>
-            <el-button
-              style="float: right; padding: 3px 0"
-              type="text"
-              icon="el-icon-refresh-right"
-              @click="refreshEmail()"
-            ></el-button>
+          <div slot="header"><span>值班统计</span></div>
+          <div class="el-table el-table--enable-row-hover el-table--medium">
+            <div ref="dutyCompare" style="height: 420px" />
           </div>
-          <el-table
-            v-loading="emailLoading"
-            :data="email"
-            style="width: 100%"
-          >
-            <el-table-column label="序号" align="center" width="50">
-              <template slot-scope="scope">
-                {{ scope.$index + 1 }}
-              </template>
-            </el-table-column>
-            <el-table-column label="邮箱类型" align="center" width="100">
-              <template slot-scope="scope">
-                <div>{{ scope.row.mailType=='163'?'163邮箱':(scope.row.mailType=='pearlwater'?'珠江委邮箱':'') }}</div>
-              </template>
-            </el-table-column>
-            <el-table-column label="标题" align="center" prop="mailName" :show-overflow-tooltip="true" />
-            <el-table-column label="发送地址" align="center" prop="address" :show-overflow-tooltip="true" />
-          </el-table>
         </el-card>
       </el-col>
 
-      <el-col :span="6">
+      <el-col :span="12" class="bar-login">
         <el-card>
-          <div slot="header">
-            <span>传真管理</span>
-            <el-button
-              style="float: right; padding: 3px 0"
-              type="text"
-              icon="el-icon-refresh-right"
-              @click="refreshFax()"
-            ></el-button>
+          <div slot="header"><span>登录信息</span></div>
+          <div class="el-table el-table--enable-row-hover el-table--medium">
+            <div ref="loginBar" style="height: 420px" />
           </div>
-          <el-table
-            v-loading="faxLoading"
-            :data="fax"
-            style="width: 100%"
-          >
-            <el-table-column label="序号" align="center" width="50">
-              <template slot-scope="scope">
-                {{ scope.$index + 1 }}
-              </template>
-            </el-table-column>
-            <el-table-column label="标题" align="center" prop="name" :show-overflow-tooltip="true" />
-            <el-table-column label="编号" align="center" prop="fileNum" :show-overflow-tooltip="true" />
-            <el-table-column label="附件" align="center" :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-                <span>{{ scope.row.fileName == null ? '无' : scope.row.fileName }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="发文时间" align="center" width="180">
-              <template slot-scope="scope">
-                <span>{{ scope.row.draftDate }}</span>
-              </template>
-            </el-table-column>
-          </el-table>
         </el-card>
       </el-col>
-
-      <el-col :span="6">
-        <el-card>
-          <div slot="header">
-            <span>短信管理</span>
-            <el-button
-              style="float: right; padding: 3px 0"
-              type="text"
-              icon="el-icon-refresh-right"
-              @click="refreshMsm()"
-            ></el-button>
-          </div>
-          <el-table
-            v-loading="msmLoading"
-            :data="msm"
-            style="width: 100%"
-          >
-            <el-table-column label="序号" align="center" width="100">
-              <template slot-scope="scope">
-                {{ scope.$index + 1 }}
-              </template>
-            </el-table-column>
-            <el-table-column label="收件人" align="center" :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-                <span>{{ scope.row.remark == null ? '无' : scope.row.remark }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="署名" align="center" prop="signaTure" width="150" :show-overflow-tooltip="true" />
-            <el-table-column label="发送内容" align="center" prop="content" :show-overflow-tooltip="true" />
-            <el-table-column label="发送是否成功" align="center">
-              <template slot-scope="scope">
-                <el-tag size="small" :type="scope.row.success=='0'?'':'danger'">{{ scope.row.success == "0" ? "成功" : "失败" }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="发送时间" align="center" width="180">
-              <template slot-scope="scope">
-                <span>{{ scope.row.sendTime }}</span>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-card>
-      </el-col>
-
-      <el-col :span="6">
-        <el-card>
-          <div slot="header">
-            <span>电话管理</span>
-            <el-button
-              style="float: right; padding: 3px 0"
-              type="text"
-              icon="el-icon-refresh-right"
-              @click="refreshTelephone()"
-            ></el-button>
-          </div>
-          <el-table
-            v-loading="telephoneLoading"
-            :data="telephone"
-            style="width: 100%"
-          >
-            <el-table-column label="序号" align="center" width="50">
-              <template slot-scope="scope">
-                {{ scope.$index + 1 }}
-              </template>
-            </el-table-column>
-            <el-table-column label="来电单位" align="center" prop="theElectricityUnit" :show-overflow-tooltip="true" />
-            <el-table-column label="来电号码" align="center" prop="tel" width="120" />
-            <el-table-column label="来电姓名" align="center" prop="userName" />
-            <el-table-column label="来电时间" align="center" prop="telTime" width="180">
-              <template slot-scope="scope">
-                <span>{{ scope.row.telTime }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="接话人" align="center" prop="answerPeople" />
-            <el-table-column label="通话内容" align="center" prop="content" :show-overflow-tooltip="true" />
-          </el-table>
-        </el-card>
+      <el-col :span="24">
+        <map-pearl-river />
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import { listEmail } from "@/api/duty/operemail";
-import { listFax } from "@/api/duty/operfax";
-import { listMsm } from "@/api/duty/opermsm";
-import { listTelephone } from "@/api/duty/opertelephone";
+import { todayEmailNum, listEmail } from "@/api/duty/operemail";
+import { todayFaxNum, listFax } from "@/api/duty/operfax";
+import { todayMsmNum, listMsm } from "@/api/duty/opermsm";
+import { todayTelephoneNum, listTelephone } from "@/api/duty/opertelephone";
+import { list } from "@/api/monitor/logininfor";
+import echarts from "echarts";
+import MapPearlRiver from "./MapPearlRiver";
+import axios from 'axios'
 
 export default {
   name: "homePage",
+  components: { MapPearlRiver },
   data() {
     return {
-      email: [],
-      fax: [],
-      msm: [],
-      telephone: [],
-      emailLoading: true,
-      faxLoading: true,
-      msmLoading: true,
-      telephoneLoading: true
+      emailNum: '',
+      faxNum: '',
+      msmNum: '',
+      telephoneNum: '',
+      // 值班统计信息
+      dutyCompare: null,
+      // 登录信息
+      loginBar: null
     };
   },
   created() {
-    this.getEmail();
-    this.getFax();
-    this.getMsm();
-    this.getTelephone();
+    this.getTodayDutyNum();
+    this.getAllDutyNum();
+    this.initUserChart();
   },
   methods: {
-    getEmail() {
-      this.emailLoading = true;
-      listEmail().then(response => {
-        this.email = response.rows;
-        this.emailLoading = false;
-      });
+    getTodayDutyNum() {
+      axios.all([
+        todayEmailNum().then(res => res.data),
+        todayFaxNum().then(res => res.data),
+        todayMsmNum().then(res => res.data),
+        todayTelephoneNum().then(res => res.data)
+      ]).then(
+        axios.spread((val1,val2,val3,val4) => {
+          // val 是数组中每个接口返回的值 res.data
+          this.emailNum = val1;
+          this.faxNum = val2;
+          this.msmNum = val3;
+          this.telephoneNum = val4;
+        })
+      )
     },
-    getFax() {
-      this.faxLoading = true;
-      listFax().then(response => {
-        this.fax = response.rows;
-        this.faxLoading = false;
-      });
+    getAllDutyNum() {
+      axios.all([
+        listEmail().then(res => res.total),
+        listFax().then(res => res.total),
+        listMsm().then(res => res.total),
+        listTelephone().then(res => res.total)
+      ]).then(
+        axios.spread((val1,val2,val3,val4) => {
+          // val 是数组中每个接口返回的值 res.total
+          this.initdutyChart(val1,val2,val3,val4)
+        })
+      )
     },
-    getMsm() {
-      this.msmLoading = true;
-      listMsm().then(response => {
-        this.msm = response.rows;
-        this.msmLoading = false;
-      });
+    initdutyChart(val1,val2,val3,val4) {
+      if(!this.emailLoading && !this.emailLoading && !this.emailLoading && !this.emailLoading) {
+        this.dutyCompare = echarts.init(this.$refs.dutyCompare, "macarons");
+        this.dutyCompare.setOption({
+          tooltip: {
+            trigger: "item",
+            formatter: "{a} <br/>{b} : {c} ({d}%)",
+          },
+          series: [
+            {
+              name: "值班",
+              type: "pie",
+              roseType: "radius",
+              radius: [15, 150],
+              center: ["50%", "50%"],
+              data: [
+                { value: val1, name: '邮件' },
+                { value: val2, name: '传真' },
+                { value: val3, name: '短信' },
+                { value: val4, name: '电话' }
+              ],
+              animationEasing: "cubicInOut",
+              animationDuration: 1000,
+            }
+          ]
+        });
+      }
     },
-    getTelephone() {
-      this.telephoneLoading = true;
-      listTelephone().then(response => {
-        this.telephone = response.rows;
-        this.telephoneLoading = false;
-      });
+    initUserChart() {
+      let myDate = new Date(); //获取今天日期
+      myDate.setDate(myDate.getDate() - 6);
+      const year = myDate.getFullYear();
+      let dateArray = [];
+      let dateTemp; 
+      let flag = 1;
+      for (let i = 0; i < 7; i++) {
+          dateTemp = (myDate.getMonth()+1)+"-"+myDate.getDate();
+          dateArray.push(dateTemp);
+          myDate.setDate(myDate.getDate() + flag);
+      };
+      axios.all([
+        list({params: {beginTime: year+"-"+dateArray[0], endTime: year+"-"+dateArray[0]}}).then(res => res.total),
+        list({params: {beginTime: year+"-"+dateArray[1], endTime: year+"-"+dateArray[1]}}).then(res => res.total),
+        list({params: {beginTime: year+"-"+dateArray[2], endTime: year+"-"+dateArray[2]}}).then(res => res.total),
+        list({params: {beginTime: year+"-"+dateArray[3], endTime: year+"-"+dateArray[3]}}).then(res => res.total),
+        list({params: {beginTime: year+"-"+dateArray[4], endTime: year+"-"+dateArray[4]}}).then(res => res.total),
+        list({params: {beginTime: year+"-"+dateArray[5], endTime: year+"-"+dateArray[5]}}).then(res => res.total),
+        list({params: {beginTime: year+"-"+dateArray[6], endTime: year+"-"+dateArray[6]}}).then(res => res.total)
+      ]).then(
+        axios.spread((val1,val2,val3,val4,val5,val6,val7) => {
+          // val 是数组中每个接口返回的值 res.total
+          const numArray = [val1,val2,val3,val4,val5,val6,val7];
+          this.loginBar = echarts.init(this.$refs.loginBar);
+          this.loginBar.setOption({
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                type: 'shadow'
+              }
+            },
+            xAxis: {
+              type: 'category',
+              data: dateArray
+            },
+            yAxis: {
+              type: 'value'
+            },
+            series: [
+              {
+                data: numArray,
+                type: 'bar',
+                showBackground: true,
+                backgroundStyle: {
+                  color: 'rgba(180, 180, 180, 0.2)'
+                }
+              }
+            ]
+          });
+        })
+      )
     },
-    refreshEmail() {
-      this.getEmail();
-      this.$modal.msgSuccess("刷新邮件管理成功");
-    },
-    refreshFax() {
-      this.getFax();
-      this.$modal.msgSuccess("刷新传真管理成功");
-    },
-    refreshMsm() {
-      this.getMsm();
-      this.$modal.msgSuccess("刷新短信管理成功");
-    },
-    refreshTelephone() {
-      this.getTelephone();
-      this.$modal.msgSuccess("刷新电话管理成功");
+    handleJump(page) {
+      this.$router.push("/duty/" + page );
     }
   }
 };
@@ -228,8 +212,12 @@ export default {
 <style scoped lang="scss">
 .home-page {
   padding: 10px;
-  .is-always-shadow {
-    overflow: auto;
+  .duty-card {
+    text-align: center;
+    line-height: 2;
+    .icon {
+      color: rgb(64, 158, 255)
+    }
   }
 }
 </style>

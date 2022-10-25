@@ -17,3 +17,11 @@ export function getFaxInfoById(id) {
     method: 'get'
   })
 }
+
+// 查询当日传真数量
+export function todayFaxNum() {
+  return request({
+    url: '/fax/message/getFaxCount',
+    method: 'get'
+  })
+}

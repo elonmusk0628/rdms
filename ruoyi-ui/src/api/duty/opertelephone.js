@@ -16,3 +16,11 @@ export function getTelInfoById(id) {
     method: 'get'
   })
 }
+
+// 查询当日电话数量
+export function todayTelephoneNum() {
+  return request({
+    url: '/tel/message/getTelCount',
+    method: 'get'
+  })
+}

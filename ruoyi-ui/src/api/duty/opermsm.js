@@ -16,3 +16,11 @@ export function getMsmInfoById(sendInfoId) {
     method: 'get'
   })
 }
+
+// 查询当日短信数量
+export function todayMsmNum() {
+  return request({
+    url: '/msm/message/getMsmCount',
+    method: 'get'
+  })
+}

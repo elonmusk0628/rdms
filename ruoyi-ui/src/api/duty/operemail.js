@@ -16,3 +16,11 @@ export function getEmailInfoById(id) {
     method: 'get'
   })
 }
+
+// 查询当日邮件数量
+export function todayEmailNum() {
+  return request({
+    url: '/mail/message/getMailCount',
+    method: 'get'
+  })
+}
