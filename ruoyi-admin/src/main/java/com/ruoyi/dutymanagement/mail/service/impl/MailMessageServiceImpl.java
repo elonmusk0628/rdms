@@ -58,6 +58,8 @@ public class MailMessageServiceImpl implements IMailMessageService {
         //查询邮件详情信息
         List<MailInfoEntity> mailInfoList = mailMessageMapper.getMailInfoById(mainId);
         mailVO.setMailInfoList(mailInfoList);
+        //修改邮件为已读
+        mailMessageMapper.updateMailStatus(Integer.valueOf(mainId));
         return mailVO;
     }
 

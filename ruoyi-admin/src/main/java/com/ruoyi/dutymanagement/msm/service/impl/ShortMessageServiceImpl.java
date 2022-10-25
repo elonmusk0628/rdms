@@ -59,6 +59,8 @@ public class ShortMessageServiceImpl implements IShortMessageService {
         //根据sendInfoId查询短信详情
         List<MsmInfoEntity> msmInfoEntityList = shortMessageMapper.getInfoById(mainId);
         msmVO.setMsmInfoList(msmInfoEntityList);
+        //修改短信为已读
+        shortMessageMapper.updatMsmStatus(mainId);
         return msmVO;
     }
 
