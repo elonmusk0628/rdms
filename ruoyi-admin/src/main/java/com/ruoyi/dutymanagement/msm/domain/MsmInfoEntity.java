@@ -10,6 +10,7 @@ import java.util.Date;
  * 短信联系人实体
  *
  * @Author fenghan
+ * @Date 2022-09-02
  */
 @Entity
 @Table(name = "msm_info", schema = "rdms")

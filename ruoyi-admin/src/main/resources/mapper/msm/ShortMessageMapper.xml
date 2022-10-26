@@ -34,6 +34,7 @@
         ageing as ageing,
         send_time as sendTime,
         business_type as businessType,
+        remark as remark,
         status as status,
         content as content,
         signa_ture as signaTure,
@@ -45,6 +46,9 @@
         </if>
         <if test="content!=null and content!=''">
             AND content like concat ('%',#{content},'%')
+        </if>
+        <if test="remark!=null and remark!=''">
+            AND remark like concat ('%',#{remark},'%')
         </if>
         <if test="success!=null and success!=''">
             AND success = #{success}
@@ -141,6 +145,13 @@
         order by id desc
     </select>
     <update id="updatMsmStatus" parameterType="Integer">
-        update msm set status="1" where id=#{id}
+        update msm set status='1' where id=#{id}
     </update>
+    <select id="getMsmCount" parameterType="MsmParam" resultType="Integer">
+        select
+            count(0)
+        from msm
+        where 1=1
+          and send_time BETWEEN #{startDate} AND #{endDate}
+    </select>
 </mapper>

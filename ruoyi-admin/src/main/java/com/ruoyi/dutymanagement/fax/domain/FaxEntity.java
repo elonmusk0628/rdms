@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
+
 /**
  * 传真信息实体类
  *
  * @Author fenghan
+ * @Date 2022-09-12
  */
 @Entity
 @Table(name = "fax", schema = "rdms")

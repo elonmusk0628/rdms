@@ -9,6 +9,7 @@ import java.util.Date;
  * 电话记录实体
  *
  * @Author fenghan
+ * @Date 2022-09-16
  */
 @Entity
 @Table(name = "tel_info", schema = "rdms")
@@ -39,7 +40,7 @@ public class TelInfoEntity {
     @Basic
     @Column(name = "tel_time")
     /** 来电时间*/
-    private Date telTime;
+    private String telTime;
     @Basic
     @Column(name = "answer_people")
     /** 接听人*/

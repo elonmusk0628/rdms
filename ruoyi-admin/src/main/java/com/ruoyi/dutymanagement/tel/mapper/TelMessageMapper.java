@@ -11,6 +11,7 @@ import java.util.List;
  * 电话管理数据交互层
  *
  * @Author fenghan
+ * @Date 2022-09-16
  */
 @Repository
 public interface TelMessageMapper {
@@ -67,4 +68,12 @@ public interface TelMessageMapper {
      * @param id
      */
     void updateTelStatus(Integer id);
+
+    /**
+     * 当天未读新来电数
+     *
+     * @param telInfoParam
+     * @return
+     */
+    int getTelCount(TelInfoParam telInfoParam);
 }

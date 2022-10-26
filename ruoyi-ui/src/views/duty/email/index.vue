@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import { list, getEmailInfoById } from "@/api/duty/operemail";
+import { listEmail, getEmailInfoById } from "@/api/duty/operemail";
 
 export default {
   name: "operemail",
@@ -153,7 +153,7 @@ export default {
       this.loading = true;
       this.queryParams.startDate = this.dateRange[0];
       this.queryParams.endDate = this.dateRange[1];
-      list(this.queryParams).then( response => {
+      listEmail(this.queryParams).then( response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;

@@ -1,16 +1,13 @@
 package com.ruoyi.dutymanagement.msm.service;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
-import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
 
 /**
  * 调外系统接口
+ *
+ * @Author fenghan
+ * @Date 2022-09-02
  */
-@Component
 public interface IHttpClientService {
     /**
      * 调值班管理系统短信接口
@@ -25,7 +22,7 @@ public interface IHttpClientService {
      *
      * @return
      */
-    String doMail(String token,String fAccess) throws Exception;
+    String doMail(String token, String fAccess) throws Exception;
 
     /**
      * 调值班管理系统传真接口
@@ -33,7 +30,7 @@ public interface IHttpClientService {
      * @param token,fAccess
      * @return
      */
-    String doFax(String token,String fAccess) throws Exception;
+    String doFax(String token, String fAccess) throws Exception;
 
     /**
      * 调值班管理系统电话接口
@@ -41,16 +38,17 @@ public interface IHttpClientService {
      * @param token,fAccess
      * @return
      */
-    String doTel(String token,String fAccess) throws Exception;
+    String doTel(String token, String fAccess) throws Exception;
 
     /**
      * 调值班管理系统排班接口
+     *
      * @param token
      * @param fAccess
      * @return
      * @throws Exception
      */
-    String doRostering(String token,String fAccess) throws Exception;
+    String doRostering(String token, String fAccess) throws Exception;
 
     /**
      * 获取token
@@ -62,6 +60,7 @@ public interface IHttpClientService {
 
     /**
      * 获取鉴权码F-Access
+     *
      * @param token
      * @return
      */

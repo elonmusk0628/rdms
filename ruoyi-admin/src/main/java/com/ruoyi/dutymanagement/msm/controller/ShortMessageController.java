@@ -9,7 +9,6 @@ import com.ruoyi.dutymanagement.msm.domain.vo.MsmVO;
 import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
 import com.ruoyi.dutymanagement.msm.service.IShortMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +19,7 @@ import java.util.List;
  * 短信管理
  *
  * @Author fenghan
+ * @Date 2022-09-02
  */
 @RestController
 @RequestMapping("/msm/message")
@@ -113,5 +113,15 @@ public class ShortMessageController extends BaseController {
     public AjaxResult getToken(@RequestBody LoginInfo loginInfo) throws Exception {
         String token = shortMessageService.getToken(loginInfo);
         return AjaxResult.success(token);
+    }
+    /**
+     * 当天未读新短信数
+     * @param msmParam
+     * @return
+     */
+    @GetMapping("/getMsmCount")
+    public AjaxResult getMsmCount(MsmParam msmParam) {
+        int msmCount = shortMessageService.getMsmCount(msmParam);
+        return AjaxResult.success(msmCount);
     }
 }

@@ -1,12 +1,9 @@
 package com.ruoyi.dutymanagement.msm.service;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.ruoyi.dutymanagement.msm.domain.MsmEntity;
 import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
 import com.ruoyi.dutymanagement.msm.domain.param.MsmParam;
 import com.ruoyi.dutymanagement.msm.domain.vo.MsmVO;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -14,6 +11,7 @@ import java.util.List;
  * 短信管理服务层
  *
  * @Author fenghan
+ * @Date 2022-09-02
  */
 public interface IShortMessageService {
     /**
@@ -54,4 +52,12 @@ public interface IShortMessageService {
      * @return
      */
     String getToken(LoginInfo loginInfo) throws Exception;
+
+    /**
+     * 当天未读新短信数
+     *
+     * @param msmParam
+     * @return
+     */
+    int getMsmCount(MsmParam msmParam);
 }

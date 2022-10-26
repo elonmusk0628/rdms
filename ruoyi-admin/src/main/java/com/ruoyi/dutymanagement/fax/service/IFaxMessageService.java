@@ -9,6 +9,7 @@ import java.util.List;
  * 传真管理服务层
  *
  * @Author fenghan
+ * @Date 2022-09-12
  */
 public interface IFaxMessageService {
     /**
@@ -32,7 +33,7 @@ public interface IFaxMessageService {
      *
      * @return
      */
-    String getJsonObject(String token,String fAccess) throws Exception;
+    String getJsonObject(String token, String fAccess) throws Exception;
 
     /**
      * 机器人接口
@@ -41,5 +42,13 @@ public interface IFaxMessageService {
      * @return
      */
     String getRobotData(String status);
+
+    /**
+     * 当天未读新传真数
+     *
+     * @param faxParam
+     * @return
+     */
+    int getFaxCount(FaxParam faxParam);
 
 }

@@ -3,10 +3,12 @@ package com.ruoyi.dutymanagement.mail.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+
 /**
  * 邮件实体类
  *
  * @Author fenghan
+ * @Date 2022-09-08
  */
 @Entity
 @Table(name = "mail", schema = "rdms")

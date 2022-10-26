@@ -18,6 +18,7 @@ import java.util.List;
  * 传真管理控制层
  *
  * @Author fenghan
+ * @Date 2022-09-12
  */
 @RestController()
 @RequestMapping("/fax/message")
@@ -37,7 +38,7 @@ public class FaxMessageController extends BaseController {
      * @return
      */
     @PreAuthorize("@ss.hasPermi('fax:message:list')")
-        @GetMapping("/getFaxList")
+    @GetMapping("/getFaxList")
     public TableDataInfo getFaxList(FaxParam faxParam) {
         startPage();
         List<FaxVO> faxVOList = faxMessageService.getFaxList(faxParam);
@@ -71,7 +72,7 @@ public class FaxMessageController extends BaseController {
         String token = faxHttpClientService.getToken(loginInfo);
         //获取fAccess
         String fAccess = faxHttpClientService.getFAccess(token);
-        String jsonObject = faxMessageService.getJsonObject(token,fAccess);
+        String jsonObject = faxMessageService.getJsonObject(token, fAccess);
         return AjaxResult.success(jsonObject);
     }
 
@@ -90,5 +91,17 @@ public class FaxMessageController extends BaseController {
             AjaxResult.error("没有新消息！");
         }
         return AjaxResult.success(messageContent);
+    }
+
+    /**
+     * 当天未读新传真数
+     *
+     * @param faxParam
+     * @return
+     */
+    @GetMapping("/getFaxCount")
+    public AjaxResult getFaxCount(FaxParam faxParam) {
+        int faxCount = faxMessageService.getFaxCount(faxParam);
+        return AjaxResult.success(faxCount);
     }
 }

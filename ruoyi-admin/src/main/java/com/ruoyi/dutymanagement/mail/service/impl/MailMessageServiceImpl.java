@@ -7,19 +7,21 @@ import com.ruoyi.dutymanagement.mail.mapper.MailMessageMapper;
 import com.ruoyi.dutymanagement.mail.service.IMailMessageService;
 import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
 import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
+import com.ruoyi.dutymanagement.msm.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  * 邮件管理业务逻辑层
  *
  * @Author fenghan
+ * @Date 2022-09-08
  */
 @Service
 @Transactional
@@ -65,12 +67,18 @@ public class MailMessageServiceImpl implements IMailMessageService {
      * @return
      */
     @Override
-    public String getJsonObject(String token,String fAccess) throws Exception {
+    public String getJsonObject(String token, String fAccess) throws Exception {
         //调取值班管理系统短信接口
-        String jsonObject = mailHttpPostClientService.doMail(token,fAccess);
+        String jsonObject = mailHttpPostClientService.doMail(token, fAccess);
         return jsonObject;
     }
 
+    /**
+     * 获取机器人播报数据
+     *
+     * @param status
+     * @return
+     */
     @Override
     public String getRobotData(String status) {
         //查询未读邮件
@@ -111,5 +119,23 @@ public class MailMessageServiceImpl implements IMailMessageService {
         String token = mailHttpPostClientService.getToken(loginInfo);
         String fAccess = mailHttpPostClientService.getFAccess(token);
         return fAccess;
+    }
+
+    /**
+     * 获取当天未读新邮件数
+     *
+     * @param mailParam
+     * @return
+     */
+    @Override
+    public int getMailCount(MailParam mailParam) {
+        if (mailParam.getStartDate() == null) {
+            mailParam.setStartDate(DateUtils.dateRurnStrFormat(new Date()));
+        }
+        if (mailParam.getEndDate() == null) {
+            mailParam.setEndDate(DateUtils.dateRurnStrFormat(new Date()));
+        }
+        int mailCount = mailMessageMapper.getMailCount(mailParam);
+        return mailCount;
     }
 }

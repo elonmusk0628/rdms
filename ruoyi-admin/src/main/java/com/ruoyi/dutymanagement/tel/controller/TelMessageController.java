@@ -9,7 +9,6 @@ import com.ruoyi.dutymanagement.tel.domain.param.TelInfoParam;
 import com.ruoyi.dutymanagement.tel.domain.vo.TelInfoVO;
 import com.ruoyi.dutymanagement.tel.service.ITelMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +18,7 @@ import java.util.List;
  * 电话管理
  *
  * @Author fenghan
+ * @Date 2022-09-16
  */
 @RestController
 @RequestMapping("/tel/message")
@@ -71,9 +71,10 @@ public class TelMessageController extends BaseController {
         //获取fAccess
         String fAccess = httpClientService.getFAccess(token);
 
-        String jsonStr = httpClientService.doTel(token,fAccess);
+        String jsonStr = httpClientService.doTel(token, fAccess);
         return AjaxResult.success(jsonStr);
     }
+
     /**
      * 与机器人接口
      *
@@ -89,5 +90,17 @@ public class TelMessageController extends BaseController {
             AjaxResult.error("没有新消息！");
         }
         return AjaxResult.success(messageContent);
+    }
+
+    /**
+     * 当天未读新来电数
+     *
+     * @param telInfoParam
+     * @return
+     */
+    @GetMapping("/getTelCount")
+    public AjaxResult getTelCount(TelInfoParam telInfoParam) {
+        int telCount = telMessageService.getTelCount(telInfoParam);
+        return AjaxResult.success(telCount);
     }
 }

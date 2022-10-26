@@ -22,6 +22,7 @@ import java.util.Map;
  * 值班 业务逻辑层
  *
  * @Author fenghan
+ * @Date 2022-10-8
  */
 @Service
 public class RosterServiceImpl implements IRosterService {
@@ -46,7 +47,7 @@ public class RosterServiceImpl implements IRosterService {
                 timeParam = DateUtils.dateRurnStrFormat(new Date());
                 //根据时间查询值班信息表
                 RosteringVO rostering = rosterMapper.getRosterByTime(timeParam);
-                if(rostering!=null){
+                if (rostering != null) {
                     /**根据排班id和排班人员类型查询值班人员信息 0:带班，1：值班，2：副班*/
                     //查询带班人员信息
                     RosterEntity leadShifInfo = rosterMapper.getRosterByTypeAndId(rostering.getScheduleId(), BaseConstants.ZERO);
@@ -61,7 +62,7 @@ public class RosterServiceImpl implements IRosterService {
                     //副班人昵称
                     String deputyShiftName = deputyShiftInfo.getNickName();
                     return "今日带班：" + leadShifName + ",值班：" + beOnDutyName + ",副班：" + deputyShiftName;
-                }else {
+                } else {
                     return ExceptionEnum.NULL_RESULT.getErrorMsg();
                 }
             } else if (BaseConstants.TOMORROW.equals(strValue)) {
@@ -69,7 +70,7 @@ public class RosterServiceImpl implements IRosterService {
                 timeParam = DateUtils.getTomorrow();
                 //根据时间查询值班信息表
                 RosteringVO rosterVO = rosterMapper.getRosterByTime(timeParam);
-                if(rosterVO!=null){
+                if (rosterVO != null) {
                     /**根据排班id和排班人员类型查询值班人员信息 0:带班，1：值班，2：副班*/
                     //查询带班人员信息
                     RosterEntity leadShifInfo = rosterMapper.getRosterByTypeAndId(rosterVO.getScheduleId(), BaseConstants.ZERO);
@@ -84,7 +85,7 @@ public class RosterServiceImpl implements IRosterService {
                     //副班人昵称
                     String deputyShiftName = deputyShiftInfo.getNickName();
                     return "明日带班：" + leadShifName + ",值班：" + beOnDutyName + ",副班：" + deputyShiftName;
-                }else {
+                } else {
                     return ExceptionEnum.NULL_RESULT.getErrorMsg();
                 }
             } else if (BaseConstants.YESTER_DAY.equals(strValue)) {
@@ -92,7 +93,7 @@ public class RosterServiceImpl implements IRosterService {
                 timeParam = DateUtils.getYesterDay();
                 //根据时间查询值班信息表
                 RosteringVO rosteringVO = rosterMapper.getRosterByTime(timeParam);
-                if(rosteringVO!=null){
+                if (rosteringVO != null) {
                     /**根据排班id和排班人员类型查询值班人员信息 0:带班，1：值班，2：副班*/
                     //查询带班人员信息
                     RosterEntity leadShifInfo = rosterMapper.getRosterByTypeAndId(rosteringVO.getScheduleId(), BaseConstants.ZERO);
@@ -107,7 +108,7 @@ public class RosterServiceImpl implements IRosterService {
                     //副班人昵称
                     String deputyShiftName = deputyShiftInfo.getNickName();
                     return "昨日带班：" + leadShifName + ",值班：" + beOnDutyName + ",副班：" + deputyShiftName;
-                }else {
+                } else {
                     return ExceptionEnum.NULL_RESULT.getErrorMsg();
                 }
             }

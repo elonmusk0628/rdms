@@ -9,7 +9,6 @@ import com.ruoyi.dutymanagement.mail.service.IMailMessageService;
 import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
 import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +18,7 @@ import java.util.List;
  * 邮件管理
  *
  * @Author fenghan
+ * @Date 2022-09-08
  */
 @RestController
 @RequestMapping("/mail/message")
@@ -68,7 +68,7 @@ public class MailMessageController extends BaseController {
         String token = iHttpClientService.getToken(loginInfo);
         //获取fAccess
         String fAccess = iHttpClientService.getFAccess(token);
-        String jsonObject = mailMessageService.getJsonObject(token,fAccess);
+        String jsonObject = mailMessageService.getJsonObject(token, fAccess);
         return AjaxResult.success(jsonObject);
     }
 
@@ -101,7 +101,7 @@ public class MailMessageController extends BaseController {
         String token = iHttpClientService.getToken(loginInfo);
         //获取fAccess
         String fAccess = iHttpClientService.getFAccess(token);
-        String jsonObject = iHttpClientService.doMail(token,fAccess);
+        String jsonObject = iHttpClientService.doMail(token, fAccess);
         return AjaxResult.success(jsonObject);
     }
 
@@ -114,5 +114,17 @@ public class MailMessageController extends BaseController {
     public AjaxResult getMailFAccess(LoginInfo loginInfo) throws Exception {
         String fAccess = mailMessageService.getMailFAccess(loginInfo);
         return AjaxResult.success(fAccess);
+    }
+
+    /**
+     * 获取当天未读新邮件数
+     *
+     * @param mailParam
+     * @return
+     */
+    @GetMapping("/getMailCount")
+    public AjaxResult getMailCount(MailParam mailParam) {
+        int mailCount = mailMessageService.getMailCount(mailParam);
+        return AjaxResult.success(mailCount);
     }
 }

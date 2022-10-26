@@ -65,7 +65,7 @@
       </el-table-column>
       <el-table-column label="发送时间" align="center" prop="sendTime" sortable :sort-orders="['descending', 'ascending']" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.sendTime) }}</span>
+          <span>{{ scope.row.sendTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import { list, getMsmInfoById } from "@/api/duty/opermsm";
+import { listMsm, getMsmInfoById } from "@/api/duty/opermsm";
 
 export default {
   name: "opermsm",
@@ -170,7 +170,7 @@ export default {
       this.loading = true;
       this.queryParams.startDate = this.dateRange[0];
       this.queryParams.endDate = this.dateRange[1];
-      list(this.queryParams).then( response => {
+      listMsm(this.queryParams).then( response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;

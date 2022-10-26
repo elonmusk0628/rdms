@@ -106,7 +106,7 @@
         and status = #{status}
     </select>
     <update id="updateStatus" >
-        update fax set status ="1" where id=#{id}
+        update fax set status ='1' where id=#{id}
     </update>
     <select id="getFaxByManageId" parameterType="String" resultType="FaxVO">
         select
@@ -119,5 +119,12 @@
         from fax
         where 1=1
           and file_manage_id=#{fileManageId}
+    </select>
+    <select id="getFaxCount" parameterType="FaxParam" resultType="Integer">
+        select
+        count(0)
+        from fax
+        where 1=1
+        and draft_date BETWEEN #{startDate} AND #{endDate}
     </select>
 </mapper>

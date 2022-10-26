@@ -10,6 +10,7 @@ import java.util.Date;
  * 短信信息实体
  *
  * @Author fenghan
+ * @Date 2022-09-02
  */
 @Entity
 @Table(name = "msm", schema = "rdms")
@@ -23,6 +24,9 @@ public class MsmEntity {
     @Column(name = "send_info_id")
     /** 发送信息ID*/
     private int sendInfoId;
+    @Column(name = "send_time")
+    /** 发送时间*/
+    private String sendTime;
     @Basic
     @Column(name = "search_value")
     /** 搜索值*/
@@ -49,16 +53,10 @@ public class MsmEntity {
     @Column(name = "remark")
     /** 收件人*/
     private String remark;
-
     @Basic
     @Column(name = "ageing")
     /** 时效*/
     private String ageing;
-    @Basic
-    @Column(name = "send_time")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    /** 发送时间*/
-    private Date sendTime;
     @Basic
     @Column(name = "business_type")
     /** 业务类型*/

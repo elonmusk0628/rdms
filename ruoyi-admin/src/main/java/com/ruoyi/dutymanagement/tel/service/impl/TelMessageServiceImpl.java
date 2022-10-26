@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  * 电话服务业务逻辑层
  *
  * @Author fenghan
+ * @Date 2022-09-16
  */
 @Service
 @Transactional
@@ -58,7 +60,7 @@ public class TelMessageServiceImpl implements ITelMessageService {
         List<TelInfoVO> telInfoVOList = telMessageMapper.getRobotData(status);
         if (telInfoVOList.size() == 1) {
             for (TelInfoVO telInfoVO : telInfoVOList) {
-                String theTelTime = DateUtils.dateRurnString(telInfoVO.getTelTime());
+                String theTelTime = telInfoVO.getTelTime();
                 String theElectricity = telInfoVO.getTheElectricityUnit();
                 String theUserName = telInfoVO.getUserName();
                 String theTel = telInfoVO.getTel();
@@ -76,5 +78,23 @@ public class TelMessageServiceImpl implements ITelMessageService {
             return null;
         }
         return resultStr;
+    }
+
+    /**
+     * 当天未读新来电数
+     *
+     * @param telInfoParam
+     * @return
+     */
+    @Override
+    public int getTelCount(TelInfoParam telInfoParam) {
+        if (telInfoParam.getStartDate() == null) {
+            telInfoParam.setStartDate(DateUtils.dateRurnStrFormat(new Date()));
+        }
+        if (telInfoParam.getEndDate() == null) {
+            telInfoParam.setEndDate(DateUtils.dateRurnStrFormat(new Date()));
+        }
+        int telCount = telMessageMapper.getTelCount(telInfoParam);
+        return telCount;
     }
 }

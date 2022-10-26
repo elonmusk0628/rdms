@@ -3,12 +3,12 @@ package com.ruoyi.web.domian;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 /**
  * 排班信息表实体类
  *
  * @Author fenghan
+ * @Date 2022-10-8
  */
 @Data
 @Entity

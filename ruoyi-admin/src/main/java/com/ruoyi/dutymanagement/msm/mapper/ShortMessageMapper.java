@@ -12,6 +12,7 @@ import java.util.List;
  * 短信管理数据交互层
  *
  * @Author fenghan
+ * @Date 2022-09-02
  */
 @Repository
 public interface ShortMessageMapper {
@@ -67,4 +68,12 @@ public interface ShortMessageMapper {
      * @param id
      */
     void updatMsmStatus(Integer id);
+
+    /**
+     * 当天未读新短信数
+     *
+     * @param msmParam
+     * @return
+     */
+    int getMsmCount(MsmParam msmParam);
 }

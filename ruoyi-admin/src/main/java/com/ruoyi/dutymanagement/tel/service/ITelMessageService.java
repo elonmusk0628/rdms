@@ -9,6 +9,7 @@ import java.util.List;
  * 电话管理服务层
  *
  * @Author fenghan
+ * @Date 2022-09-16
  */
 public interface ITelMessageService {
     /**
@@ -34,4 +35,12 @@ public interface ITelMessageService {
      * @return
      */
     String getRobotData(String status);
+
+    /**
+     * 当天未读新来电数
+     *
+     * @param telInfoParam
+     * @return
+     */
+    int getTelCount(TelInfoParam telInfoParam);
 }

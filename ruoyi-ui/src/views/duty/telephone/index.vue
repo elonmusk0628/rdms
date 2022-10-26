@@ -65,7 +65,7 @@
       <el-table-column label="来电姓名" align="center" prop="userName" />
       <el-table-column label="来电时间" align="center" prop="telTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.telTime) }}</span>
+          <span>{{ scope.row.telTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="接话人" align="center" prop="answerPeople" />
@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import { list, getTelInfoById } from "@/api/duty/opertelephone";
+import { listTelephone, getTelInfoById } from "@/api/duty/opertelephone";
 
 export default {
   name: "opertelephone",
@@ -155,7 +155,7 @@ export default {
       this.loading = true;
       this.queryParams.startDate = this.dateRange[0];
       this.queryParams.endDate = this.dateRange[1];
-      list(this.queryParams).then( response => {
+      listTelephone(this.queryParams).then( response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;

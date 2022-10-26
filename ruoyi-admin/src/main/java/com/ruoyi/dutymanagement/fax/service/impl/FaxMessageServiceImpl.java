@@ -6,17 +6,19 @@ import com.ruoyi.dutymanagement.fax.domain.vo.FaxVO;
 import com.ruoyi.dutymanagement.fax.mapper.FaxMessageMapper;
 import com.ruoyi.dutymanagement.fax.service.IFaxMessageService;
 import com.ruoyi.dutymanagement.msm.service.IHttpClientService;
+import com.ruoyi.dutymanagement.msm.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  * 传真管理服务实现层
  *
  * @Author fenghan
+ * @Date 2022-09-12
  */
 @Service
 @Transactional
@@ -61,11 +63,12 @@ public class FaxMessageServiceImpl implements IFaxMessageService {
      * @return
      */
     @Override
-    public String getJsonObject(String token,String fAccess) throws Exception {
+    public String getJsonObject(String token, String fAccess) throws Exception {
         //调取值班管理系统传真接口
-        String jsonObject = httpPostClientService.doFax(token,fAccess);
+        String jsonObject = httpPostClientService.doFax(token, fAccess);
         return jsonObject;
     }
+
     /**
      * 与机器人接口
      *
@@ -75,7 +78,7 @@ public class FaxMessageServiceImpl implements IFaxMessageService {
     public String getRobotData(String status) {
         List<FaxVO> faxVOList = faxMessageMapper.getFaxByStatus(status);
         String resultStr = null;
-        if (faxVOList.size() ==1) {
+        if (faxVOList.size() == 1) {
             for (FaxVO faxVO : faxVOList) {
                 //发文时间
                 String draftDate = faxVO.getDraftDate();
@@ -85,15 +88,33 @@ public class FaxMessageServiceImpl implements IFaxMessageService {
                 //播报完成的传真修改状态为已读1
                 faxMessageMapper.updateStatus(faxVO.getId());
             }
-        }else if (faxVOList.size()>1){
-            resultStr = "有"+faxVOList.size()+"份新传真，请及时查看！";
+        } else if (faxVOList.size() > 1) {
+            resultStr = "有" + faxVOList.size() + "份新传真，请及时查看！";
             for (FaxVO faxVO : faxVOList) {
                 //将多份播报完成的传真修改状态为已读1
                 faxMessageMapper.updateStatus(faxVO.getId());
             }
-        }else {
+        } else {
             return null;
         }
         return resultStr;
+    }
+
+    /**
+     * 当天未读新传真数
+     *
+     * @param faxParam
+     * @return
+     */
+    @Override
+    public int getFaxCount(FaxParam faxParam) {
+        if (faxParam.getStartDate() == null) {
+            faxParam.setStartDate(DateUtils.dateRurnStrFormat(new Date()));
+        }
+        if (faxParam.getEndDate() == null) {
+            faxParam.setEndDate(DateUtils.dateRurnStrFormat(new Date()));
+        }
+        int faxCount = faxMessageMapper.getFaxCount(faxParam);
+        return faxCount;
     }
 }
