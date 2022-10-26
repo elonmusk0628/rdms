@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * 河流信息 服务层实现类
  *
- * @author
+ * @author fengZh
  */
 @Service
 public class WrResBServiceImpl implements IWrResBService {
@@ -149,6 +149,11 @@ public class WrResBServiceImpl implements IWrResBService {
         return wrResBMapper.selectName();
     }
 
+    /**
+     * 封装水库返回体
+     *
+     * @param list 水库信息集合
+     */
     private void packageParamWrResB(List<WrResB> list) {
         WrResB resB = list.get(0);
         if (resB.getRunCond().equals(ConstantEnum.STATUS_NORMAL.getCode())) {
@@ -176,6 +181,13 @@ public class WrResBServiceImpl implements IWrResBService {
         resB.setStEndLen(resB.getStEndLen() + BaseConstants.METER_SUFFIX);
     }
 
+    /**
+     * 封装水库返回体
+     *
+     * @param list 水库信息集合
+     * @param keyWordMap 关键字集合
+     * @return 水库信息返回体
+     */
     private SearchResponse packageRespWrResB(List<WrResB> list, Map<Integer, String> keyWordMap) {
         WrResB resB = list.get(0);
         SearchResponse resp = new SearchResponse();
@@ -332,6 +344,12 @@ public class WrResBServiceImpl implements IWrResBService {
         return req;
     }
 
+    /**
+     * 封装河道返回体
+     *
+     * @param list 水库信息集合
+     * @param statBVO 河道信息vo
+     */
     private void packageParamWrStatB(List<WrStatB> list, WrStatBVO statBVO) {
         WrStatB wrStatB = list.get(0);
         if (wrStatB.getRunCond().equals(ConstantEnum.STATUS_NORMAL.getCode())) {
@@ -351,6 +369,13 @@ public class WrResBServiceImpl implements IWrResBService {
         statBVO.setW(wrStatB.getW().get(0).getW() + BaseConstants.TOT_V);
     }
 
+    /**
+     * 封装河道返回体
+     *
+     * @param keyWordMap 关键字集合
+     * @param statBVO 河道信息vo
+     * @return 河道信息返回体
+     */
     private SearchResponse packageRespWrStatB(WrStatBVO statBVO, Map<Integer, String> keyWordMap) {
         SearchResponse resp = new SearchResponse();
         String attribute = "";

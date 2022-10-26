@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.web.common.constant.BaseConstants;
 import com.ruoyi.web.domian.CustomQAInfo;
 import com.ruoyi.web.domian.CustomQAInfoRequest;
 import com.ruoyi.web.domian.SearchResponse;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * 知识问答 服务层实现类
  *
- * @author
+ * @author fengZh
  */
 @Service
 public class CustomQAInfoServiceImpl implements ICustomQAInfoService {
@@ -33,7 +34,7 @@ public class CustomQAInfoServiceImpl implements ICustomQAInfoService {
 
 
     /**
-     * 知识问答查询信息
+     * 机器人知识问答
      *
      * @param qAndAInfoStr 查询参数
      * @return 信息集合返回体
@@ -42,7 +43,11 @@ public class CustomQAInfoServiceImpl implements ICustomQAInfoService {
     public SearchResponse selectAnswerByCondition(String qAndAInfoStr) {
         SearchResponse resp = new SearchResponse();
         CustomQAInfoRequest req = new CustomQAInfoRequest();
-        req.setQuestion(qAndAInfoStr);
+        // 去除机器人入参末尾的句号
+        String newQAStr = qAndAInfoStr.substring(0, qAndAInfoStr.length() - 1);
+        // 如果入参有数字，将大写汉字转为数字
+        String replaceStr = packageHour(newQAStr);
+        req.setQuestion(replaceStr);
         List<CustomQAInfo> customQAInfo = qAndAInfoMapper.selectAnswerInfoList(req);
         if (CollectionUtils.isNotEmpty(customQAInfo)) {
             resp.setContent(customQAInfo.get(0).getAnswer());
@@ -169,6 +174,62 @@ public class CustomQAInfoServiceImpl implements ICustomQAInfoService {
             successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
         }
         return successMsg.toString();
+    }
+
+    /**
+     * 汉字转阿拉伯柱数字
+     *
+     * @param qAStr 自定义问答字符串
+     * @ture String 转换后的字符串
+     */
+    private String packageHour(String qAStr) {
+        String replaceStr = "";
+        if (qAStr.contains(BaseConstants.ZERO_CLOCK)) {
+            replaceStr = qAStr.replace(BaseConstants.ZERO_CLOCK,"0");
+            return replaceStr;
+        }
+        if (qAStr.contains(BaseConstants.ONE_CLOCK)) {
+            replaceStr = qAStr.replace(BaseConstants.ONE_CLOCK,"1");
+            return replaceStr;
+        }
+        if (qAStr.contains(BaseConstants.TWO_NUMBER) || qAStr.contains(BaseConstants.TWO_CLOCK) ) {
+            replaceStr = qAStr.replace(BaseConstants.TWO_NUMBER,"2");
+            replaceStr = replaceStr.replace(BaseConstants.TWO_CLOCK,"2");
+            return replaceStr;
+        }
+        if (qAStr.contains(BaseConstants.THREE_CLOCK)) {
+            replaceStr =  qAStr.replace(BaseConstants.THREE_CLOCK, "3");
+            return replaceStr;
+        }
+        if (qAStr.contains(BaseConstants.FOUR_CLOCK)) {
+            replaceStr = qAStr.replace(BaseConstants.FOUR_CLOCK,"4");
+            return replaceStr;
+        }
+        if (qAStr.contains(BaseConstants.FIVE_CLOCK)) {
+            replaceStr = qAStr.replace(BaseConstants.FIVE_CLOCK,"5");
+            return replaceStr;
+        }
+        if (qAStr.contains(BaseConstants.SIX_CLOCK)) {
+            replaceStr = qAStr.replace(BaseConstants.SIX_CLOCK,"6");
+            return replaceStr;
+        }
+        if (qAStr.contains(BaseConstants.SEVEN_CLOCK)) {
+            replaceStr = qAStr.replace(BaseConstants.SEVEN_CLOCK,"7");
+            return replaceStr;
+        }
+        if (qAStr.contains(BaseConstants.EIGHT_CLOCK)) {
+            replaceStr = qAStr.replace(BaseConstants.EIGHT_CLOCK,"8");
+            return replaceStr;
+        }
+        if (qAStr.contains(BaseConstants.NINE_CLOCK)) {
+            replaceStr = qAStr.replace(BaseConstants.NINE_CLOCK,"9");
+            return replaceStr;
+        }
+        if (qAStr.contains(BaseConstants.TEN_CLOCK)) {
+            replaceStr = qAStr.replace(BaseConstants.TEN_CLOCK,"10");
+            return replaceStr;
+        }
+        return qAStr;
     }
 
 }

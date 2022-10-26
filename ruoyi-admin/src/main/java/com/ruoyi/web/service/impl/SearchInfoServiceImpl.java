@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * 河流信息 服务层实现类
  *
- * @author
+ * @author fengZh
  */
 @Service
 public class SearchInfoServiceImpl implements ISearchInfoService {
@@ -219,6 +219,7 @@ public class SearchInfoServiceImpl implements ISearchInfoService {
 
     /**
      * 时间转换方法
+     *
      * @param hourStr 汉字小时参数
      * @return int类型小时数值
      */

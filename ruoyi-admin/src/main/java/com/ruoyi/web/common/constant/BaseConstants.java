@@ -3,6 +3,7 @@ package com.ruoyi.web.common.constant;
 /**
  * 常量类
  *
+ * @Author fengZh
  **/
 public interface BaseConstants {
 
@@ -127,6 +128,8 @@ public interface BaseConstants {
     String ONE_CLOCK = "一";
 
     String TWO_CLOCK = "两";
+
+    String TWO_NUMBER = "二";
 
     String THREE_CLOCK = "三";
 

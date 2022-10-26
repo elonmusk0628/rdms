@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 机器人查询信息控制层
  *
- * @Author fengzh
+ * @Author fengZh
  */
 @RestController
 @RequestMapping("/search")
@@ -54,7 +54,7 @@ public class SearchInfoController {
     }
 
     /**
-     * 知识问答请求
+     * 机器人知识问答请求
      *
      * @param qAndAInfoStr qAndAInfoStr
      */

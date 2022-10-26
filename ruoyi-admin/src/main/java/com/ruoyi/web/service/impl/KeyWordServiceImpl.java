@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * 关键字 服务层
  *
- * @author ruoyi
+ * @author fengZh
  */
 @Service
 public class KeyWordServiceImpl implements IKeyWordService {
@@ -202,7 +202,12 @@ public class KeyWordServiceImpl implements IKeyWordService {
         return null;
     }
 
-
+    /**
+     * 写入字典文档
+     *
+     * @param  path 文档路径
+     * @param  content 写入内容
+     */
     public void writeToDocument(String path, String content) throws IOException {
         File file = new File(path);
         FileWriter fileWriter = new FileWriter(file, true);
@@ -213,6 +218,10 @@ public class KeyWordServiceImpl implements IKeyWordService {
         bufferedWriter.close();
     }
 
+    /**
+     * 清空字典文档
+     *
+     */
     public void clearDocument() throws IOException {
         File fi = new File(FILE_PATH);
         FileWriter fileWriter = new FileWriter(fi);
