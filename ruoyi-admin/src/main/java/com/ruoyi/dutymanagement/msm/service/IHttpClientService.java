@@ -1,7 +1,6 @@
 package com.ruoyi.dutymanagement.msm.service;
 
 import com.ruoyi.dutymanagement.msm.domain.param.LoginInfo;
-import org.springframework.stereotype.Component;
 
 /**
  * 调外系统接口
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Component;
  * @Author fenghan
  * @Date 2022-09-02
  */
-@Component
 public interface IHttpClientService {
     /**
      * 调值班管理系统短信接口
