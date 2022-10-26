@@ -101,9 +101,6 @@ public class FaxMessageController extends BaseController {
      */
     @GetMapping("/getFaxCount")
     public AjaxResult getFaxCount(FaxParam faxParam) {
-        if (faxParam.getStatus() == null) {
-            return AjaxResult.error("status参数不能为空！");
-        }
         int faxCount = faxMessageService.getFaxCount(faxParam);
         return AjaxResult.success(faxCount);
     }

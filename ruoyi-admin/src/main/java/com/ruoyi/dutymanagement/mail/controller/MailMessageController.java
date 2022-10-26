@@ -124,9 +124,6 @@ public class MailMessageController extends BaseController {
      */
     @GetMapping("/getMailCount")
     public AjaxResult getMailCount(MailParam mailParam) {
-        if (mailParam.getStatus() == null) {
-            return AjaxResult.error("status参数不能为空！");
-        }
         int mailCount = mailMessageService.getMailCount(mailParam);
         return AjaxResult.success(mailCount);
     }

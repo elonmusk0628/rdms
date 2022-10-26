@@ -100,9 +100,6 @@ public class TelMessageController extends BaseController {
      */
     @GetMapping("/getTelCount")
     public AjaxResult getTelCount(TelInfoParam telInfoParam) {
-        if (telInfoParam.getStatus() == null || "".equals(telInfoParam.getStatus())) {
-            return AjaxResult.error("status参数不能为空！");
-        }
         int telCount = telMessageService.getTelCount(telInfoParam);
         return AjaxResult.success(telCount);
     }

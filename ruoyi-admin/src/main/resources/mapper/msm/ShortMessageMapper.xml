@@ -153,6 +153,5 @@
         from msm
         where 1=1
           and send_time BETWEEN #{startDate} AND #{endDate}
-          and status = #{status}
     </select>
 </mapper>

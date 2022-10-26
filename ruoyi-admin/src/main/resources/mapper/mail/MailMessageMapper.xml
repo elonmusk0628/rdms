@@ -167,6 +167,5 @@
         from mail
         where 1=1
           and received_date BETWEEN #{startDate} AND #{endDate}
-          and status = #{status}
     </select>
 </mapper>

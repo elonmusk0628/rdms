@@ -126,6 +126,5 @@
         from fax
         where 1=1
         and draft_date BETWEEN #{startDate} AND #{endDate}
-        and status = #{status}
     </select>
 </mapper>

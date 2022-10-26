@@ -121,9 +121,6 @@ public class ShortMessageController extends BaseController {
      */
     @GetMapping("/getMsmCount")
     public AjaxResult getMsmCount(MsmParam msmParam) {
-        if (msmParam.getStatus() == null) {
-            return AjaxResult.error("status参数不能为空！");
-        }
         int msmCount = shortMessageService.getMsmCount(msmParam);
         return AjaxResult.success(msmCount);
     }
