@@ -161,7 +161,7 @@
         order by id desc
     </select>
     <update id="updateTelStatus" parameterType="Integer">
-        update tel_info set status="1" where id =#{id}
+        update tel_info set status='1' where id =#{id}
     </update>
     <select id="getTelCount" parameterType="TelInfoParam" resultType="Integer">
         select

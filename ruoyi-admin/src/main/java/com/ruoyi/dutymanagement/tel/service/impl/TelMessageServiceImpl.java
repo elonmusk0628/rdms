@@ -45,8 +45,6 @@ public class TelMessageServiceImpl implements ITelMessageService {
     @Override
     public TelInfoVO getTelInfoById(String id) {
         TelInfoVO telInfoVO = telMessageMapper.getTelInfoById(Integer.valueOf(id));
-        //修改电话为已读
-        telMessageMapper.updateTelStatus(Integer.valueOf(id));
         return telInfoVO;
     }
 

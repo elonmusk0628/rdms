@@ -54,8 +54,6 @@ public class FaxMessageServiceImpl implements IFaxMessageService {
         //查询传真详细信息
         List<FaxInfoEntity> faxInfoEntityList = faxMessageMapper.getFaxInfoById(Integer.valueOf(mainId));
         faxVO.setFaxInfoEntityList(faxInfoEntityList);
-        //修改传真为已读
-        faxMessageMapper.updateStatus(Integer.valueOf(mainId));
         return faxVO;
     }
 

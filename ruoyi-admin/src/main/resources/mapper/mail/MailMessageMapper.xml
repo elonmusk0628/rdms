@@ -126,7 +126,7 @@
         )
     </insert>
     <update id="updateMailStatus">
-        update mail set status ="1" where id=#{id}
+        update mail set status ='1' where id=#{id}
     </update>
     <insert id="addMailAttachMent" useGeneratedKeys="true" keyProperty="item_id" parameterType="MailInfoEntity">
         insert into mail_attachment (

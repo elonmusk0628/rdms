@@ -106,7 +106,7 @@
         and status = #{status}
     </select>
     <update id="updateStatus" >
-        update fax set status ="1" where id=#{id}
+        update fax set status ='1' where id=#{id}
     </update>
     <select id="getFaxByManageId" parameterType="String" resultType="FaxVO">
         select
