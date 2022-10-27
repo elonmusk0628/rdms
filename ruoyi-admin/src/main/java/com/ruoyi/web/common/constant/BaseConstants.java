@@ -151,12 +151,16 @@ public interface BaseConstants {
 
     String TEN_OCLOCK = "十";
 
+    /** 珠江委水旱灾害防御值班管理系统IP地址 */
     String IP = "http://192.168.1.3";
 
+    /** 珠江委水旱灾害防御值班管理系统端口号 */
     String PORT = "18092";
 
+    /** 珠江委水旱灾害防御值班管理系统登录账户 */
     String USER_NAME = "admin";
 
+    /** 珠江委水旱灾害防御值班管理系统登录密码 */
     String PASS_WORD = "Fyc@87117781";
 
     String TODAY = "今天";
