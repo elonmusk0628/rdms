@@ -45,7 +45,7 @@ public class CustomQAInfoController {
      * @param pageSize 页数
      */
     @GetMapping("/select")
-//    @PreAuthorize("@ss.hasPermi('CustomQA:select')")
+    @PreAuthorize("@ss.hasPermi('CustomQA:select')")
     public AjaxResult selectAnswerInfo(@RequestParam(value = "question", required = false) String question,
                                        @RequestParam(value = "answer", required = false) String answer,
                                        @RequestParam(value = "start_time", required = false) String startTime,
