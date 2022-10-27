@@ -13,76 +13,57 @@ import java.util.List;
  */
 @Data
 public class MailVO {
-    /**
-     * id
-     */
+    /** id */
     private int id;
-    /**
-     * 邮件id
-     */
+
+    /** 邮件id */
     private String messageId;
-    /**
-     * 邮件附件id
-     */
+
+    /** 邮件附件id */
     private Integer mailAttachmentId;
-    /**
-     * 标题
-     */
+
+    /** 标题 */
     private String mailName;
-    /**
-     * 邮件发送人
-     */
+
+    /** 邮件发送人 */
     private String personal;
-    /**
-     * 邮件发送地址
-     */
+
+    /** 邮件发送地址 */
     private String address;
-    /**
-     * 接收时间
-     */
+
+    /** 接收时间 */
     private String receivedDate;
-    /**
-     * 邮件类型
-     */
+
+    /** 邮件类型 */
     private String mailType;
-    /**
-     * 附件数量
-     */
+
+    /** 附件数量 */
     private Integer fileSize;
-    /**
-     * 搜索值
-     */
+
+    /** 搜索值 */
     private String searchValue;
-    /**
-     * 创建人
-     */
+
+    /** 创建人 */
     private String createby;
-    /**
-     * 创建时间
-     */
+
+    /** 创建时间 */
     private String createTime;
-    /**
-     * 修改人
-     */
+
+    /** 修改人 */
     private String updateBy;
-    /**
-     * 修改时间
-     */
+
+    /** 修改时间 */
     private String updateTime;
-    /**
-     * 应用号
-     */
+
+    /** 应用号 */
     private String appCode;
-    /**
-     * 备注
-     */
+
+    /** 备注 */
     private String remark;
-    /**
-     * 状态0未读1已读
-     */
+
+    /** 状态0未读1已读 */
     private String status;
-    /**
-     * 附件列表
-     */
+
+    /** 附件列表 */
     private List<MailInfoEntity> mailInfoList;
 }
