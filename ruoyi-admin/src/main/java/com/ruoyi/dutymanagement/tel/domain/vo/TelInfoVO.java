@@ -12,72 +12,54 @@ import java.util.Date;
  */
 @Data
 public class TelInfoVO {
-    /**
-     * id
-     */
+    /** id */
     private int id;
-    /**
-     * 通话记录id
-     */
+
+    /** 通话记录id */
     private int telRecordId;
-    /**
-     * 来电单位
-     */
+
+    /** 来电单位 */
     private String theElectricityUnit;
-    /**
-     * 来电单位电话
-     */
+
+    /** 来电单位电话 */
     private String tel;
-    /**
-     * 来电人姓名
-     */
+
+    /** 来电人姓名 */
     private String userName;
-    /**
-     * 来电时间
-     */
+
+    /** 来电时间 */
     private String telTime;
-    /**
-     * 接听人
-     */
+
+    /** 接听人 */
     private String answerPeople;
-    /**
-     * 接听人电话
-     */
+
+    /** 接听人电话 */
     private String phone;
-    /**
-     * 通话标题
-     */
+
+    /** 通话标题 */
     private String title;
-    /**
-     * 通话内容
-     */
+
+    /** 通话内容 */
     private String content;
-    /**
-     * 处理意见
-     */
+
+    /** 处理意见 */
     private String suggestion;
-    /**
-     * 创建时间
-     */
+
+    /** 创建时间 */
     private Date createTime;
-    /**
-     * 创建人
-     */
+
+    /** 创建人 */
     private String createBy;
-    /**
-     * 修改人
-     */
+
+    /** 修改人 */
     private String updateBy;
-    /**
-     * 修改时间
-     */
+
+    /** 修改时间 */
     private Date updateTime;
-    /**
-     * 备注
-     */
+
+    /** 备注 */
     private String remark;
-    /**
-     * 状态 0已读1未读
-     */
+
+    /** 状态 0已读1未读 */
     private String status;
 }
