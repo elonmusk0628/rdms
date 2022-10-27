@@ -37,10 +37,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and answer LIKE CONCAT( '%' , #{answer}, '%')
             </if>
             <if test="startTime != null and startTime != ''">
-                and date_format(create_time,'%y%m%d%H%i%s') &gt;= date_format(#{startTime},'%y%m%d%H%i%s')
+                and date_format(create_time,'%y%m%d') &gt;= date_format(#{startTime},'%y%m%d')
             </if>
             <if test="endTime != null and endTime != ''">
-                and date_format(create_time,'%y%m%d%H%i%s') &lt;= date_format(#{endTime},'%y%m%d%H%i%s')
+                and date_format(create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
             </if>
 
         </where>

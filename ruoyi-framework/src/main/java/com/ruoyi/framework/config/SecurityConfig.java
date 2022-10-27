@@ -118,7 +118,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 // 关键字添加删除等接口放行
                 .antMatchers("/key/word/**").permitAll()
                 // 自定义问答接口放行
-                .antMatchers("/QAndA/**").permitAll()
+                .antMatchers("/CustomQA/**").permitAll()
                 //短信
                 .antMatchers("/msm/message/**").permitAll()
                 //外系统短信
