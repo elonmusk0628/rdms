@@ -7,33 +7,41 @@
         </el-col>
         <el-col :span="6">
           <el-card class="duty-card" @click.native="handleJump('email')">
-            <svg-icon class="icon" icon-class="email" />
-            <div>邮件数量</div>
-            <span>{{emailNum}}</span>
+            <svg-icon class="icon icon-email" icon-class="email" />
+            <div class="num-detail">
+              <div class="num-type">邮件数量</div>
+              <span class="num">{{emailNum}}</span>
+            </div>
           </el-card>
         </el-col>
 
         <el-col :span="6">
           <el-card class="duty-card" @click.native="handleJump('fax')">
-            <svg-icon class="icon" icon-class="fax" />
-            <div>传真数量</div>
-            <span>{{faxNum}}</span>
+            <svg-icon class="icon icon-fax" icon-class="fax" />
+            <div class="num-detail">
+              <div class="num-type">传真数量</div>
+              <span class="num">{{faxNum}}</span>
+            </div>
           </el-card>
         </el-col>
 
         <el-col :span="6">
           <el-card class="duty-card" @click.native="handleJump('msm')">
-            <svg-icon class="icon" icon-class="msm" />
-            <div>短信数量</div>
-            <span>{{msmNum}}</span>
+            <svg-icon class="icon icon-msm" icon-class="msm" />
+            <div class="num-detail">
+              <div class="num-type">短信数量</div>
+              <span class="num">{{msmNum}}</span>
+            </div>
           </el-card>
         </el-col>
 
         <el-col :span="6">
           <el-card class="duty-card" @click.native="handleJump('telephone')">
-            <svg-icon class="icon" icon-class="telephone" />
-            <div>电话数量</div>
-            <span>{{telephoneNum}}</span>
+            <svg-icon class="icon icon-tel" icon-class="telephone" />
+            <div class="num-detail">
+              <div class="num-type">电话数量</div>
+              <span class="num">{{telephoneNum}}</span>
+            </div>
           </el-card>
         </el-col>
       </el-card>
@@ -41,7 +49,7 @@
         <el-card>
           <div slot="header"><span>值班统计</span></div>
           <div class="el-table el-table--enable-row-hover el-table--medium">
-            <div ref="dutyCompare" style="height: 420px" />
+            <div ref="dutyPie" style="height: 420px" />
           </div>
         </el-card>
       </el-col>
@@ -76,12 +84,16 @@ export default {
   components: { MapPearlRiver },
   data() {
     return {
-      emailNum: '',
-      faxNum: '',
-      msmNum: '',
-      telephoneNum: '',
+      // 今日邮件数量
+      emailNum: 0,
+      // 今日传真数量
+      faxNum: 0,
+      // 今日短信数量
+      msmNum: 0,
+      // 今日电话数量
+      telephoneNum: 0,
       // 值班统计信息
-      dutyCompare: null,
+      dutyPie: null,
       // 登录信息
       loginBar: null
     };
@@ -92,6 +104,7 @@ export default {
     this.initUserChart();
   },
   methods: {
+    /** 查询当日值班数量 */
     getTodayDutyNum() {
       axios.all([
         todayEmailNum().then(res => res.data),
@@ -108,6 +121,7 @@ export default {
         })
       )
     },
+    /** 查询所有值班数量 */
     getAllDutyNum() {
       axios.all([
         listEmail().then(res => res.total),
@@ -121,21 +135,60 @@ export default {
         })
       )
     },
+    /** 值班数量饼状图 */
     initdutyChart(val1,val2,val3,val4) {
       if(!this.emailLoading && !this.emailLoading && !this.emailLoading && !this.emailLoading) {
-        this.dutyCompare = echarts.init(this.$refs.dutyCompare, "macarons");
-        this.dutyCompare.setOption({
+        this.dutyPie = echarts.init(this.$refs.dutyPie);
+        this.dutyPie.setOption({
           tooltip: {
             trigger: "item",
             formatter: "{a} <br/>{b} : {c} ({d}%)",
+          },
+          legend: {
+            left: 'center',
+            top: 'bottom',
+            data: [
+              '邮件',
+              '传真',
+              '短信',
+              '电话'
+            ]
+          },
+          toolbox: {
+            show: true,
+            feature: {
+              mark: { show: true },
+              dataView: { show: true, readOnly: false },
+              restore: { show: true },
+              saveAsImage: { show: true }
+            }
           },
           series: [
             {
               name: "值班",
               type: "pie",
               roseType: "radius",
-              radius: [15, 150],
+              radius: [20, 190],
               center: ["50%", "50%"],
+              itemStyle: {
+                borderRadius: 5,
+                normal: {
+                  color: function (colors) {
+                    let colorList = [
+                      '#409EFF',
+                      '#5470c6',
+                      '#91cd77',
+                      '#ef6567'
+                    ];
+                    return colorList[colors.dataIndex];
+                  }
+                }
+              },
+              emphasis: {
+                label: {
+                  show: true
+                }
+              },
               data: [
                 { value: val1, name: '邮件' },
                 { value: val2, name: '传真' },
@@ -149,6 +202,7 @@ export default {
         });
       }
     },
+    /** 用户登录情况柱状图 */
     initUserChart() {
       let myDate = new Date(); //获取今天日期
       myDate.setDate(myDate.getDate() - 6);
@@ -181,6 +235,12 @@ export default {
                 type: 'shadow'
               }
             },
+            grid:{
+              top:"5%",
+              left:"10%",
+              right:"10%",
+              bottom:"5%"
+            },
             xAxis: {
               type: 'category',
               data: dateArray
@@ -193,6 +253,9 @@ export default {
                 data: numArray,
                 type: 'bar',
                 showBackground: true,
+                itemStyle: {
+                  color: '#409EFF'
+                },
                 backgroundStyle: {
                   color: 'rgba(180, 180, 180, 0.2)'
                 }
@@ -202,6 +265,7 @@ export default {
         })
       )
     },
+    /** 值班卡片跳转 */
     handleJump(page) {
       this.$router.push("/duty/" + page );
     }
@@ -215,8 +279,34 @@ export default {
   .duty-card {
     text-align: center;
     line-height: 2;
+    ::v-deep .el-card__body {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+    .icon-email {
+      color: #409EFF;
+    }
+    .icon-fax {
+      color: #5470c6;
+    }
+    .icon-msm {
+      color: #91cd77;
+    }
+    .icon-tel {
+      color: #ef6567;
+    }
     .icon {
-      color: rgb(64, 158, 255)
+      font-size: 70px;
+    }
+    .num-detail {
+      .num-type {
+        font-size: 24px;
+      }
+      .num {
+        font-weight: bold;
+        font-size: 30px;
+      }
     }
   }
 }
