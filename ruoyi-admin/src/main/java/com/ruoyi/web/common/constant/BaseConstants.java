@@ -147,10 +147,6 @@ public interface BaseConstants {
 
     String TEN_CLOCK = "十";
 
-    String NINE_OCLOCK = "九";
-
-    String TEN_OCLOCK = "十";
-
     /** 珠江委水旱灾害防御值班管理系统IP地址 */
     String IP = "http://192.168.1.3";
 
