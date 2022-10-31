@@ -37,12 +37,22 @@ public class CustomQAInfoController {
     /**
      * 查询自定义问答请求
      *
-     * @param req
+     * @param question 问题
+     * @param answer 答案
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @param pageNum 页码
+     * @param pageSize 页数
      */
     @GetMapping("/select")
     @PreAuthorize("@ss.hasPermi('CustomQA:select')")
-    public AjaxResult selectAnswerInfo(CustomQAInfoRequest req) {
-        PageInfo<CustomQAInfo> answerInfoPage = customQAInfoService.selectAnswerInfoList(req.getQuestion(), req.getAnswer(), req.getStartTime(), req.getEndTime(), req.getPageNum(), req.getPageSize());
+    public AjaxResult selectAnswerInfo(@RequestParam(value = "question", required = false) String question,
+                                       @RequestParam(value = "answer", required = false) String answer,
+                                       @RequestParam(value = "start_time", required = false) String startTime,
+                                       @RequestParam(value = "end_time", required = false) String endTime,
+                                       @RequestParam(value = "page_num", required = false) Integer pageNum,
+                                       @RequestParam(value = "page_size", required = false) Integer pageSize) {
+        PageInfo<CustomQAInfo> answerInfoPage = customQAInfoService.selectAnswerInfoList(question, answer, startTime, endTime, pageNum, pageSize);
         List<CustomQAInfo> AnswerInfos = answerInfoPage.getList();
         return AjaxResult.success(answerInfoPage);
     }
